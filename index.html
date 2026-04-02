@@ -3,753 +3,350 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lexara — Language Assessment Studio</title>
+<title>TestGen — Language Assessment Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Tenor+Sans&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #F5F0E8;
-    --parchment: #EDE5D0;
-    --aged: #D4C5A9;
-    --gold: #B8960C;
-    --gold-light: #D4AF37;
-    --gold-dim: #8B6914;
-    --forest: #1C2B1E;
-    --forest-mid: #2C3E2F;
-    --ink: #1A1410;
-    --ink-mid: #3D3028;
-    --brown: #5C4033;
-    --border: #C4B49A;
-    --border-light: #DDD0B8;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background-color: var(--cream);
-    color: var(--ink);
-    font-family: 'Tenor Sans', sans-serif;
-    min-height: 100vh;
-    background-image:
-      radial-gradient(ellipse at 20% 0%, rgba(184,150,12,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 100%, rgba(28,43,30,0.05) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  }
-
-  /* ── HEADER ── */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 0 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 80px;
-    background: rgba(245,240,232,0.95);
-    backdrop-filter: blur(8px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .logo {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-  }
-
-  .logo-mark {
-    font-family: 'IM Fell English', serif;
-    font-size: 28px;
-    color: var(--forest);
-    letter-spacing: 0.04em;
-  }
-
-  .logo-mark span {
-    color: var(--gold);
-  }
-
-  .logo-sub {
-    font-family: 'Tenor Sans', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--brown);
-    padding-bottom: 2px;
-  }
-
-  .header-rule {
-    width: 1px;
-    height: 30px;
-    background: var(--border);
-    margin: 0 20px;
-  }
-
-  nav {
-    display: flex;
-    gap: 32px;
-    align-items: center;
-  }
-
-  nav a {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--brown);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  nav a:hover { color: var(--gold-dim); }
-
-  /* ── HERO ── */
-  .hero {
-    padding: 80px 60px 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .hero-left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-right: 40px;
-    border-right: 1px solid var(--border-light);
-  }
-
-  .eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .eyebrow::before {
-    content: '';
-    display: block;
-    width: 30px;
-    height: 1px;
-    background: var(--gold);
-  }
-
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 56px;
-    font-weight: 300;
-    line-height: 1.1;
-    color: var(--forest);
-    margin-bottom: 24px;
-    letter-spacing: -0.01em;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold-dim);
-  }
-
-  .hero-desc {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--brown);
-    max-width: 420px;
-    margin-bottom: 36px;
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 40px;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--forest);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--brown);
-  }
-
-  /* ── FORM CARD ── */
-  .form-card {
-    background: var(--parchment);
-    border: 1px solid var(--border);
-    padding: 48px;
-    position: relative;
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.5),
-      0 4px 24px rgba(28,43,30,0.08);
-  }
-
-  .form-card::before {
-    content: '';
-    position: absolute;
-    top: 6px; left: 6px; right: -6px; bottom: -6px;
-    border: 1px solid var(--border-light);
-    z-index: -1;
-  }
-
-  .form-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: var(--forest);
-    margin-bottom: 6px;
-    letter-spacing: 0.02em;
-  }
-
-  .form-subtitle {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--aged);
-    margin-bottom: 36px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border-light);
-  }
-
-  /* ── FORM SECTIONS ── */
-  .form-section {
-    margin-bottom: 28px;
-  }
-
-  .section-label {
-    font-size: 9px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold-dim);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border-light);
-  }
-
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .field-row.single { grid-template-columns: 1fr; }
-  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--brown);
-  }
-
-  label .optional {
-    color: var(--aged);
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: none;
-    font-style: italic;
-    margin-left: 6px;
-  }
-
-  input, select, textarea {
-    background: var(--cream);
-    border: 1px solid var(--border);
-    padding: 11px 14px;
-    font-family: 'Tenor Sans', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none;
-    -webkit-appearance: none;
-    width: 100%;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(184,150,12,0.08);
-  }
-
-  input::placeholder, textarea::placeholder {
-    color: var(--aged);
-    font-style: italic;
-    font-size: 12px;
-  }
-
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23B8960C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 36px;
-    cursor: pointer;
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-    line-height: 1.6;
-  }
-
-  /* ── DIFFICULTY SLIDERS ── */
-  .difficulty-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-  }
-
-  .diff-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .diff-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .diff-name {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--brown);
-  }
-
-  .diff-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 300;
-    color: var(--forest);
-    line-height: 1;
-  }
-
-  .diff-value span { font-size: 11px; color: var(--brown); }
-
-  input[type="range"] {
-    padding: 0;
-    height: 2px;
-    border: none;
-    background: var(--border);
-    cursor: pointer;
-    box-shadow: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 14px;
-    height: 14px;
-    background: var(--gold);
-    border-radius: 50%;
-    cursor: pointer;
-    margin-top: -6px;
-    box-shadow: 0 1px 4px rgba(184,150,12,0.4);
-  }
-
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 2px;
-    background: linear-gradient(to right, var(--gold) var(--pct, 0%), var(--border) var(--pct, 0%));
-  }
-
-  .diff-warning {
-    font-size: 10px;
-    color: #8B3A3A;
-    letter-spacing: 0.05em;
-    margin-top: 4px;
-    display: none;
-  }
-
-  /* ── MIXED SECTION ── */
-  .mixed-section {
-    display: none;
-    background: rgba(28,43,30,0.04);
-    border: 1px solid var(--border-light);
-    padding: 20px;
-    margin-top: 16px;
-  }
-
-  .mixed-section.visible { display: block; }
-
-  /* ── SUBMIT ── */
-  .submit-area {
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .btn-generate {
-    flex: 1;
-    background: var(--forest);
-    color: var(--gold-light);
-    border: 1px solid var(--forest-mid);
-    padding: 16px 32px;
-    font-family: 'Tenor Sans', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-generate::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 40%, rgba(212,175,55,0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .btn-generate:hover::before { opacity: 1; }
-  .btn-generate:hover {
-    background: var(--forest-mid);
-    box-shadow: 0 4px 20px rgba(28,43,30,0.3);
-    transform: translateY(-1px);
-  }
-
-  .btn-generate:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .btn-generate.loading {
-    color: transparent;
-  }
-
-  .btn-generate.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 18px; height: 18px;
-    border: 1px solid var(--gold-light);
-    border-top-color: transparent;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-  .form-hint {
-    font-size: 10px;
-    color: var(--aged);
-    line-height: 1.6;
-    letter-spacing: 0.05em;
-    max-width: 140px;
-  }
-
-  /* ── RESULT PANEL ── */
-  #result-panel {
-    max-width: 1400px;
-    margin: 0 auto 80px;
-    padding: 0 60px;
-    display: none;
-  }
-
-  #result-panel.visible { display: block; }
-
-  .result-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 32px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .result-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--forest);
-  }
-
-  .result-meta {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-  }
-
-  .meta-pill {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--brown);
-    background: var(--parchment);
-    border: 1px solid var(--border);
-    padding: 6px 14px;
-  }
-
-  .form-link-box {
-    background: var(--forest);
-    padding: 20px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 32px;
-  }
-
-  .form-link-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-    margin-bottom: 6px;
-  }
-
-  .form-link-url {
-    font-size: 13px;
-    color: var(--cream);
-    word-break: break-all;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-  }
-
-  .btn-copy {
-    background: transparent;
-    border: 1px solid var(--gold-dim);
-    color: var(--gold-light);
-    padding: 10px 20px;
-    font-family: 'Tenor Sans', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-left: 24px;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
-
-  .btn-copy:hover {
-    background: var(--gold-dim);
-    color: var(--cream);
-  }
-
-  /* ── QUESTIONS ── */
-  .questions-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .question-card {
-    background: var(--parchment);
-    border: 1px solid var(--border-light);
-    padding: 24px;
-    position: relative;
-    opacity: 0;
-    transform: translateY(12px);
-    animation: fadeUp 0.4s forwards;
-  }
-
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .q-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 14px;
-  }
-
-  .q-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 300;
-    color: var(--border);
-    line-height: 1;
-  }
-
-  .q-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  .tag {
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border: 1px solid;
-  }
-
-  .tag-easy { color: #2D5A27; border-color: #2D5A27; background: rgba(45,90,39,0.06); }
-  .tag-medium { color: #7A5C00; border-color: #7A5C00; background: rgba(122,92,0,0.06); }
-  .tag-hard { color: #6B2020; border-color: #6B2020; background: rgba(107,32,32,0.06); }
-  .tag-type { color: var(--brown); border-color: var(--border); background: transparent; }
-
-  .q-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--ink);
-    margin-bottom: 16px;
-    font-weight: 400;
-  }
-
-  .q-options {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-
-  .option {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 12px;
-    border: 1px solid transparent;
-    font-size: 13px;
-    line-height: 1.4;
-  }
-
-  .option.correct {
-    border-color: rgba(45,90,39,0.3);
-    background: rgba(45,90,39,0.05);
-  }
-
-  .option-letter {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--gold-dim);
-    flex-shrink: 0;
-    width: 18px;
-  }
-
-  .option.correct .option-letter { color: #2D5A27; }
-
-  .option-text { color: var(--ink-mid); }
-
-  .q-explanation {
-    font-size: 11px;
-    line-height: 1.6;
-    color: var(--brown);
-    padding-top: 12px;
-    border-top: 1px solid var(--border-light);
-    font-style: italic;
-  }
-
-  /* ── ERROR ── */
-  .error-box {
-    background: rgba(107,32,32,0.06);
-    border: 1px solid rgba(107,32,32,0.2);
-    padding: 20px 24px;
-    margin: 20px 60px;
-    display: none;
-  }
-
-  .error-box.visible { display: block; }
-
-  .error-title {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #6B2020;
-    margin-bottom: 6px;
-  }
-
-  .error-msg {
-    font-size: 13px;
-    color: var(--ink-mid);
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-  }
-
-  /* ── ORNAMENT ── */
-  .ornament {
-    text-align: center;
-    color: var(--gold);
-    font-size: 18px;
-    letter-spacing: 0.4em;
-    margin: 40px 0;
-    opacity: 0.4;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .footer-left {
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: var(--aged);
-    text-transform: uppercase;
-  }
-
-  .footer-right {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 13px;
-    color: var(--aged);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 960px) {
-    header { padding: 0 24px; }
-    .hero { grid-template-columns: 1fr; padding: 40px 24px; }
-    .hero-left { border-right: none; border-bottom: 1px solid var(--border-light); padding-right: 0; padding-bottom: 40px; }
-    .questions-grid { grid-template-columns: 1fr; }
-    #result-panel { padding: 0 24px; }
-    .error-box { margin: 20px 24px; }
-    footer { padding: 20px 24px; flex-direction: column; gap: 12px; text-align: center; }
-  }
+:root {
+  --cream: #F5F0E8;
+  --parchment: #EDE5D0;
+  --aged: #D4C5A9;
+  --gold: #B8960C;
+  --gold-light: #D4AF37;
+  --gold-dim: #8B6914;
+  --forest: #1C2B1E;
+  --forest-mid: #2C3E2F;
+  --ink: #1A1410;
+  --ink-mid: #3D3028;
+  --brown: #5C4033;
+  --border: #C4B49A;
+  --border-light: #DDD0B8;
+  --error: #6B2020;
+  --pass: #2D5A27;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: 'Tenor Sans', sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 15% 0%, rgba(184,150,12,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 100%, rgba(28,43,30,0.06) 0%, transparent 55%);
+}
+
+/* ── HEADER ── */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 0 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  background: rgba(245,240,232,0.97);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.logo { display:flex; align-items:baseline; gap:14px; }
+.logo-mark { font-family:'IM Fell English',serif; font-size:24px; color:var(--forest); letter-spacing:0.04em; }
+.logo-mark span { color:var(--gold); }
+.logo-div { width:1px; height:26px; background:var(--border); align-self:center; }
+.logo-sub { font-size:9px; letter-spacing:0.24em; text-transform:uppercase; color:var(--brown); }
+
+nav { display:flex; gap:28px; align-items:center; }
+nav a { font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); text-decoration:none; transition:color 0.2s; }
+nav a:hover { color:var(--gold-dim); }
+
+/* ── LAYOUT ── */
+.page { max-width:1440px; margin:0 auto; padding:0 56px; }
+
+/* ── FORM SECTION ── */
+.form-section {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 64px;
+  padding: 56px 0 48px;
+  align-items: start;
+}
+
+.hero-col { position:sticky; top:90px; }
+
+.eyebrow {
+  font-size:10px; letter-spacing:0.32em; text-transform:uppercase;
+  color:var(--gold-dim); margin-bottom:16px;
+  display:flex; align-items:center; gap:12px;
+}
+.eyebrow::before { content:''; display:block; width:26px; height:1px; background:var(--gold); }
+
+.hero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:46px; font-weight:300; line-height:1.1;
+  color:var(--forest); margin-bottom:18px;
+}
+.hero-title em { font-style:italic; color:var(--gold-dim); }
+
+.hero-desc { font-size:13px; line-height:1.85; color:var(--brown); margin-bottom:32px; }
+
+.hero-stats { display:flex; gap:28px; padding-top:24px; border-top:1px solid var(--border-light); }
+.stat { display:flex; flex-direction:column; gap:3px; }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--forest); line-height:1; }
+.stat-label { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); }
+
+/* ── FORM CARD ── */
+.form-card {
+  background:var(--parchment);
+  border:1px solid var(--border);
+  padding:40px;
+  position:relative;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 28px rgba(28,43,30,0.08);
+}
+.form-card::before {
+  content:''; position:absolute;
+  top:7px; left:7px; right:-7px; bottom:-7px;
+  border:1px solid var(--border-light); z-index:-1; pointer-events:none;
+}
+
+.card-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--forest); margin-bottom:4px; }
+.card-sub { font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--aged); margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid var(--border-light); }
+
+.sec-label {
+  font-size:9px; letter-spacing:0.28em; text-transform:uppercase;
+  color:var(--gold-dim); margin-bottom:12px;
+  display:flex; align-items:center; gap:10px;
+}
+.sec-label::after { content:''; flex:1; height:1px; background:var(--border-light); }
+
+.form-sec { margin-bottom:24px; }
+.row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px; }
+.row1 { display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:12px; }
+
+.field { display:flex; flex-direction:column; gap:5px; }
+
+label { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); }
+label .opt { color:var(--aged); font-size:8px; letter-spacing:0.08em; text-transform:none; font-style:italic; margin-left:5px; }
+
+input[type=text], input[type=number], input[type=email], select, textarea {
+  background:var(--cream); border:1px solid var(--border);
+  padding:9px 12px; font-family:'Tenor Sans',sans-serif;
+  font-size:13px; color:var(--ink); outline:none;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  appearance:none; -webkit-appearance:none; width:100%;
+}
+input:focus, select:focus, textarea:focus {
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(184,150,12,0.08);
+}
+input::placeholder, textarea::placeholder { color:var(--aged); font-style:italic; font-size:12px; }
+
+select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23B8960C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center;
+  padding-right:32px; cursor:pointer;
+}
+select:disabled { opacity:0.42; cursor:not-allowed; }
+
+textarea { resize:vertical; min-height:72px; line-height:1.65; }
+
+/* ── MIXED SECTION ── */
+.mixed-sec { display:none; background:rgba(28,43,30,0.03); border:1px solid var(--border-light); padding:16px; margin-top:10px; }
+.mixed-sec.on { display:block; }
+.mix-total { font-size:11px; color:var(--brown); margin-top:6px; }
+.mix-total .mn { font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--forest); }
+.mix-total.bad .mn { color:var(--error); }
+
+/* ── DIFFICULTY PRESETS ── */
+.diff-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.diff-btn {
+  border:1px solid var(--border); background:var(--cream);
+  padding:10px 8px; cursor:pointer; text-align:center; transition:all 0.2s;
+}
+.diff-btn:hover { border-color:var(--gold-dim); background:rgba(184,150,12,0.04); }
+.diff-btn.active { border-color:var(--gold); background:rgba(184,150,12,0.09); }
+.diff-btn-name { font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--forest); margin-bottom:4px; }
+.diff-btn-vals { font-family:'Cormorant Garamond',serif; font-size:12px; color:var(--brown); font-style:italic; }
+
+.diff-breakdown {
+  display:none; gap:16px; margin-top:10px;
+  padding:10px 12px; background:var(--cream); border:1px solid var(--border-light);
+}
+.diff-breakdown.on { display:flex; }
+.diff-item { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--brown); }
+.dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.dot-e { background:#2D5A27; } .dot-m { background:#7A5C00; } .dot-h { background:#6B2020; }
+.diff-pct { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--forest); line-height:1; }
+
+/* ── SUBMIT ── */
+.submit-area { margin-top:24px; padding-top:20px; border-top:1px solid var(--border-light); display:flex; align-items:center; gap:16px; }
+
+.btn-gen {
+  flex:1; background:var(--forest); color:var(--gold-light);
+  border:1px solid var(--forest-mid); padding:14px 28px;
+  font-family:'Tenor Sans',sans-serif; font-size:11px;
+  letter-spacing:0.26em; text-transform:uppercase;
+  cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden;
+}
+.btn-gen::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,transparent 40%,rgba(212,175,55,0.12) 100%); opacity:0; transition:opacity 0.3s; }
+.btn-gen:hover::before { opacity:1; }
+.btn-gen:hover { background:var(--forest-mid); box-shadow:0 4px 18px rgba(28,43,30,0.25); transform:translateY(-1px); }
+.btn-gen:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.btn-gen.loading { color:transparent; }
+.btn-gen.loading::after {
+  content:''; position:absolute; top:50%; left:50%;
+  width:16px; height:16px; border:1.5px solid var(--gold-light);
+  border-top-color:transparent; border-radius:50%;
+  transform:translate(-50%,-50%); animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+
+.form-hint { font-size:10px; color:var(--aged); line-height:1.65; max-width:120px; }
+
+/* ── LOADING BAR ── */
+.loading-bar-wrap { display:none; margin-top:14px; }
+.loading-bar-wrap.on { display:block; }
+.loading-bar-track { height:2px; background:var(--border-light); overflow:hidden; }
+.loading-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); width:0%; transition:width 0.4s ease; animation:barPulse 2s ease-in-out infinite; }
+@keyframes barPulse { 0%{width:0%} 50%{width:75%} 100%{width:95%} }
+.loading-msg { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold-dim); margin-top:8px; text-align:center; }
+
+/* ── ERROR ── */
+.error-box { display:none; background:rgba(107,32,32,0.06); border:1px solid rgba(107,32,32,0.2); padding:14px 18px; margin-top:14px; }
+.error-box.on { display:block; }
+.error-title { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--error); margin-bottom:4px; }
+.error-msg { font-family:'Cormorant Garamond',serif; font-size:14px; font-style:italic; color:var(--ink-mid); }
+
+/* ── RESULT SECTION ── */
+#result-section { display:none; padding-bottom:80px; border-top:1px solid var(--border); padding-top:48px; }
+#result-section.on { display:block; }
+
+.result-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; padding-bottom:18px; border-bottom:1px solid var(--border); }
+.result-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--forest); }
+.result-pills { display:flex; gap:8px; flex-wrap:wrap; }
+.pill { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); background:var(--parchment); border:1px solid var(--border); padding:4px 12px; }
+
+/* ── TABS ── */
+.tab-bar { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:28px; }
+.tab-btn {
+  font-size:10px; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--brown); background:none; border:none; border-bottom:2px solid transparent;
+  padding:12px 20px; cursor:pointer; transition:all 0.2s; margin-bottom:-1px;
+}
+.tab-btn:hover { color:var(--gold-dim); }
+.tab-btn.active { color:var(--forest); border-bottom-color:var(--gold); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* ── FORM LINK BOX ── */
+.form-link-box {
+  background:var(--forest); padding:18px 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:24px; gap:20px;
+}
+.form-link-label { font-size:9px; letter-spacing:0.24em; text-transform:uppercase; color:var(--gold-light); margin-bottom:4px; }
+.form-link-url { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:var(--cream); word-break:break-all; }
+.form-link-btns { display:flex; gap:8px; flex-shrink:0; }
+.btn-sm {
+  background:transparent; border:1px solid var(--gold-dim); color:var(--gold-light);
+  padding:8px 16px; font-family:'Tenor Sans',sans-serif; font-size:9px;
+  letter-spacing:0.18em; text-transform:uppercase; cursor:pointer; white-space:nowrap; transition:all 0.2s;
+}
+.btn-sm:hover { background:var(--gold-dim); color:var(--cream); }
+.btn-sm.loading-sm { opacity:0.6; cursor:not-allowed; }
+
+/* ── CREATE FORM BUTTON ── */
+.create-form-area { margin-bottom:24px; }
+.btn-create-form {
+  background:var(--parchment); border:1px solid var(--border);
+  color:var(--forest); padding:14px 28px;
+  font-family:'Tenor Sans',sans-serif; font-size:11px;
+  letter-spacing:0.22em; text-transform:uppercase;
+  cursor:pointer; transition:all 0.2s; position:relative;
+}
+.btn-create-form:hover { border-color:var(--gold); background:rgba(184,150,12,0.06); }
+.btn-create-form:disabled { opacity:0.5; cursor:not-allowed; }
+.btn-create-form.loading { color:transparent; }
+.btn-create-form.loading::after {
+  content:''; position:absolute; top:50%; left:50%;
+  width:14px; height:14px; border:1.5px solid var(--forest);
+  border-top-color:transparent; border-radius:50%;
+  transform:translate(-50%,-50%); animation:spin 0.8s linear infinite;
+}
+
+/* ── QUESTION CARDS ── */
+.questions-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+.q-card {
+  background:var(--parchment); border:1px solid var(--border-light);
+  padding:20px; opacity:0; transform:translateY(10px);
+  animation:fadeUp 0.35s forwards;
+}
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+.q-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+.q-num { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--border); line-height:1; }
+.q-tags { display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; }
+.tag { font-size:9px; letter-spacing:0.16em; text-transform:uppercase; padding:3px 6px; border:1px solid; }
+.tag-easy   { color:#2D5A27; border-color:#2D5A27; background:rgba(45,90,39,0.06); }
+.tag-medium { color:#7A5C00; border-color:#7A5C00; background:rgba(122,92,0,0.06); }
+.tag-hard   { color:#6B2020; border-color:#6B2020; background:rgba(107,32,32,0.06); }
+.tag-type   { color:var(--brown); border-color:var(--border); }
+
+.q-text { font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.65; color:var(--ink); margin-bottom:12px; }
+
+.q-opts { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.opt-row { display:flex; align-items:flex-start; gap:8px; padding:6px 10px; border:1px solid transparent; font-size:12px; line-height:1.4; }
+.opt-row.correct { border-color:rgba(45,90,39,0.3); background:rgba(45,90,39,0.05); }
+.opt-letter { font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:500; color:var(--gold-dim); flex-shrink:0; width:16px; }
+.opt-row.correct .opt-letter { color:#2D5A27; }
+.opt-text { color:var(--ink-mid); }
+
+.q-expl { font-size:11px; line-height:1.6; color:var(--brown); padding-top:10px; border-top:1px solid var(--border-light); font-style:italic; }
+
+/* ── ANSWER KEY TAB ── */
+.ak-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+.ak-card { background:var(--parchment); border:1px solid var(--border-light); padding:14px 16px; }
+.ak-num { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--aged); margin-bottom:6px; }
+.ak-answer { font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--pass); font-weight:500; line-height:1; margin-bottom:4px; }
+.ak-expl { font-size:11px; color:var(--brown); font-style:italic; line-height:1.5; }
+
+/* ── FULL PAPER TAB ── */
+.full-paper {
+  background:var(--parchment); border:1px solid var(--border-light);
+  padding:32px; font-family:'Cormorant Garamond',serif; font-size:15px;
+  line-height:1.8; color:var(--ink); white-space:pre-wrap;
+}
+
+/* ── ORNAMENT ── */
+.ornament { text-align:center; color:var(--gold); font-size:14px; letter-spacing:0.4em; margin:32px 0; opacity:0.35; }
+
+/* ── FOOTER ── */
+footer { border-top:1px solid var(--border); padding:20px 56px; display:flex; justify-content:space-between; align-items:center; }
+.footer-l { font-size:9px; letter-spacing:0.14em; color:var(--aged); text-transform:uppercase; }
+.footer-r { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px; color:var(--aged); }
+
+@media(max-width:1024px){
+  header,footer { padding:0 24px; }
+  .page { padding:0 24px; }
+  .form-section { grid-template-columns:1fr; gap:36px; }
+  .hero-col { position:static; }
+  .questions-grid { grid-template-columns:1fr; }
+  .diff-grid { grid-template-columns:1fr 1fr; }
+  footer { flex-direction:column; gap:8px; text-align:center; padding:16px 24px; }
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-mark">Le<span>x</span>ara</div>
-    <div class="header-rule"></div>
+    <div class="logo-mark">Test<span>G</span>en</div>
+    <div class="logo-div"></div>
     <div class="logo-sub">Language Assessment Studio</div>
   </div>
   <nav>
@@ -760,417 +357,705 @@
   </nav>
 </header>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-left">
-    <div class="eyebrow">AI-Powered Assessment</div>
-    <h1 class="hero-title">
-      Craft examinations of <em>genuine</em> distinction
-    </h1>
-    <p class="hero-desc">
-      Generate bespoke language assessments calibrated to the CEFR framework. 
-      Each paper is tailored to your students' precise level — vocabulary, 
-      grammar, and comprehension — delivered as a polished Google Form in moments.
-    </p>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Languages</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">6</div>
-        <div class="stat-label">CEFR Levels</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Unique Papers</div>
+<div class="page">
+
+  <!-- FORM SECTION -->
+  <div class="form-section">
+
+    <!-- LEFT / HERO -->
+    <div class="hero-col">
+      <div class="eyebrow">AI-Powered Assessment</div>
+      <h1 class="hero-title">Craft examinations of <em>genuine</em> distinction</h1>
+      <p class="hero-desc">
+        Generate bespoke language assessments calibrated to the CEFR framework.
+        Each paper is tailored to your students' precise level — vocabulary,
+        grammar, and comprehension — delivered as a polished Google Form in moments.
+      </p>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Languages</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">CEFR Levels</div></div>
+        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Unique Papers</div></div>
       </div>
     </div>
-  </div>
 
-  <!-- FORM CARD -->
-  <div class="form-card">
-    <div class="form-title">Compose a New Assessment</div>
-    <div class="form-subtitle">Complete the fields below with precision</div>
+    <!-- RIGHT / FORM CARD -->
+    <div class="form-card">
+      <div class="card-title">Compose a New Assessment</div>
+      <div class="card-sub">Complete the fields below with precision</div>
 
-    <form id="gen-form">
+      <form id="gen-form">
 
-      <!-- IDENTITY -->
-      <div class="form-section">
-        <div class="section-label">I. Tutor & Paper Identity</div>
-        <div class="field-row">
-          <div class="field">
-            <label for="teacher_name">Your Name</label>
-            <input type="text" id="teacher_name" placeholder="e.g. Sophie Martin" required>
-          </div>
-          <div class="field">
-            <label for="test_title">Paper Title <span class="optional">auto-generated</span></label>
-            <input type="text" id="test_title" placeholder="French B1 — Present Tense">
-          </div>
-        </div>
-      </div>
-
-      <!-- LANGUAGE -->
-      <div class="form-section">
-        <div class="section-label">II. Language & Level</div>
-        <div class="field-row">
-          <div class="field">
-            <label for="language">Language</label>
-            <select id="language" required>
-              <option value="">Select language</option>
-              <option value="French">French</option>
-              <option value="German">German</option>
-              <option value="English">English (EFL)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="level">CEFR Level</label>
-            <select id="level" required>
-              <option value="">Select level</option>
-              <option value="A1">A1 — Beginner</option>
-              <option value="A2">A2 — Elementary</option>
-              <option value="B1">B1 — Intermediate</option>
-              <option value="B2">B2 — Upper Intermediate</option>
-              <option value="C1">C1 — Advanced</option>
-              <option value="C2">C2 — Mastery</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- TOPIC -->
-      <div class="form-section">
-        <div class="section-label">III. Topic & Content</div>
-        <div class="field-row">
-          <div class="field">
-            <label for="topic_type">Question Type</label>
-            <select id="topic_type" required>
-              <option value="">Select type</option>
-              <option value="grammar">Grammar</option>
-              <option value="vocabulary">Vocabulary</option>
-              <option value="reading">Reading Comprehension</option>
-              <option value="mixed">Mixed</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="topic">Specific Topic</label>
-            <input type="text" id="topic" placeholder="e.g. present tense conjugation" required>
-          </div>
-        </div>
-
-        <!-- Mixed distribution — shown only when Mixed selected -->
-        <div class="mixed-section" id="mixed-section">
-          <div class="section-label" style="margin-bottom:12px;">Mixed Distribution</div>
-          <div class="field-row triple">
+        <!-- I. IDENTITY -->
+        <div class="form-sec">
+          <div class="sec-label">I. Tutor & Paper Identity</div>
+          <div class="row2">
             <div class="field">
-              <label for="mix_grammar">Grammar Qs</label>
-              <input type="number" id="mix_grammar" min="0" value="8" placeholder="8">
+              <label for="teacher_name">Your Name</label>
+              <input type="text" id="teacher_name" placeholder="e.g. Sophie Martin" required>
             </div>
             <div class="field">
-              <label for="mix_vocab">Vocabulary Qs</label>
-              <input type="number" id="mix_vocab" min="0" value="8" placeholder="8">
+              <label for="teacher_email">Your Email <span class="opt">for records</span></label>
+              <input type="email" id="teacher_email" placeholder="sophie@school.com">
+            </div>
+          </div>
+          <div class="row1">
+            <div class="field">
+              <label for="test_title">Paper Title <span class="opt">auto-generated</span></label>
+              <input type="text" id="test_title" placeholder="French B1 — Present Tense">
+            </div>
+          </div>
+        </div>
+
+        <!-- II. LANGUAGE & LEVEL -->
+        <div class="form-sec">
+          <div class="sec-label">II. Language & Level</div>
+          <div class="row2">
+            <div class="field">
+              <label for="language">Language</label>
+              <select id="language" required>
+                <option value="">Select language</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+                <option value="English">English (EFL)</option>
+              </select>
             </div>
             <div class="field">
-              <label for="mix_reading">Reading Qs</label>
-              <input type="number" id="mix_reading" min="0" value="4" placeholder="4">
+              <label for="level">CEFR Level</label>
+              <select id="level" required>
+                <option value="">Select level</option>
+                <option value="A1">A1 — Beginner</option>
+                <option value="A2">A2 — Elementary</option>
+                <option value="B1">B1 — Intermediate</option>
+                <option value="B2">B2 — Upper Intermediate</option>
+                <option value="C1">C1 — Advanced</option>
+                <option value="C2">C2 — Mastery</option>
+              </select>
             </div>
           </div>
-          <div style="font-size:11px;color:var(--brown);margin-top:8px;">
-            Total: <span id="mix-total">20</span> questions
-          </div>
         </div>
 
-        <div class="field-row single" style="margin-top:16px;">
-          <div class="field">
-            <label for="custom_content">Specific Words / Verbs to Test <span class="optional">optional — leave blank to let AI choose</span></label>
-            <textarea id="custom_content" placeholder="e.g. aller, faire, prendre, vouloir&#10;Leave blank and AI will select appropriate vocabulary for the chosen level"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- QUANTITY & DIFFICULTY -->
-      <div class="form-section">
-        <div class="section-label">IV. Quantity & Difficulty</div>
-        <div class="field-row" style="margin-bottom:20px;">
-          <div class="field">
-            <label for="num_questions">Number of Questions</label>
-            <input type="number" id="num_questions" min="5" max="50" value="20" required>
-          </div>
-          <div class="field" style="justify-content:flex-end;">
-            <div class="diff-warning" id="diff-warning">Difficulty must total 100%</div>
-          </div>
-        </div>
-
-        <div class="difficulty-grid">
-          <div class="diff-item">
-            <div class="diff-header">
-              <div class="diff-name">Easy</div>
-              <div class="diff-value"><span id="easy-val">40</span><span>%</span></div>
+        <!-- III. TOPIC & CONTENT -->
+        <div class="form-sec">
+          <div class="sec-label">III. Topic & Content</div>
+          <div class="row2">
+            <div class="field">
+              <label for="topic_type">Question Type</label>
+              <select id="topic_type" required>
+                <option value="">Select type</option>
+                <option value="grammar">Grammar</option>
+                <option value="vocabulary">Vocabulary</option>
+                <option value="reading">Reading Comprehension</option>
+                <option value="mixed">Mixed</option>
+              </select>
             </div>
-            <input type="range" id="easy" min="0" max="100" value="40" style="--pct:40%">
-          </div>
-          <div class="diff-item">
-            <div class="diff-header">
-              <div class="diff-name">Medium</div>
-              <div class="diff-value"><span id="medium-val">40</span><span>%</span></div>
+            <div class="field">
+              <label for="topic">Specific Topic</label>
+              <select id="topic" required disabled>
+                <option value="">Select language & type first</option>
+              </select>
             </div>
-            <input type="range" id="medium" min="0" max="100" value="40" style="--pct:40%">
           </div>
-          <div class="diff-item">
-            <div class="diff-header">
-              <div class="diff-name">Hard</div>
-              <div class="diff-value"><span id="hard-val">20</span><span>%</span></div>
+
+          <!-- Mixed distribution -->
+          <div class="mixed-sec" id="mixed-sec">
+            <div class="sec-label" style="margin-bottom:10px;">Mixed Distribution</div>
+            <div class="row3">
+              <div class="field"><label for="mix_g">Grammar Qs</label><input type="number" id="mix_g" min="0" value="8"></div>
+              <div class="field"><label for="mix_v">Vocabulary Qs</label><input type="number" id="mix_v" min="0" value="8"></div>
+              <div class="field"><label for="mix_r">Reading Qs</label><input type="number" id="mix_r" min="0" value="4"></div>
             </div>
-            <input type="range" id="hard" min="0" max="100" value="20" style="--pct:20%">
+            <div class="mix-total" id="mix-total">Total: <span class="mn" id="mix-num">20</span> questions</div>
+          </div>
+
+          <div class="row1" style="margin-top:12px;">
+            <div class="field">
+              <label for="custom_content">Specific Words / Verbs to Test <span class="opt">optional — leave blank to let AI choose</span></label>
+              <textarea id="custom_content" placeholder="e.g. aller, faire, prendre, vouloir&#10;Leave blank and AI will select appropriate content for the chosen level"></textarea>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- SUBMIT -->
-      <div class="submit-area">
-        <button type="submit" class="btn-generate" id="submit-btn">
-          Generate Assessment
-        </button>
-        <div class="form-hint">
-          Your paper will be ready within 30 seconds
+        <!-- IV. QUANTITY & DIFFICULTY -->
+        <div class="form-sec">
+          <div class="sec-label">IV. Quantity & Difficulty</div>
+          <div class="row2" style="margin-bottom:16px;">
+            <div class="field">
+              <label for="num_questions">Number of Questions</label>
+              <input type="number" id="num_questions" min="5" max="50" value="20" required>
+            </div>
+            <div class="field">
+              <label for="diff_preset">Difficulty Profile</label>
+              <select id="diff_preset" required>
+                <option value="">Select profile</option>
+                <option value="easy_heavy">Easy-Heavy — Revision & Practice</option>
+                <option value="balanced" selected>Balanced — Standard Assessment</option>
+                <option value="hard_heavy">Hard-Heavy — Challenge Paper</option>
+                <option value="exam_mode">Exam Mode — High Stakes</option>
+              </select>
+            </div>
+          </div>
+          <div class="diff-breakdown" id="diff-breakdown">
+            <div class="diff-item"><div class="dot dot-e"></div><div><div class="diff-pct" id="e-pct">40%</div><div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged)">Easy</div></div></div>
+            <div class="diff-item" style="border-left:1px solid var(--border-light);padding-left:14px;"><div class="dot dot-m"></div><div><div class="diff-pct" id="m-pct">40%</div><div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged)">Medium</div></div></div>
+            <div class="diff-item" style="border-left:1px solid var(--border-light);padding-left:14px;"><div class="dot dot-h"></div><div><div class="diff-pct" id="h-pct">20%</div><div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged)">Hard</div></div></div>
+          </div>
         </div>
-      </div>
 
-    </form>
-  </div>
-</div>
+        <!-- SUBMIT -->
+        <div class="submit-area">
+          <button type="submit" class="btn-gen" id="submit-btn">Generate Assessment</button>
+          <div class="form-hint">Ready within 30 seconds</div>
+        </div>
 
-<!-- ERROR BOX -->
-<div class="error-box" id="error-box">
-  <div class="error-title">Generation Error</div>
-  <div class="error-msg" id="error-msg"></div>
-</div>
+        <!-- LOADING BAR -->
+        <div class="loading-bar-wrap" id="loading-wrap">
+          <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+          <div class="loading-msg" id="loading-msg">Generating your assessment…</div>
+        </div>
 
-<!-- ORNAMENT -->
-<div class="ornament" id="ornament" style="display:none;">✦ &nbsp; ✦ &nbsp; ✦</div>
+        <!-- ERROR -->
+        <div class="error-box" id="error-box">
+          <div class="error-title">Generation Error</div>
+          <div class="error-msg" id="error-msg"></div>
+        </div>
 
-<!-- RESULT PANEL -->
-<div id="result-panel">
-  <div class="result-header">
-    <div>
-      <div class="eyebrow" style="margin-bottom:8px;">Assessment Ready</div>
-      <div class="result-title" id="result-title">French B1 — Present Tense</div>
+      </form>
     </div>
-    <div class="result-meta">
-      <div class="meta-pill" id="result-lang">French · B1</div>
-      <div class="meta-pill" id="result-count">20 Questions</div>
-    </div>
   </div>
 
-  <div class="form-link-box" id="form-link-box" style="display:none;">
-    <div>
-      <div class="form-link-label">Student Form Link</div>
-      <div class="form-link-url" id="form-link-url">—</div>
+  <!-- ORNAMENT -->
+  <div class="ornament" id="ornament" style="display:none;">✦ &nbsp; ✦ &nbsp; ✦</div>
+
+  <!-- RESULT SECTION -->
+  <div id="result-section">
+
+    <div class="result-header">
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px;">Assessment Ready</div>
+        <div class="result-title" id="result-title">—</div>
+      </div>
+      <div class="result-pills">
+        <div class="pill" id="r-lang">—</div>
+        <div class="pill" id="r-count">—</div>
+        <div class="pill" id="r-diff">—</div>
+      </div>
     </div>
-    <button class="btn-copy" id="copy-btn">Copy Link</button>
+
+    <!-- CREATE FORM BUTTON -->
+    <div class="create-form-area" id="create-form-area">
+      <button class="btn-create-form" id="create-form-btn">
+        Create Google Form for Students
+      </button>
+      <div style="font-size:10px;color:var(--aged);margin-top:8px;letter-spacing:0.08em;">
+        Creates a quiz-mode Google Form with all questions, correct answers and explanations pre-loaded
+      </div>
+    </div>
+
+    <!-- FORM LINK (shown after form created) -->
+    <div class="form-link-box" id="form-link-box" style="display:none;">
+      <div>
+        <div class="form-link-label">Student Form Link</div>
+        <div class="form-link-url" id="form-link-url">—</div>
+      </div>
+      <div class="form-link-btns">
+        <button class="btn-sm" id="copy-btn">Copy Link</button>
+        <button class="btn-sm" id="open-btn">Open Form</button>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="questions">Questions</button>
+      <button class="tab-btn" data-tab="answer-key">Answer Key</button>
+      <button class="tab-btn" data-tab="full-paper">Full Paper</button>
+    </div>
+
+    <!-- TAB: QUESTIONS -->
+    <div class="tab-panel active" id="tab-questions">
+      <div class="questions-grid" id="questions-grid"></div>
+    </div>
+
+    <!-- TAB: ANSWER KEY -->
+    <div class="tab-panel" id="tab-answer-key">
+      <div class="ak-grid" id="ak-grid"></div>
+    </div>
+
+    <!-- TAB: FULL PAPER -->
+    <div class="tab-panel" id="tab-full-paper">
+      <div class="full-paper" id="full-paper-text"></div>
+    </div>
+
   </div>
 
-  <div class="questions-grid" id="questions-grid"></div>
-</div>
+</div><!-- /page -->
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-left">Lexara · Language Assessment Studio · Est. 2026</div>
-  <div class="footer-right">Crafted for educators who demand excellence</div>
+  <div class="footer-l">TestGen · Language Assessment Studio · Est. 2026</div>
+  <div class="footer-r">Crafted for educators who demand excellence</div>
 </footer>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────────────────────
-  const WEBHOOK_URL = 'https://revisionsystem.app.n8n.cloud/webhook/language-teacher-gen';
+// ── CONFIG ────────────────────────────────────────────────────────────────
+const W1_URL = 'https://primary-production-64a6.up.railway.app/webhook/language-teacher-gen';
+const W2_URL = 'https://primary-production-64a6.up.railway.app/webhook/6309a8f0-7e27-4fdb-b9cd-ad4d1747298a';
 
-  // ── AUTO-GENERATE TITLE ─────────────────────────────────────────────────
-  function autoTitle() {
-    const lang = document.getElementById('language').value;
-    const lvl  = document.getElementById('level').value;
-    const topic = document.getElementById('topic').value;
-    const titleEl = document.getElementById('test_title');
-    if (!titleEl.dataset.manual) {
-      if (lang && lvl && topic) {
-        titleEl.value = `${lang} ${lvl} — ${topic}`;
-      }
+// ── TOPIC DATA ────────────────────────────────────────────────────────────
+const TOPICS = {
+  grammar: {
+    French: [
+      'Present Tense (Présent)', 'Past Tense — Passé Composé', 'Past Tense — Imparfait',
+      'Future Tense (Futur Simple)', 'Conditional (Conditionnel)', 'Subjunctive (Subjonctif)',
+      'Imperative (Impératif)', 'Passive Voice', 'Articles & Gender (le/la/les/un/une)',
+      'Adjective Agreement', 'Personal Pronouns', 'Relative Pronouns (qui/que/dont)',
+      'Prepositions (à/de/en/dans)', 'Negation (ne…pas/jamais/plus)',
+      'Question Formation', 'Reflexive Verbs (Verbes Pronominaux)'
+    ],
+    German: [
+      'Present Tense (Präsens)', 'Past Tense — Perfekt', 'Past Tense — Präteritum',
+      'Future Tense (Futur I)', 'Conditional (Konjunktiv II)', 'Passive Voice (Passiv)',
+      'Nominative Case (Nominativ)', 'Accusative Case (Akkusativ)', 'Dative Case (Dativ)',
+      'Genitive Case (Genitiv)', 'Articles & Gender (der/die/das)', 'Adjective Endings',
+      'Modal Verbs (können/müssen/dürfen)', 'Separable Verbs (Trennbare Verben)',
+      'Word Order (Satzstellung)', 'Negation (nicht/kein)'
+    ],
+    English: [
+      'Present Simple', 'Present Continuous', 'Past Simple', 'Past Continuous',
+      'Present Perfect', 'Future (will / going to)', 'Conditional (if clauses)',
+      'Passive Voice', 'Articles (a / an / the)', 'Modal Verbs (can/must/should)',
+      'Prepositions of Time & Place', 'Question Tags', 'Reported Speech',
+      'Relative Clauses', 'Gerunds & Infinitives', 'Comparatives & Superlatives'
+    ]
+  },
+  vocabulary: [
+    'Food & Drink', 'Travel & Transport', 'Family & Relationships', 'Work & Profession',
+    'Health & Body', 'Home & Daily Routine', 'Shopping & Money', 'Nature & Weather',
+    'Education & School', 'Emotions & Personality', 'Technology & Media', 'Culture & Society'
+  ],
+  reading: [
+    'Everyday Situations', 'News & Current Events', 'Travel Writing',
+    'Formal Letters & Emails', 'Social Media & Messaging', 'Advertisements',
+    'Short Stories', 'Academic Texts'
+  ]
+};
+
+const DIFF_PRESETS = {
+  easy_heavy: { easy:60, medium:30, hard:10, label:'Easy-Heavy' },
+  balanced:   { easy:40, medium:40, hard:20, label:'Balanced' },
+  hard_heavy: { easy:20, medium:40, hard:40, label:'Hard-Heavy' },
+  exam_mode:  { easy:20, medium:30, hard:50, label:'Exam Mode' }
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let state = {
+  generated_text: '',
+  questions: [],
+  answer_key: [],
+  meta: {},
+  test_id: '',
+  form_link: '',
+  form_id: ''
+};
+
+// ── TOPIC DROPDOWN ────────────────────────────────────────────────────────
+function updateTopicDropdown() {
+  const lang = document.getElementById('language').value;
+  const type = document.getElementById('topic_type').value;
+  const topicEl = document.getElementById('topic');
+
+  topicEl.innerHTML = '<option value="">Select a topic</option>';
+
+  if (!lang || !type || type === 'mixed') {
+    topicEl.disabled = true;
+    topicEl.innerHTML = type === 'mixed'
+      ? '<option value="">N/A — see mixed distribution</option>'
+      : '<option value="">Select language & type first</option>';
+    return;
+  }
+
+  let topics = [];
+  if (type === 'grammar') topics = TOPICS.grammar[lang] || [];
+  else if (type === 'vocabulary') topics = TOPICS.vocabulary;
+  else if (type === 'reading') topics = TOPICS.reading;
+
+  topics.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    topicEl.appendChild(o);
+  });
+  topicEl.disabled = false;
+  autoTitle();
+}
+
+document.getElementById('language').addEventListener('change', updateTopicDropdown);
+document.getElementById('topic_type').addEventListener('change', () => {
+  updateTopicDropdown();
+  document.getElementById('mixed-sec').classList.toggle('on', document.getElementById('topic_type').value === 'mixed');
+});
+document.getElementById('topic').addEventListener('change', autoTitle);
+document.getElementById('level').addEventListener('change', autoTitle);
+
+// ── AUTO TITLE ────────────────────────────────────────────────────────────
+function autoTitle() {
+  const lang  = document.getElementById('language').value;
+  const lvl   = document.getElementById('level').value;
+  const topic = document.getElementById('topic').value;
+  const el    = document.getElementById('test_title');
+  if (!el.dataset.manual && lang && lvl && topic) {
+    el.value = `${lang} ${lvl} — ${topic}`;
+  }
+}
+document.getElementById('test_title').addEventListener('input', function() {
+  this.dataset.manual = this.value ? '1' : '';
+});
+
+// ── MIXED TOTAL ───────────────────────────────────────────────────────────
+['mix_g','mix_v','mix_r'].forEach(id =>
+  document.getElementById(id).addEventListener('input', updateMixTotal)
+);
+function updateMixTotal() {
+  const g = parseInt(document.getElementById('mix_g').value)||0;
+  const v = parseInt(document.getElementById('mix_v').value)||0;
+  const r = parseInt(document.getElementById('mix_r').value)||0;
+  const numQ = parseInt(document.getElementById('num_questions').value)||20;
+  const total = g+v+r;
+  document.getElementById('mix-num').textContent = total;
+  document.getElementById('mix-total').classList.toggle('bad', total !== numQ);
+}
+
+// ── DIFFICULTY PRESET ─────────────────────────────────────────────────────
+document.getElementById('diff_preset').addEventListener('change', function() {
+  const p = DIFF_PRESETS[this.value];
+  const bd = document.getElementById('diff-breakdown');
+  if (p) {
+    document.getElementById('e-pct').textContent = p.easy + '%';
+    document.getElementById('m-pct').textContent = p.medium + '%';
+    document.getElementById('h-pct').textContent = p.hard + '%';
+    bd.classList.add('on');
+  } else {
+    bd.classList.remove('on');
+  }
+});
+
+// ── LOADING MESSAGES ──────────────────────────────────────────────────────
+const LOADING_MSGS = [
+  'Composing your assessment…',
+  'Calibrating difficulty levels…',
+  'Checking spelling and accents…',
+  'Crafting distractors…',
+  'Preparing answer key…',
+  'Almost ready…'
+];
+let msgInterval;
+function startLoadingMessages() {
+  let i = 0;
+  document.getElementById('loading-msg').textContent = LOADING_MSGS[0];
+  msgInterval = setInterval(() => {
+    i = (i + 1) % LOADING_MSGS.length;
+    document.getElementById('loading-msg').textContent = LOADING_MSGS[i];
+  }, 4000);
+}
+function stopLoadingMessages() { clearInterval(msgInterval); }
+
+// ── PARSE QUESTIONS FROM GENERATED TEXT ──────────────────────────────────
+function parseGeneratedText(text) {
+  const questions = [];
+  const answer_key = [];
+
+  const blocks = text.split(/\n(?=Q\d+\.)/);
+
+  blocks.forEach(block => {
+    if (!block.trim() || !/^Q\d+\./.test(block.trim())) return;
+
+    const numMatch   = block.match(/^Q(\d+)\./);
+    if (!numMatch) return;
+    const qNum = parseInt(numMatch[1]);
+
+    const diffMatch  = block.match(/\[(Easy|Medium|Hard)\]/i);
+    const typeMatch  = block.match(/\[(Grammar|Vocabulary|Reading)\]/i);
+    const difficulty = diffMatch ? diffMatch[1] : 'Medium';
+    const q_type     = typeMatch ? typeMatch[1] : '';
+
+    const qTextMatch = block.match(/^Q\d+\.\s*(?:\[(?:Easy|Medium|Hard)\]\s*)?(?:\[(?:Grammar|Vocabulary|Reading)\]\s*)?([\s\S]*?)(?=\nA\))/i);
+    const question   = qTextMatch ? qTextMatch[1].trim() : '';
+
+    const optA = (block.match(/\nA\)\s*([\s\S]*?)(?=\nB\))/) || [])[1]?.trim() || '';
+    const optB = (block.match(/\nB\)\s*([\s\S]*?)(?=\nC\))/) || [])[1]?.trim() || '';
+    const optC = (block.match(/\nC\)\s*([\s\S]*?)(?=\nD\))/) || [])[1]?.trim() || '';
+    const optD = (block.match(/\nD\)\s*([\s\S]*?)(?=\nAnswer:)/) || [])[1]?.trim() || '';
+
+    const answerMatch = block.match(/\nAnswer:\s*([A-D])/i);
+    const answer = answerMatch ? answerMatch[1].toUpperCase() : '';
+
+    const explMatch  = block.match(/\nExplanation:\s*([\s\S]*?)(?=\n---|$)/i);
+    const explanation = explMatch ? explMatch[1].trim() : '';
+
+    if (question && answer) {
+      questions.push({ q_num:qNum, question, option_a:optA, option_b:optB, option_c:optC, option_d:optD, answer, explanation, difficulty, question_type:q_type });
+      answer_key.push({ q_num:qNum, answer, explanation });
     }
+  });
+
+  return { questions, answer_key };
+}
+
+// ── HANDLE RESPONSE SHAPES ────────────────────────────────────────────────
+function extractFromResponse(data) {
+  // Shape A: { questions:[], test_id, test_title, ... }
+  if (data.questions && Array.isArray(data.questions)) {
+    return {
+      questions: data.questions,
+      test_id: data.test_id || '',
+      test_title: data.test_title || '',
+      language: data.language || '',
+      level: data.level || '',
+      total_questions: data.total_questions || data.questions.length,
+      generated_text: data.generated_text || ''
+    };
+  }
+  // Shape B: Array (Google Sheets row)
+  if (Array.isArray(data) && data[0]) {
+    const row = data[0];
+    const text = row['generated_text'] || row['Generated Text'] || '';
+    const { questions, answer_key } = parseGeneratedText(text);
+    return {
+      questions, answer_key,
+      test_id: row['test_id'] || row['Test ID'] || '',
+      test_title: row['test_title'] || row['Test Title'] || '',
+      language: row['language'] || '',
+      level: row['level'] || '',
+      total_questions: questions.length,
+      generated_text: text
+    };
+  }
+  // Shape C: plain text
+  if (typeof data === 'string') {
+    const { questions, answer_key } = parseGeneratedText(data);
+    return { questions, answer_key, test_id:'', test_title:'', language:'', level:'', total_questions:questions.length, generated_text:data };
+  }
+  return null;
+}
+
+// ── FORM SUBMIT ───────────────────────────────────────────────────────────
+document.getElementById('gen-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn  = document.getElementById('submit-btn');
+  const errB = document.getElementById('error-box');
+  const loadW = document.getElementById('loading-wrap');
+
+  errB.classList.remove('on');
+  btn.classList.add('loading'); btn.disabled = true;
+  loadW.classList.add('on');
+  startLoadingMessages();
+
+  const topicType = document.getElementById('topic_type').value;
+  const presetKey = document.getElementById('diff_preset').value;
+  const diff      = DIFF_PRESETS[presetKey] || { easy:40, medium:40, hard:20 };
+
+  const payload = {
+    teacher_name:   document.getElementById('teacher_name').value.trim(),
+    teacher_email:  document.getElementById('teacher_email').value.trim(),
+    test_title:     document.getElementById('test_title').value.trim(),
+    language:       document.getElementById('language').value,
+    level:          document.getElementById('level').value,
+    topic_type:     topicType,
+    topic:          document.getElementById('topic').value,
+    custom_content: document.getElementById('custom_content').value.trim(),
+    num_questions:  parseInt(document.getElementById('num_questions').value),
+    difficulty:     { easy:diff.easy, medium:diff.medium, hard:diff.hard }
+  };
+
+  if (topicType === 'mixed') {
+    payload.custom_mix = {
+      grammar:    parseInt(document.getElementById('mix_g').value)||0,
+      vocabulary: parseInt(document.getElementById('mix_v').value)||0,
+      reading:    parseInt(document.getElementById('mix_r').value)||0
+    };
+    payload.topic = 'mixed';
   }
 
-  document.getElementById('test_title').addEventListener('input', function() {
-    this.dataset.manual = this.value ? 'true' : '';
-  });
-
-  ['language','level','topic'].forEach(id => {
-    document.getElementById(id).addEventListener('change', autoTitle);
-    document.getElementById(id).addEventListener('input', autoTitle);
-  });
-
-  // ── MIXED SECTION TOGGLE ────────────────────────────────────────────────
-  document.getElementById('topic_type').addEventListener('change', function() {
-    const mixed = document.getElementById('mixed-section');
-    mixed.classList.toggle('visible', this.value === 'mixed');
-  });
-
-  // ── MIXED TOTAL ─────────────────────────────────────────────────────────
-  ['mix_grammar','mix_vocab','mix_reading'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateMixTotal);
-  });
-
-  function updateMixTotal() {
-    const g = parseInt(document.getElementById('mix_grammar').value) || 0;
-    const v = parseInt(document.getElementById('mix_vocab').value) || 0;
-    const r = parseInt(document.getElementById('mix_reading').value) || 0;
-    document.getElementById('mix-total').textContent = g + v + r;
-  }
-
-  // ── DIFFICULTY SLIDERS ──────────────────────────────────────────────────
-  const sliders = ['easy','medium','hard'];
-
-  sliders.forEach(id => {
-    document.getElementById(id).addEventListener('input', function() {
-      updateSlider(id, this.value);
-      checkDiffTotal();
+  try {
+    const res  = await fetch(W1_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
     });
-  });
 
-  function updateSlider(id, val) {
-    document.getElementById(`${id}-val`).textContent = val;
-    const slider = document.getElementById(id);
-    slider.style.setProperty('--pct', val + '%');
-  }
+    let data;
+    const text = await res.text();
+    try { data = JSON.parse(text); } catch { data = text; }
 
-  function checkDiffTotal() {
-    const total = sliders.reduce((s, id) => s + parseInt(document.getElementById(id).value), 0);
-    const warn = document.getElementById('diff-warning');
-    warn.style.display = total !== 100 ? 'block' : 'none';
-  }
+    if (!res.ok) throw new Error(
+      (typeof data === 'object' && data.error) ? data.error : `Server error ${res.status}`
+    );
 
-  // ── FORM SUBMIT ─────────────────────────────────────────────────────────
-  document.getElementById('gen-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    const extracted = extractFromResponse(data);
+    if (!extracted || extracted.questions.length === 0) throw new Error('No questions were generated. Please try again.');
 
-    const btn = document.getElementById('submit-btn');
-    const errorBox = document.getElementById('error-box');
-
-    errorBox.classList.remove('visible');
-    btn.classList.add('loading');
-    btn.disabled = true;
-
-    const topicType = document.getElementById('topic_type').value;
-
-    const payload = {
-      teacher_name:   document.getElementById('teacher_name').value.trim(),
-      test_title:     document.getElementById('test_title').value.trim(),
-      language:       document.getElementById('language').value,
-      level:          document.getElementById('level').value,
-      topic_type:     topicType,
-      topic:          document.getElementById('topic').value.trim(),
-      custom_content: document.getElementById('custom_content').value.trim(),
-      num_questions:  parseInt(document.getElementById('num_questions').value),
-      difficulty: {
-        easy:   parseInt(document.getElementById('easy').value),
-        medium: parseInt(document.getElementById('medium').value),
-        hard:   parseInt(document.getElementById('hard').value)
-      }
+    // Store state
+    state.questions     = extracted.questions;
+    state.answer_key    = extracted.answer_key || extracted.questions.map(q => ({ q_num:q.q_num, answer:q.answer, explanation:q.explanation }));
+    state.test_id       = extracted.test_id;
+    state.generated_text = extracted.generated_text || text;
+    state.meta = {
+      test_title: extracted.test_title || payload.test_title || `${payload.language} ${payload.level} — ${payload.topic}`,
+      language:   extracted.language  || payload.language,
+      level:      extracted.level     || payload.level,
+      topic:      payload.topic,
+      total:      extracted.total_questions,
+      difficulty: diff.label || presetKey
     };
 
-    // Add mixed distribution if applicable
-    if (topicType === 'mixed') {
-      payload.custom_mix = {
-        grammar:    parseInt(document.getElementById('mix_grammar').value) || 0,
-        vocabulary: parseInt(document.getElementById('mix_vocab').value) || 0,
-        reading:    parseInt(document.getElementById('mix_reading').value) || 0
-      };
-    }
+    renderResult();
 
-    try {
-      const res = await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+  } catch(err) {
+    errB.classList.add('on');
+    document.getElementById('error-msg').textContent = err.message;
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+    loadW.classList.remove('on');
+    stopLoadingMessages();
+  }
+});
 
-      const data = await res.json();
+// ── RENDER RESULT ─────────────────────────────────────────────────────────
+function renderResult() {
+  const { questions, answer_key, meta, generated_text } = state;
 
-      if (!res.ok || data.success === false) {
-        throw new Error(data.error || data.message || 'Generation failed');
-      }
+  document.getElementById('result-title').textContent = meta.test_title;
+  document.getElementById('r-lang').textContent  = `${meta.language} · ${meta.level}`;
+  document.getElementById('r-count').textContent = `${meta.total} Questions`;
+  document.getElementById('r-diff').textContent  = meta.difficulty || 'Balanced';
 
-      renderResult(data);
+  // Questions tab
+  const grid = document.getElementById('questions-grid');
+  grid.innerHTML = '';
+  questions.forEach((q, i) => {
+    const dc   = `tag-${(q.difficulty||'medium').toLowerCase()}`;
+    const letters = ['a','b','c','d'];
+    const optsHtml = letters.map(l => {
+      const txt = q[`option_${l}`] || '';
+      const isCorrct = q.answer === l.toUpperCase();
+      return `<div class="opt-row ${isCorrct?'correct':''}">
+        <span class="opt-letter">${l.toUpperCase()}.</span>
+        <span class="opt-text">${txt}</span>
+      </div>`;
+    }).join('');
 
-    } catch (err) {
-      errorBox.classList.add('visible');
-      document.getElementById('error-msg').textContent = err.message;
-    } finally {
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    }
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.style.animationDelay = `${i*0.04}s`;
+    card.innerHTML = `
+      <div class="q-head">
+        <div class="q-num">${String(q.q_num||i+1).padStart(2,'0')}</div>
+        <div class="q-tags">
+          <span class="tag ${dc}">${q.difficulty||'Medium'}</span>
+          ${q.question_type ? `<span class="tag tag-type">${q.question_type}</span>` : ''}
+        </div>
+      </div>
+      <div class="q-text">${q.question}</div>
+      <div class="q-opts">${optsHtml}</div>
+      ${q.explanation ? `<div class="q-expl">${q.explanation}</div>` : ''}
+    `;
+    grid.appendChild(card);
   });
 
-  // ── RENDER RESULT ────────────────────────────────────────────────────────
-  function renderResult(data) {
-    const panel = document.getElementById('result-panel');
-    const grid  = document.getElementById('questions-grid');
-    const orn   = document.getElementById('ornament');
+  // Answer key tab
+  const akGrid = document.getElementById('ak-grid');
+  akGrid.innerHTML = '';
+  (answer_key || questions).forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'ak-card';
+    card.innerHTML = `
+      <div class="ak-num">Question ${q.q_num}</div>
+      <div class="ak-answer">${q.answer}</div>
+      ${q.explanation ? `<div class="ak-expl">${q.explanation}</div>` : ''}
+    `;
+    akGrid.appendChild(card);
+  });
 
-    // Header
-    document.getElementById('result-title').textContent = data.test_title || 'Assessment Ready';
-    document.getElementById('result-lang').textContent  = `${data.language} · ${data.level}`;
-    document.getElementById('result-count').textContent = `${data.total_questions} Questions`;
+  // Full paper tab
+  document.getElementById('full-paper-text').textContent = generated_text || 'Full paper text not available.';
 
-    // Form link
-    if (data.form_link) {
-      document.getElementById('form-link-url').textContent = data.form_link;
-      document.getElementById('form-link-box').style.display = 'flex';
-    }
+  // Show result section
+  document.getElementById('ornament').style.display = 'block';
+  document.getElementById('result-section').classList.add('on');
+  document.getElementById('result-section').scrollIntoView({ behavior:'smooth', block:'start' });
+}
 
-    // Questions
-    grid.innerHTML = '';
-    (data.questions || []).forEach((q, i) => {
-      const diffClass = `tag-${(q.difficulty || 'medium').toLowerCase()}`;
-      const options = ['A','B','C','D'];
-
-      const optionsHtml = options.map(letter => {
-        const text = q[`option_${letter.toLowerCase()}`] || '';
-        const isCorrect = q.answer === letter;
-        return `
-          <div class="option ${isCorrect ? 'correct' : ''}">
-            <span class="option-letter">${letter}.</span>
-            <span class="option-text">${text}</span>
-          </div>`;
-      }).join('');
-
-      const card = document.createElement('div');
-      card.className = 'question-card';
-      card.style.animationDelay = `${i * 0.05}s`;
-      card.innerHTML = `
-        <div class="q-header">
-          <div class="q-num">${String(q.number || i+1).padStart(2,'0')}</div>
-          <div class="q-tags">
-            <span class="tag ${diffClass}">${q.difficulty || 'Medium'}</span>
-            <span class="tag tag-type">${q.question_type || ''}</span>
-          </div>
-        </div>
-        <div class="q-text">${q.question}</div>
-        <div class="q-options">${optionsHtml}</div>
-        ${q.explanation ? `<div class="q-explanation">${q.explanation}</div>` : ''}
-      `;
-      grid.appendChild(card);
-    });
-
-    orn.style.display = 'block';
-    panel.classList.add('visible');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// ── CREATE GOOGLE FORM ────────────────────────────────────────────────────
+document.getElementById('create-form-btn').addEventListener('click', async function() {
+  if (!state.test_id) {
+    alert('No test ID found. Please generate a test first.');
+    return;
   }
 
-  // ── COPY LINK ────────────────────────────────────────────────────────────
-  document.getElementById('copy-btn').addEventListener('click', function() {
-    const url = document.getElementById('form-link-url').textContent;
-    navigator.clipboard.writeText(url).then(() => {
-      this.textContent = 'Copied';
-      setTimeout(() => this.textContent = 'Copy Link', 2000);
+  this.classList.add('loading'); this.disabled = true;
+  document.getElementById('form-link-box').style.display = 'none';
+
+  try {
+    const res  = await fetch(W2_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ test_id: state.test_id })
     });
+
+    let data;
+    const text = await res.text();
+    try { data = JSON.parse(text); } catch { data = {}; }
+
+    // Strip leading = from URL (known N8N issue)
+    let formLink = data.form_link || data.responderUri || '';
+    formLink = formLink.replace(/^=/, '');
+
+    if (!formLink) throw new Error('Form link not returned. Check Workflow 2.');
+
+    state.form_link = formLink;
+    state.form_id   = data.form_id || '';
+
+    document.getElementById('form-link-url').textContent = formLink;
+    document.getElementById('form-link-box').style.display = 'flex';
+
+    // Hide the create form button after success
+    document.getElementById('create-form-area').style.display = 'none';
+
+    document.getElementById('form-link-box').scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  } catch(err) {
+    alert('Form creation failed: ' + err.message);
+  } finally {
+    this.classList.remove('loading'); this.disabled = false;
+  }
+});
+
+// ── COPY LINK ─────────────────────────────────────────────────────────────
+document.getElementById('copy-btn').addEventListener('click', function() {
+  const url = document.getElementById('form-link-url').textContent;
+  navigator.clipboard.writeText(url).then(() => {
+    this.textContent = 'Copied';
+    setTimeout(() => this.textContent = 'Copy Link', 2000);
   });
+});
+
+// ── OPEN FORM ─────────────────────────────────────────────────────────────
+document.getElementById('open-btn').addEventListener('click', function() {
+  const url = document.getElementById('form-link-url').textContent;
+  if (url && url !== '—') window.open(url, '_blank');
+});
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
+  });
+});
+
+// ── INIT DIFF BREAKDOWN ───────────────────────────────────────────────────
+document.getElementById('diff_preset').value = 'balanced';
+document.getElementById('diff_preset').dispatchEvent(new Event('change'));
 </script>
 </body>
 </html>
