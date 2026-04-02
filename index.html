@@ -1,1061 +1,1062 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>TestGen — Language Assessment Studio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Tenor+Sans&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Tenor+Sans&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 :root {
-  --cream: #F5F0E8;
-  --parchment: #EDE5D0;
-  --aged: #D4C5A9;
-  --gold: #B8960C;
-  --gold-light: #D4AF37;
-  --gold-dim: #8B6914;
-  --forest: #1C2B1E;
-  --forest-mid: #2C3E2F;
-  --ink: #1A1410;
-  --ink-mid: #3D3028;
-  --brown: #5C4033;
-  --border: #C4B49A;
-  --border-light: #DDD0B8;
-  --error: #6B2020;
-  --pass: #2D5A27;
+  --cream:    #F5F0E8;
+  --parch:    #EDE5D0;
+  --parch2:   #E4D9C0;
+  --ink:      #1A1410;
+  --ink2:     #3D2E1E;
+  --gold:     #B8960C;
+  --gold2:    #D4AC0D;
+  --gold-dim: rgba(184,150,12,0.1);
+  --forest:   #1C2B1E;
+  --forest2:  #243625;
+  --forest3:  #2E4430;
+  --linen:    #C4B49A;
+  --linen2:   #D8CDB5;
+  --muted:    #7A6A54;
+  --muted2:   #A8967E;
+  --green:    #2D5A27;
+  --green-dim:rgba(45,90,39,0.08);
+  --red:      #8B2020;
+  --red-dim:  rgba(139,32,32,0.08);
+  --ff:       'Tenor Sans', sans-serif;
+  --ffd:      'Cormorant Garamond', serif;
+  --ffi:      'IM Fell English', serif;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--cream);
+  font-family: var(--ff);
+  background: var(--cream);
   color: var(--ink);
-  font-family: 'Tenor Sans', sans-serif;
   min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse at 15% 0%, rgba(184,150,12,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 100%, rgba(28,43,30,0.06) 0%, transparent 55%);
+  overflow-x: hidden;
 }
 
-/* ── HEADER ── */
-header {
-  border-bottom: 1px solid var(--border);
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+  opacity: 0.7;
+}
+
+/* Warm vignette */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 900px 600px at 10% 0%, rgba(184,150,12,0.06) 0%, transparent 65%),
+    radial-gradient(ellipse 700px 700px at 90% 100%, rgba(28,43,30,0.07) 0%, transparent 65%);
+}
+
+#root { position: relative; z-index: 1; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
   padding: 0 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 70px;
-  background: rgba(245,240,232,0.97);
-  backdrop-filter: blur(8px);
-  position: sticky;
-  top: 0;
-  z-index: 200;
+  background: rgba(245,240,232,0.93);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--linen);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 14px;
+}
+.nav-crest {
+  width: 34px; height: 34px; border-radius: 4px;
+  border: 1.5px solid var(--gold);
+  background: var(--forest);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ffd); font-size: 17px; font-weight: 600;
+  color: var(--gold); letter-spacing: -0.5px;
+  box-shadow: 1px 1px 0 var(--gold);
+}
+.nav-brand {
+  font-family: var(--ffd); font-size: 20px; font-weight: 600;
+  color: var(--ink); letter-spacing: 0.3px;
+}
+.nav-brand em { color: var(--gold); font-style: italic; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
+.nav-tag {
+  font-family: var(--ff); font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--forest);
+  border: 1px solid var(--linen); padding: 4px 12px; border-radius: 2px;
+}
+.nav-langs { display: flex; gap: 8px; align-items: center; }
+.lang-flag {
+  font-size: 16px; opacity: 0.7; transition: opacity 0.2s;
+  cursor: default;
+}
+.lang-flag:hover { opacity: 1; }
+
+/* ── HERO ── */
+.hero {
+  padding: 110px 56px 72px;
+  max-width: 1060px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  gap: 72px; align-items: center;
+}
+.hero-eyebrow {
+  font-family: var(--ff); font-size: 10px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 22px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; flex: 1; max-width: 32px;
+  height: 1px; background: var(--gold); opacity: 0.5;
+}
+.hero-h1 {
+  font-family: var(--ffd); font-size: clamp(44px, 5vw, 70px);
+  font-weight: 600; line-height: 1.08; letter-spacing: -0.5px;
+  color: var(--ink); margin-bottom: 18px;
+}
+.hero-h1 em { color: var(--forest); font-style: italic; font-weight: 400; }
+.hero-sub {
+  font-family: var(--ffi); font-size: 16px; font-style: italic;
+  color: var(--muted); line-height: 1.9; margin-bottom: 36px;
+  max-width: 440px;
+}
+.hero-cefr {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.cefr-pill {
+  font-family: var(--ffd); font-size: 14px; font-weight: 600;
+  color: var(--forest); border: 1px solid var(--linen);
+  background: var(--parch); padding: 5px 14px; border-radius: 2px;
+  letter-spacing: 0.5px; transition: all 0.2s;
+  box-shadow: 1px 1px 0 var(--linen);
+}
+.cefr-pill:hover {
+  border-color: var(--gold); color: var(--gold);
+  box-shadow: 1px 1px 0 var(--gold);
+}
+.cefr-pill.advanced { background: var(--forest); color: var(--gold); border-color: var(--forest); }
+
+/* Hero right — decorative card */
+.hero-card {
+  background: var(--parch);
+  border: 1px solid var(--linen);
+  border-radius: 4px; padding: 32px;
+  box-shadow: 4px 4px 0 var(--linen), 8px 8px 0 var(--linen2);
+  position: relative;
+}
+.hero-card::before {
+  content: '"';
+  position: absolute; top: -24px; left: 24px;
+  font-family: var(--ffd); font-size: 80px; font-weight: 700;
+  color: var(--gold); opacity: 0.3; line-height: 1;
+}
+.hero-card-quote {
+  font-family: var(--ffi); font-size: 15px; font-style: italic;
+  color: var(--ink2); line-height: 1.85; margin-bottom: 20px;
+}
+.hero-card-attr {
+  font-family: var(--ff); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted2);
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-card-attr::before { content: '—'; font-size: 14px; }
+.hero-stat-row {
+  display: flex; gap: 0; margin-top: 24px;
+  border-top: 1px solid var(--linen); padding-top: 20px;
+}
+.hstat {
+  flex: 1; text-align: center; padding: 0 12px;
+  border-right: 1px solid var(--linen);
+}
+.hstat:last-child { border-right: none; }
+.hstat-n {
+  font-family: var(--ffd); font-size: 26px; font-weight: 700;
+  color: var(--forest); line-height: 1;
+}
+.hstat-l { font-size: 10px; color: var(--muted2); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── MAIN ── */
+.main { max-width: 1060px; margin: 0 auto; padding: 0 56px 80px; }
+
+/* ── ORNAMENT DIVIDER ── */
+.ornament {
+  text-align: center; color: var(--gold); opacity: 0.4;
+  font-size: 18px; letter-spacing: 12px; margin: 8px 0 24px;
+  user-select: none;
 }
 
-.logo { display:flex; align-items:baseline; gap:14px; }
-.logo-mark { font-family:'IM Fell English',serif; font-size:24px; color:var(--forest); letter-spacing:0.04em; }
-.logo-mark span { color:var(--gold); }
-.logo-div { width:1px; height:26px; background:var(--border); align-self:center; }
-.logo-sub { font-size:9px; letter-spacing:0.24em; text-transform:uppercase; color:var(--brown); }
-
-nav { display:flex; gap:28px; align-items:center; }
-nav a { font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); text-decoration:none; transition:color 0.2s; }
-nav a:hover { color:var(--gold-dim); }
-
-/* ── LAYOUT ── */
-.page { max-width:1440px; margin:0 auto; padding:0 56px; }
-
-/* ── FORM SECTION ── */
-.form-section {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 64px;
-  padding: 56px 0 48px;
-  align-items: start;
+/* ── SECTION LABEL ── */
+.sect-label {
+  font-family: var(--ff); font-size: 9px; letter-spacing: 3.5px;
+  text-transform: uppercase; color: var(--muted);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
 }
+.sect-label::after { content: ''; flex: 1; height: 1px; background: var(--linen); }
 
-.hero-col { position:sticky; top:90px; }
-
-.eyebrow {
-  font-size:10px; letter-spacing:0.32em; text-transform:uppercase;
-  color:var(--gold-dim); margin-bottom:16px;
-  display:flex; align-items:center; gap:12px;
+/* ── CARD ── */
+.card {
+  background: var(--parch);
+  border: 1px solid var(--linen);
+  border-radius: 3px; overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 3px 3px 0 var(--linen2), 6px 6px 0 rgba(196,180,154,0.3);
 }
-.eyebrow::before { content:''; display:block; width:26px; height:1px; background:var(--gold); }
-
-.hero-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:46px; font-weight:300; line-height:1.1;
-  color:var(--forest); margin-bottom:18px;
+.card-hd {
+  padding: 18px 28px; border-bottom: 1px solid var(--linen);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  background: linear-gradient(135deg, var(--parch2), var(--parch));
 }
-.hero-title em { font-style:italic; color:var(--gold-dim); }
-
-.hero-desc { font-size:13px; line-height:1.85; color:var(--brown); margin-bottom:32px; }
-
-.hero-stats { display:flex; gap:28px; padding-top:24px; border-top:1px solid var(--border-light); }
-.stat { display:flex; flex-direction:column; gap:3px; }
-.stat-num { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--forest); line-height:1; }
-.stat-label { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); }
-
-/* ── FORM CARD ── */
-.form-card {
-  background:var(--parchment);
-  border:1px solid var(--border);
-  padding:40px;
-  position:relative;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 28px rgba(28,43,30,0.08);
+.card-title {
+  font-family: var(--ffd); font-size: 20px; font-weight: 600;
+  color: var(--ink); letter-spacing: 0.2px;
 }
-.form-card::before {
-  content:''; position:absolute;
-  top:7px; left:7px; right:-7px; bottom:-7px;
-  border:1px solid var(--border-light); z-index:-1; pointer-events:none;
+.card-sub {
+  font-family: var(--ffi); font-size: 13px; font-style: italic;
+  color: var(--muted); margin-top: 3px;
 }
+.card-body { padding: 28px; }
 
-.card-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--forest); margin-bottom:4px; }
-.card-sub { font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--aged); margin-bottom:28px; padding-bottom:20px; border-bottom:1px solid var(--border-light); }
-
-.sec-label {
-  font-size:9px; letter-spacing:0.28em; text-transform:uppercase;
-  color:var(--gold-dim); margin-bottom:12px;
-  display:flex; align-items:center; gap:10px;
+/* ── LANGUAGE SELECTOR ── */
+.lang-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
+.lang-card {
+  background: var(--cream); border: 1.5px solid var(--linen);
+  border-radius: 3px; padding: 18px 16px; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+  box-shadow: 2px 2px 0 var(--linen2);
 }
-.sec-label::after { content:''; flex:1; height:1px; background:var(--border-light); }
-
-.form-sec { margin-bottom:24px; }
-.row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
-.row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px; }
-.row1 { display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:12px; }
-
-.field { display:flex; flex-direction:column; gap:5px; }
-
-label { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); }
-label .opt { color:var(--aged); font-size:8px; letter-spacing:0.08em; text-transform:none; font-style:italic; margin-left:5px; }
-
-input[type=text], input[type=number], input[type=email], select, textarea {
-  background:var(--cream); border:1px solid var(--border);
-  padding:9px 12px; font-family:'Tenor Sans',sans-serif;
-  font-size:13px; color:var(--ink); outline:none;
-  transition:border-color 0.2s, box-shadow 0.2s;
-  appearance:none; -webkit-appearance:none; width:100%;
+.lang-card:hover { border-color: var(--gold); box-shadow: 2px 2px 0 var(--gold); }
+.lang-card.active {
+  background: var(--forest); border-color: var(--forest);
+  box-shadow: 2px 2px 0 var(--gold);
 }
-input:focus, select:focus, textarea:focus {
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(184,150,12,0.08);
+.lang-flag-lg { font-size: 28px; margin-bottom: 8px; display: block; }
+.lang-name {
+  font-family: var(--ffd); font-size: 16px; font-weight: 600;
+  color: var(--ink); letter-spacing: 0.3px; display: block;
 }
-input::placeholder, textarea::placeholder { color:var(--aged); font-style:italic; font-size:12px; }
-
-select {
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23B8960C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 12px center;
-  padding-right:32px; cursor:pointer;
+.lang-card.active .lang-name { color: var(--gold); }
+.lang-native {
+  font-family: var(--ffi); font-size: 12px; font-style: italic;
+  color: var(--muted); margin-top: 3px; display: block;
 }
-select:disabled { opacity:0.42; cursor:not-allowed; }
+.lang-card.active .lang-native { color: rgba(255,255,255,0.5); }
 
-textarea { resize:vertical; min-height:72px; line-height:1.65; }
+/* ── FORM FIELDS ── */
+.fg { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.fg3 { grid-template-columns: 1fr 1fr 1fr; }
+.ff-col { grid-column: 1 / -1; }
 
-/* ── MIXED SECTION ── */
-.mixed-sec { display:none; background:rgba(28,43,30,0.03); border:1px solid var(--border-light); padding:16px; margin-top:10px; }
-.mixed-sec.on { display:block; }
-.mix-total { font-size:11px; color:var(--brown); margin-top:6px; }
-.mix-total .mn { font-family:'Cormorant Garamond',serif; font-size:17px; color:var(--forest); }
-.mix-total.bad .mn { color:var(--error); }
+.fl {
+  display: block; font-family: var(--ff); font-size: 9px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.fl span { color: var(--gold); }
+.fl em { font-style: italic; color: var(--muted2); letter-spacing: 0; text-transform: none; font-size: 11px; }
 
-/* ── DIFFICULTY PRESETS ── */
-.diff-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.ti {
+  width: 100%; padding: 10px 14px;
+  background: var(--cream); border: 1px solid var(--linen);
+  border-radius: 2px; color: var(--ink);
+  font-family: var(--ff); font-size: 14px;
+  transition: border-color 0.15s, box-shadow 0.15s; outline: none;
+  box-shadow: inset 1px 1px 0 rgba(196,180,154,0.3);
+}
+.ti::placeholder { color: var(--muted2); font-family: var(--ffi); font-style: italic; }
+.ti:focus { border-color: var(--gold); box-shadow: inset 1px 1px 0 rgba(196,180,154,0.3), 0 0 0 3px var(--gold-dim); }
+.ti:disabled { opacity: 0.35; cursor: not-allowed; }
+select.ti {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A8967E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px;
+}
+select.ti option { background: var(--cream); }
+textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
+
+/* CEFR selector */
+.cefr-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
+.cefr-btn {
+  padding: 10px 6px; text-align: center;
+  background: var(--cream); border: 1px solid var(--linen);
+  border-radius: 2px; cursor: pointer; transition: all 0.15s;
+  box-shadow: 1px 1px 0 var(--linen2);
+}
+.cefr-btn:hover { border-color: var(--linen2); }
+.cefr-level {
+  font-family: var(--ffd); font-size: 18px; font-weight: 700;
+  color: var(--forest); display: block; line-height: 1;
+}
+.cefr-desc { font-size: 9px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; display: block; }
+.cefr-btn.sel-a1,.cefr-btn.sel-a2 { background: var(--green-dim); border-color: rgba(45,90,39,0.3); }
+.cefr-btn.sel-a1 .cefr-level,.cefr-btn.sel-a2 .cefr-level { color: var(--green); }
+.cefr-btn.sel-b1,.cefr-btn.sel-b2 { background: var(--gold-dim); border-color: rgba(184,150,12,0.3); }
+.cefr-btn.sel-b1 .cefr-level,.cefr-btn.sel-b2 .cefr-level { color: var(--gold); }
+.cefr-btn.sel-c1,.cefr-btn.sel-c2 { background: rgba(28,43,30,0.08); border-color: rgba(28,43,30,0.3); }
+.cefr-btn.sel-c1 .cefr-level,.cefr-btn.sel-c2 .cefr-level { color: var(--forest); }
+
+/* Difficulty pills */
+.diff-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
 .diff-btn {
-  border:1px solid var(--border); background:var(--cream);
-  padding:10px 8px; cursor:pointer; text-align:center; transition:all 0.2s;
+  padding: 12px 8px; text-align: center;
+  background: var(--cream); border: 1px solid var(--linen);
+  border-radius: 2px; cursor: pointer; transition: all 0.15s;
+  box-shadow: 1px 1px 0 var(--linen2);
 }
-.diff-btn:hover { border-color:var(--gold-dim); background:rgba(184,150,12,0.04); }
-.diff-btn.active { border-color:var(--gold); background:rgba(184,150,12,0.09); }
-.diff-btn-name { font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--forest); margin-bottom:4px; }
-.diff-btn-vals { font-family:'Cormorant Garamond',serif; font-size:12px; color:var(--brown); font-style:italic; }
-
-.diff-breakdown {
-  display:none; gap:16px; margin-top:10px;
-  padding:10px 12px; background:var(--cream); border:1px solid var(--border-light);
+.diff-btn:hover { border-color: var(--linen2); }
+.diff-name {
+  font-family: var(--ffd); font-size: 15px; font-weight: 600;
+  color: var(--ink); display: block;
 }
-.diff-breakdown.on { display:flex; }
-.diff-item { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--brown); }
-.dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.dot-e { background:#2D5A27; } .dot-m { background:#7A5C00; } .dot-h { background:#6B2020; }
-.diff-pct { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--forest); line-height:1; }
+.diff-sub { font-family: var(--ffi); font-size: 11px; font-style: italic; color: var(--muted); margin-top: 3px; display: block; }
+.diff-bars { display: flex; gap: 2px; justify-content: center; margin-top: 8px; }
+.diff-bar { width: 8px; height: 3px; border-radius: 1px; background: var(--linen); }
+.diff-bar.filled { background: var(--gold); }
+.diff-btn.sel { border-color: var(--gold); background: var(--parch); box-shadow: 1px 1px 0 var(--gold), 2px 2px 0 var(--gold-dim); }
+.diff-btn.sel .diff-name { color: var(--forest); }
 
-/* ── SUBMIT ── */
-.submit-area { margin-top:24px; padding-top:20px; border-top:1px solid var(--border-light); display:flex; align-items:center; gap:16px; }
+/* Spell check notice */
+.spell-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 16px; background: var(--gold-dim);
+  border: 1px solid rgba(184,150,12,0.2); border-left: 3px solid var(--gold);
+  border-radius: 2px; margin-top: 10px;
+}
+.spell-note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.spell-note-text { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--ink2); line-height: 1.6; }
 
+/* Divider */
+.div { height: 1px; background: var(--linen); margin: 8px 0 20px; }
+
+/* Generate button */
 .btn-gen {
-  flex:1; background:var(--forest); color:var(--gold-light);
-  border:1px solid var(--forest-mid); padding:14px 28px;
-  font-family:'Tenor Sans',sans-serif; font-size:11px;
-  letter-spacing:0.26em; text-transform:uppercase;
-  cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden;
+  width: 100%; padding: 16px 24px; border-radius: 2px;
+  background: var(--forest);
+  border: 1px solid var(--forest3);
+  font-family: var(--ffd); font-size: 18px; font-weight: 600;
+  color: var(--gold); cursor: pointer; letter-spacing: 0.5px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  transition: all 0.2s;
+  box-shadow: 3px 3px 0 rgba(28,43,30,0.3);
 }
-.btn-gen::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,transparent 40%,rgba(212,175,55,0.12) 100%); opacity:0; transition:opacity 0.3s; }
-.btn-gen:hover::before { opacity:1; }
-.btn-gen:hover { background:var(--forest-mid); box-shadow:0 4px 18px rgba(28,43,30,0.25); transform:translateY(-1px); }
-.btn-gen:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-.btn-gen.loading { color:transparent; }
-.btn-gen.loading::after {
-  content:''; position:absolute; top:50%; left:50%;
-  width:16px; height:16px; border:1.5px solid var(--gold-light);
-  border-top-color:transparent; border-radius:50%;
-  transform:translate(-50%,-50%); animation:spin 0.8s linear infinite;
+.btn-gen:hover {
+  background: var(--forest2); box-shadow: 4px 4px 0 rgba(28,43,30,0.4);
+  transform: translate(-1px,-1px);
 }
-@keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+.btn-gen:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgba(28,43,30,0.3); }
+.btn-gen:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 rgba(28,43,30,0.2); }
 
-.form-hint { font-size:10px; color:var(--aged); line-height:1.65; max-width:120px; }
-
-/* ── LOADING BAR ── */
-.loading-bar-wrap { display:none; margin-top:14px; }
-.loading-bar-wrap.on { display:block; }
-.loading-bar-track { height:2px; background:var(--border-light); overflow:hidden; }
-.loading-bar-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); width:0%; transition:width 0.4s ease; animation:barPulse 2s ease-in-out infinite; }
-@keyframes barPulse { 0%{width:0%} 50%{width:75%} 100%{width:95%} }
-.loading-msg { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold-dim); margin-top:8px; text-align:center; }
-
-/* ── ERROR ── */
-.error-box { display:none; background:rgba(107,32,32,0.06); border:1px solid rgba(107,32,32,0.2); padding:14px 18px; margin-top:14px; }
-.error-box.on { display:block; }
-.error-title { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--error); margin-bottom:4px; }
-.error-msg { font-family:'Cormorant Garamond',serif; font-size:14px; font-style:italic; color:var(--ink-mid); }
-
-/* ── RESULT SECTION ── */
-#result-section { display:none; padding-bottom:80px; border-top:1px solid var(--border); padding-top:48px; }
-#result-section.on { display:block; }
-
-.result-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; padding-bottom:18px; border-bottom:1px solid var(--border); }
-.result-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--forest); }
-.result-pills { display:flex; gap:8px; flex-wrap:wrap; }
-.pill { font-size:9px; letter-spacing:0.18em; text-transform:uppercase; color:var(--brown); background:var(--parchment); border:1px solid var(--border); padding:4px 12px; }
-
-/* ── TABS ── */
-.tab-bar { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:28px; }
-.tab-btn {
-  font-size:10px; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--brown); background:none; border:none; border-bottom:2px solid transparent;
-  padding:12px 20px; cursor:pointer; transition:all 0.2s; margin-bottom:-1px;
+/* Secondary buttons */
+.btn-s {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 2px;
+  border: 1px solid var(--linen); background: var(--cream);
+  font-family: var(--ff); font-size: 12px; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--muted); cursor: pointer;
+  text-decoration: none; transition: all 0.15s;
+  box-shadow: 1px 1px 0 var(--linen2);
 }
-.tab-btn:hover { color:var(--gold-dim); }
-.tab-btn.active { color:var(--forest); border-bottom-color:var(--gold); }
-.tab-panel { display:none; }
-.tab-panel.active { display:block; }
+.btn-s:hover { border-color: var(--linen2); color: var(--ink); box-shadow: 2px 2px 0 var(--linen); }
+.btn-s.forest { border-color: var(--forest); color: var(--forest); background: var(--green-dim); box-shadow: 1px 1px 0 rgba(28,43,30,0.3); }
+.btn-s.forest:hover { background: rgba(28,43,30,0.12); }
+.btn-s.gold { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); box-shadow: 1px 1px 0 rgba(184,150,12,0.3); }
+.btn-s.gold:hover { background: rgba(184,150,12,0.15); }
 
-/* ── FORM LINK BOX ── */
-.form-link-box {
-  background:var(--forest); padding:18px 24px;
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:24px; gap:20px;
+/* Loader */
+.lw { text-align: center; padding: 14px 0 4px; }
+.lb { height: 1px; background: var(--linen); overflow: hidden; margin-bottom: 14px; }
+.lf {
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: lscan 2s ease-in-out infinite; width: 45%;
 }
-.form-link-label { font-size:9px; letter-spacing:0.24em; text-transform:uppercase; color:var(--gold-light); margin-bottom:4px; }
-.form-link-url { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:13px; color:var(--cream); word-break:break-all; }
-.form-link-btns { display:flex; gap:8px; flex-shrink:0; }
-.btn-sm {
-  background:transparent; border:1px solid var(--gold-dim); color:var(--gold-light);
-  padding:8px 16px; font-family:'Tenor Sans',sans-serif; font-size:9px;
-  letter-spacing:0.18em; text-transform:uppercase; cursor:pointer; white-space:nowrap; transition:all 0.2s;
+@keyframes lscan { 0%{margin-left:-45%;} 100%{margin-left:145%;} }
+.lt {
+  font-family: var(--ffi); font-size: 14px; font-style: italic;
+  color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.btn-sm:hover { background:var(--gold-dim); color:var(--cream); }
-.btn-sm.loading-sm { opacity:0.6; cursor:not-allowed; }
+.blink { animation: blink 1.2s step-end infinite; }
+@keyframes blink { 50%{opacity:0;} }
 
-/* ── CREATE FORM BUTTON ── */
-.create-form-area { margin-bottom:24px; }
-.btn-create-form {
-  background:var(--parchment); border:1px solid var(--border);
-  color:var(--forest); padding:14px 28px;
-  font-family:'Tenor Sans',sans-serif; font-size:11px;
-  letter-spacing:0.22em; text-transform:uppercase;
-  cursor:pointer; transition:all 0.2s; position:relative;
-}
-.btn-create-form:hover { border-color:var(--gold); background:rgba(184,150,12,0.06); }
-.btn-create-form:disabled { opacity:0.5; cursor:not-allowed; }
-.btn-create-form.loading { color:transparent; }
-.btn-create-form.loading::after {
-  content:''; position:absolute; top:50%; left:50%;
-  width:14px; height:14px; border:1.5px solid var(--forest);
-  border-top-color:transparent; border-radius:50%;
-  transform:translate(-50%,-50%); animation:spin 0.8s linear infinite;
+/* Error/warning */
+.err {
+  padding: 12px 16px; background: var(--red-dim);
+  border: 1px solid rgba(139,32,32,0.2); border-left: 3px solid var(--red);
+  border-radius: 2px; font-family: var(--ff); font-size: 13px;
+  color: var(--red); margin-top: 14px;
+  display: flex; align-items: flex-start; gap: 9px;
 }
 
-/* ── QUESTION CARDS ── */
-.questions-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-
-.q-card {
-  background:var(--parchment); border:1px solid var(--border-light);
-  padding:20px; opacity:0; transform:translateY(10px);
-  animation:fadeUp 0.35s forwards;
+/* ── RESULTS ── */
+.res-hd {
+  padding: 20px 28px; border-bottom: 1px solid var(--linen);
+  background: linear-gradient(135deg, var(--parch2), var(--parch));
+  display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 14px;
 }
-@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
-
-.q-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
-.q-num { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--border); line-height:1; }
-.q-tags { display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; }
-.tag { font-size:9px; letter-spacing:0.16em; text-transform:uppercase; padding:3px 6px; border:1px solid; }
-.tag-easy   { color:#2D5A27; border-color:#2D5A27; background:rgba(45,90,39,0.06); }
-.tag-medium { color:#7A5C00; border-color:#7A5C00; background:rgba(122,92,0,0.06); }
-.tag-hard   { color:#6B2020; border-color:#6B2020; background:rgba(107,32,32,0.06); }
-.tag-type   { color:var(--brown); border-color:var(--border); }
-
-.q-text { font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.65; color:var(--ink); margin-bottom:12px; }
-
-.q-opts { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
-.opt-row { display:flex; align-items:flex-start; gap:8px; padding:6px 10px; border:1px solid transparent; font-size:12px; line-height:1.4; }
-.opt-row.correct { border-color:rgba(45,90,39,0.3); background:rgba(45,90,39,0.05); }
-.opt-letter { font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:500; color:var(--gold-dim); flex-shrink:0; width:16px; }
-.opt-row.correct .opt-letter { color:#2D5A27; }
-.opt-text { color:var(--ink-mid); }
-
-.q-expl { font-size:11px; line-height:1.6; color:var(--brown); padding-top:10px; border-top:1px solid var(--border-light); font-style:italic; }
-
-/* ── ANSWER KEY TAB ── */
-.ak-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
-.ak-card { background:var(--parchment); border:1px solid var(--border-light); padding:14px 16px; }
-.ak-num { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--aged); margin-bottom:6px; }
-.ak-answer { font-family:'Cormorant Garamond',serif; font-size:22px; color:var(--pass); font-weight:500; line-height:1; margin-bottom:4px; }
-.ak-expl { font-size:11px; color:var(--brown); font-style:italic; line-height:1.5; }
-
-/* ── FULL PAPER TAB ── */
-.full-paper {
-  background:var(--parchment); border:1px solid var(--border-light);
-  padding:32px; font-family:'Cormorant Garamond',serif; font-size:15px;
-  line-height:1.8; color:var(--ink); white-space:pre-wrap;
+.res-title { font-family: var(--ffd); font-size: 24px; font-weight: 600; color: var(--ink); }
+.res-title em { font-style: italic; color: var(--forest); }
+.badge-ok {
+  font-family: var(--ff); font-size: 9px; font-weight: 400;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--green); background: var(--green-dim);
+  border: 1px solid rgba(45,90,39,0.2); padding: 4px 10px; border-radius: 2px;
 }
 
-/* ── ORNAMENT ── */
-.ornament { text-align:center; color:var(--gold); font-size:14px; letter-spacing:0.4em; margin:32px 0; opacity:0.35; }
+/* Meta tags */
+.meta-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 28px; border-bottom: 1px solid var(--linen); }
+.mc {
+  font-family: var(--ff); font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+  background: var(--cream); border: 1px solid var(--linen);
+  padding: 3px 10px; border-radius: 2px;
+}
+.mc.gold { color: var(--gold); border-color: rgba(184,150,12,0.3); background: var(--gold-dim); }
+.mc.forest { color: var(--forest); border-color: rgba(28,43,30,0.25); background: var(--green-dim); }
 
-/* ── FOOTER ── */
-footer { border-top:1px solid var(--border); padding:20px 56px; display:flex; justify-content:space-between; align-items:center; }
-.footer-l { font-size:9px; letter-spacing:0.14em; color:var(--aged); text-transform:uppercase; }
-.footer-r { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px; color:var(--aged); }
+/* Tabs */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--linen); padding: 0 28px; }
+.tab {
+  padding: 14px 22px; font-family: var(--ff); font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted2); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.15s; margin-bottom: -1px;
+}
+.tab:hover { color: var(--muted); }
+.tab.active { color: var(--forest); border-bottom-color: var(--gold); }
 
-@media(max-width:1024px){
-  header,footer { padding:0 24px; }
-  .page { padding:0 24px; }
-  .form-section { grid-template-columns:1fr; gap:36px; }
-  .hero-col { position:static; }
-  .questions-grid { grid-template-columns:1fr; }
-  .diff-grid { grid-template-columns:1fr 1fr; }
-  footer { flex-direction:column; gap:8px; text-align:center; padding:16px 24px; }
+.tc {
+  padding: 28px; max-height: 600px; overflow-y: auto;
+  font-size: 14px; line-height: 1.9; color: var(--ink2);
+}
+.tc::-webkit-scrollbar { width: 3px; }
+.tc::-webkit-scrollbar-thumb { background: var(--linen); border-radius: 1px; }
+
+/* Question cards */
+.q-block {
+  margin-bottom: 22px; padding: 20px 22px;
+  background: var(--cream); border: 1px solid var(--linen);
+  border-radius: 2px; border-left: 3px solid var(--gold);
+  box-shadow: 2px 2px 0 var(--linen2);
+}
+.q-num {
+  font-family: var(--ff); font-size: 9px; color: var(--gold);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;
+}
+.q-text { font-family: var(--ffi); font-size: 15px; font-style: italic; color: var(--ink); margin-bottom: 14px; line-height: 1.75; }
+.q-opts { display: flex; flex-direction: column; gap: 7px; }
+.q-opt {
+  padding: 9px 14px; border-radius: 2px; font-family: var(--ff); font-size: 13.5px;
+  background: var(--parch); border: 1px solid var(--linen);
+  color: var(--ink2); display: flex; align-items: flex-start; gap: 12px;
+  transition: border-color 0.1s;
+}
+.q-opt:hover { border-color: var(--linen2); }
+.q-opt-label {
+  font-family: var(--ffd); font-size: 13px; font-weight: 700;
+  color: var(--gold); flex-shrink: 0; margin-top: 1px;
+}
+
+/* Answer key */
+.ak-block {
+  margin-bottom: 14px; padding: 16px 18px;
+  background: rgba(45,90,39,0.04); border: 1px solid rgba(45,90,39,0.12);
+  border-radius: 2px; border-left: 3px solid var(--green);
+}
+.ak-num { font-family: var(--ff); font-size: 9px; color: var(--green); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 6px; }
+.ak-ans { font-family: var(--ffd); font-size: 15px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
+.ak-exp { font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--muted); line-height: 1.7; }
+
+/* Markdown fallback */
+.md-out strong { color: var(--ink); font-weight: 600; }
+.md-out h1,.md-out h2,.md-out h3 {
+  font-family: var(--ff); font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--gold);
+  margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--linen);
+}
+.md-out p { margin-bottom: 4px; }
+.md-out hr { border: none; border-top: 1px solid var(--linen); margin: 20px 0; }
+.md-out em { font-family: var(--ffi); font-style: italic; color: var(--muted); }
+
+/* Form panel */
+.fp {
+  padding: 20px 28px; border-top: 1px solid var(--linen);
+  background: linear-gradient(135deg, var(--parch2), var(--parch));
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+}
+.fp-title { font-family: var(--ffd); font-size: 17px; font-weight: 600; color: var(--ink); }
+.fp-sub { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--muted); margin-top: 3px; }
+.fl-box {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: var(--cream);
+  border: 1px solid rgba(45,90,39,0.2); border-radius: 2px; margin-top: 8px;
+}
+.fl-url { font-family: var(--ff); font-size: 11px; color: var(--green); word-break: break-all; flex: 1; letter-spacing: 0.3px; }
+
+/* How it works */
+.how { padding: 72px 56px; max-width: 1060px; margin: 0 auto; }
+.how-top { text-align: center; margin-bottom: 52px; }
+.how-eyebrow {
+  font-family: var(--ff); font-size: 9px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+}
+.how-h2 { font-family: var(--ffd); font-size: clamp(30px, 4vw, 48px); font-weight: 600; color: var(--ink); letter-spacing: -0.5px; }
+.how-h2 em { font-style: italic; color: var(--forest); }
+.how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.how-card {
+  background: var(--parch); border: 1px solid var(--linen);
+  border-radius: 3px; padding: 28px;
+  box-shadow: 3px 3px 0 var(--linen2);
+  transition: all 0.2s;
+}
+.how-card:hover { box-shadow: 5px 5px 0 var(--linen); transform: translate(-1px,-1px); }
+.how-n { font-family: var(--ff); font-size: 9px; color: var(--muted2); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+.how-icon { font-size: 28px; margin-bottom: 12px; }
+.how-ct { font-family: var(--ffd); font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.how-cp { font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--muted); line-height: 1.75; }
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--linen); padding: 28px 56px;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  background: var(--parch);
+}
+.footer-l { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--muted); }
+.footer-r { font-family: var(--ff); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); display: flex; align-items: center; gap: 10px; }
+.footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: livepulse 2s ease-in-out infinite; }
+@keyframes livepulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* Animations */
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.a1{animation:fadeUp 0.6s ease both 0.05s}
+.a2{animation:fadeUp 0.7s ease both 0.2s}
+.a3{animation:fadeUp 0.7s ease both 0.35s}
+.a4{animation:fadeUp 0.7s ease both 0.5s}
+.a5{animation:fadeUp 0.6s ease both 0.15s}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;gap:40px;}
+  .hero-card{display:none;}
+  .nav{padding:0 20px;}
+  .hero{padding:100px 20px 56px;}
+  .main{padding:0 20px 60px;}
+  .fg,.fg3,.lang-grid,.cefr-grid,.diff-grid,.how-grid{grid-template-columns:1fr 1fr;}
+  .ff-col{grid-column:1;}
+  .how{padding:48px 20px;}
+  .footer{padding:20px;}
+}
+@media(max-width:520px){
+  .lang-grid,.cefr-grid{grid-template-columns:repeat(3,1fr);}
+  .diff-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
 <body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useRef,useEffect}=React;
 
-<header>
-  <div class="logo">
-    <div class="logo-mark">Test<span>G</span>en</div>
-    <div class="logo-div"></div>
-    <div class="logo-sub">Language Assessment Studio</div>
-  </div>
-  <nav>
-    <a href="#">Dashboard</a>
-    <a href="#">Test History</a>
-    <a href="#">Students</a>
-    <a href="#">Help</a>
-  </nav>
-</header>
+const W1='https://primary-production-64a6.up.railway.app/webhook/language-teacher-gen';
+const W2='https://primary-production-64a6.up.railway.app/webhook/6309a8f0-7e27-4fdb-b9cd-ad4d1747298a';
 
-<div class="page">
-
-  <!-- FORM SECTION -->
-  <div class="form-section">
-
-    <!-- LEFT / HERO -->
-    <div class="hero-col">
-      <div class="eyebrow">AI-Powered Assessment</div>
-      <h1 class="hero-title">Craft examinations of <em>genuine</em> distinction</h1>
-      <p class="hero-desc">
-        Generate bespoke language assessments calibrated to the CEFR framework.
-        Each paper is tailored to your students' precise level — vocabulary,
-        grammar, and comprehension — delivered as a polished Google Form in moments.
-      </p>
-      <div class="hero-stats">
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Languages</div></div>
-        <div class="stat"><div class="stat-num">6</div><div class="stat-label">CEFR Levels</div></div>
-        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Unique Papers</div></div>
-      </div>
-    </div>
-
-    <!-- RIGHT / FORM CARD -->
-    <div class="form-card">
-      <div class="card-title">Compose a New Assessment</div>
-      <div class="card-sub">Complete the fields below with precision</div>
-
-      <form id="gen-form">
-
-        <!-- I. IDENTITY -->
-        <div class="form-sec">
-          <div class="sec-label">I. Tutor & Paper Identity</div>
-          <div class="row2">
-            <div class="field">
-              <label for="teacher_name">Your Name</label>
-              <input type="text" id="teacher_name" placeholder="e.g. Sophie Martin" required>
-            </div>
-            <div class="field">
-              <label for="teacher_email">Your Email <span class="opt">for records</span></label>
-              <input type="email" id="teacher_email" placeholder="sophie@school.com">
-            </div>
-          </div>
-          <div class="row1">
-            <div class="field">
-              <label for="test_title">Paper Title <span class="opt">auto-generated</span></label>
-              <input type="text" id="test_title" placeholder="French B1 — Present Tense">
-            </div>
-          </div>
-        </div>
-
-        <!-- II. LANGUAGE & LEVEL -->
-        <div class="form-sec">
-          <div class="sec-label">II. Language & Level</div>
-          <div class="row2">
-            <div class="field">
-              <label for="language">Language</label>
-              <select id="language" required>
-                <option value="">Select language</option>
-                <option value="French">French</option>
-                <option value="German">German</option>
-                <option value="English">English (EFL)</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="level">CEFR Level</label>
-              <select id="level" required>
-                <option value="">Select level</option>
-                <option value="A1">A1 — Beginner</option>
-                <option value="A2">A2 — Elementary</option>
-                <option value="B1">B1 — Intermediate</option>
-                <option value="B2">B2 — Upper Intermediate</option>
-                <option value="C1">C1 — Advanced</option>
-                <option value="C2">C2 — Mastery</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- III. TOPIC & CONTENT -->
-        <div class="form-sec">
-          <div class="sec-label">III. Topic & Content</div>
-          <div class="row2">
-            <div class="field">
-              <label for="topic_type">Question Type</label>
-              <select id="topic_type" required>
-                <option value="">Select type</option>
-                <option value="grammar">Grammar</option>
-                <option value="vocabulary">Vocabulary</option>
-                <option value="reading">Reading Comprehension</option>
-                <option value="mixed">Mixed</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="topic">Specific Topic</label>
-              <select id="topic" required disabled>
-                <option value="">Select language & type first</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Mixed distribution -->
-          <div class="mixed-sec" id="mixed-sec">
-            <div class="sec-label" style="margin-bottom:10px;">Mixed Distribution</div>
-            <div class="row3">
-              <div class="field"><label for="mix_g">Grammar Qs</label><input type="number" id="mix_g" min="0" value="8"></div>
-              <div class="field"><label for="mix_v">Vocabulary Qs</label><input type="number" id="mix_v" min="0" value="8"></div>
-              <div class="field"><label for="mix_r">Reading Qs</label><input type="number" id="mix_r" min="0" value="4"></div>
-            </div>
-            <div class="mix-total" id="mix-total">Total: <span class="mn" id="mix-num">20</span> questions</div>
-          </div>
-
-          <div class="row1" style="margin-top:12px;">
-            <div class="field">
-              <label for="custom_content">Specific Words / Verbs to Test <span class="opt">optional — leave blank to let AI choose</span></label>
-              <textarea id="custom_content" placeholder="e.g. aller, faire, prendre, vouloir&#10;Leave blank and AI will select appropriate content for the chosen level"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- IV. QUANTITY & DIFFICULTY -->
-        <div class="form-sec">
-          <div class="sec-label">IV. Quantity & Difficulty</div>
-          <div class="row2" style="margin-bottom:16px;">
-            <div class="field">
-              <label for="num_questions">Number of Questions</label>
-              <input type="number" id="num_questions" min="5" max="50" value="20" required>
-            </div>
-            <div class="field">
-              <label for="diff_preset">Difficulty Profile</label>
-              <select id="diff_preset" required>
-                <option value="">Select profile</option>
-                <option value="easy_heavy">Easy-Heavy — Revision & Practice</option>
-                <option value="balanced" selected>Balanced — Standard Assessment</option>
-                <option value="hard_heavy">Hard-Heavy — Challenge Paper</option>
-                <option value="exam_mode">Exam Mode — High Stakes</option>
-              </select>
-            </div>
-          </div>
-          <div class="diff-breakdown" id="diff-breakdown">
-            <div class="diff-item"><div class="dot dot-e"></div><div><div class="diff-pct" id="e-pct">40%</div><div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged)">Easy</div></div></div>
-            <div class="diff-item" style="border-left:1px solid var(--border-light);padding-left:14px;"><div class="dot dot-m"></div><div><div class="diff-pct" id="m-pct">40%</div><div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged)">Medium</div></div></div>
-            <div class="diff-item" style="border-left:1px solid var(--border-light);padding-left:14px;"><div class="dot dot-h"></div><div><div class="diff-pct" id="h-pct">20%</div><div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--aged)">Hard</div></div></div>
-          </div>
-        </div>
-
-        <!-- SUBMIT -->
-        <div class="submit-area">
-          <button type="submit" class="btn-gen" id="submit-btn">Generate Assessment</button>
-          <div class="form-hint">Ready within 30 seconds</div>
-        </div>
-
-        <!-- LOADING BAR -->
-        <div class="loading-bar-wrap" id="loading-wrap">
-          <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
-          <div class="loading-msg" id="loading-msg">Generating your assessment…</div>
-        </div>
-
-        <!-- ERROR -->
-        <div class="error-box" id="error-box">
-          <div class="error-title">Generation Error</div>
-          <div class="error-msg" id="error-msg"></div>
-        </div>
-
-      </form>
-    </div>
-  </div>
-
-  <!-- ORNAMENT -->
-  <div class="ornament" id="ornament" style="display:none;">✦ &nbsp; ✦ &nbsp; ✦</div>
-
-  <!-- RESULT SECTION -->
-  <div id="result-section">
-
-    <div class="result-header">
-      <div>
-        <div class="eyebrow" style="margin-bottom:8px;">Assessment Ready</div>
-        <div class="result-title" id="result-title">—</div>
-      </div>
-      <div class="result-pills">
-        <div class="pill" id="r-lang">—</div>
-        <div class="pill" id="r-count">—</div>
-        <div class="pill" id="r-diff">—</div>
-      </div>
-    </div>
-
-    <!-- CREATE FORM BUTTON -->
-    <div class="create-form-area" id="create-form-area">
-      <button class="btn-create-form" id="create-form-btn">
-        Create Google Form for Students
-      </button>
-      <div style="font-size:10px;color:var(--aged);margin-top:8px;letter-spacing:0.08em;">
-        Creates a quiz-mode Google Form with all questions, correct answers and explanations pre-loaded
-      </div>
-    </div>
-
-    <!-- FORM LINK (shown after form created) -->
-    <div class="form-link-box" id="form-link-box" style="display:none;">
-      <div>
-        <div class="form-link-label">Student Form Link</div>
-        <div class="form-link-url" id="form-link-url">—</div>
-      </div>
-      <div class="form-link-btns">
-        <button class="btn-sm" id="copy-btn">Copy Link</button>
-        <button class="btn-sm" id="open-btn">Open Form</button>
-      </div>
-    </div>
-
-    <!-- TABS -->
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="questions">Questions</button>
-      <button class="tab-btn" data-tab="answer-key">Answer Key</button>
-      <button class="tab-btn" data-tab="full-paper">Full Paper</button>
-    </div>
-
-    <!-- TAB: QUESTIONS -->
-    <div class="tab-panel active" id="tab-questions">
-      <div class="questions-grid" id="questions-grid"></div>
-    </div>
-
-    <!-- TAB: ANSWER KEY -->
-    <div class="tab-panel" id="tab-answer-key">
-      <div class="ak-grid" id="ak-grid"></div>
-    </div>
-
-    <!-- TAB: FULL PAPER -->
-    <div class="tab-panel" id="tab-full-paper">
-      <div class="full-paper" id="full-paper-text"></div>
-    </div>
-
-  </div>
-
-</div><!-- /page -->
-
-<footer>
-  <div class="footer-l">TestGen · Language Assessment Studio · Est. 2026</div>
-  <div class="footer-r">Crafted for educators who demand excellence</div>
-</footer>
-
-<script>
-// ── CONFIG ────────────────────────────────────────────────────────────────
-const W1_URL = 'https://primary-production-64a6.up.railway.app/webhook/language-teacher-gen';
-const W2_URL = 'https://primary-production-64a6.up.railway.app/webhook/6309a8f0-7e27-4fdb-b9cd-ad4d1747298a';
-
-// ── TOPIC DATA ────────────────────────────────────────────────────────────
-const TOPICS = {
-  grammar: {
-    French: [
-      'Present Tense (Présent)', 'Past Tense — Passé Composé', 'Past Tense — Imparfait',
-      'Future Tense (Futur Simple)', 'Conditional (Conditionnel)', 'Subjunctive (Subjonctif)',
-      'Imperative (Impératif)', 'Passive Voice', 'Articles & Gender (le/la/les/un/une)',
-      'Adjective Agreement', 'Personal Pronouns', 'Relative Pronouns (qui/que/dont)',
-      'Prepositions (à/de/en/dans)', 'Negation (ne…pas/jamais/plus)',
-      'Question Formation', 'Reflexive Verbs (Verbes Pronominaux)'
-    ],
-    German: [
-      'Present Tense (Präsens)', 'Past Tense — Perfekt', 'Past Tense — Präteritum',
-      'Future Tense (Futur I)', 'Conditional (Konjunktiv II)', 'Passive Voice (Passiv)',
-      'Nominative Case (Nominativ)', 'Accusative Case (Akkusativ)', 'Dative Case (Dativ)',
-      'Genitive Case (Genitiv)', 'Articles & Gender (der/die/das)', 'Adjective Endings',
-      'Modal Verbs (können/müssen/dürfen)', 'Separable Verbs (Trennbare Verben)',
-      'Word Order (Satzstellung)', 'Negation (nicht/kein)'
-    ],
-    English: [
-      'Present Simple', 'Present Continuous', 'Past Simple', 'Past Continuous',
-      'Present Perfect', 'Future (will / going to)', 'Conditional (if clauses)',
-      'Passive Voice', 'Articles (a / an / the)', 'Modal Verbs (can/must/should)',
-      'Prepositions of Time & Place', 'Question Tags', 'Reported Speech',
-      'Relative Clauses', 'Gerunds & Infinitives', 'Comparatives & Superlatives'
-    ]
+// ── TOPICS BY LANGUAGE ──────────────────────────────────────────
+const TOPICS={
+  French:{
+    Grammar:["Présent de l'indicatif","Passé composé","Imparfait","Futur simple","Futur proche","Conditionnel présent","Subjonctif présent","Plus-que-parfait","Passé simple","Impératif","Articles définis et indéfinis","Articles partitifs","Pronoms personnels","Pronoms relatifs (qui, que, dont)","Pronoms démonstratifs","Adjectifs possessifs","Adjectifs qualificatifs","Comparatif et superlatif","Négation","Questions et interrogation","Prépositions de lieu","Prépositions de temps","Discours indirect","La voix passive","Les gallicismes (être en train de, venir de)"],
+    Vocabulary:["La famille et les relations","Le corps humain","La maison et les meubles","Les vêtements et la mode","La nourriture et les boissons","Les transports","Les professions et le travail","Les loisirs et les hobbies","La ville et les directions","La nature et l'environnement","Les émotions et les sentiments","Les animaux","Les sports","Les voyages et le tourisme","Les technologies","La santé et le corps","Les nombres et les mathématiques","Les couleurs et les formes","Le temps et les saisons","Les fêtes et les traditions"],
+    Reading:["Texte narratif simple","Dialogue quotidien","Article de presse","Lettre formelle","Lettre informelle","Description de lieu","Biographie","Recette de cuisine","Programme d'événement","Publicité et affiche"],
+    Mixed:["Grammaire et vocabulaire niveau A1","Grammaire et vocabulaire niveau A2","Compréhension et expression B1","Révision complète B2","Préparation DELF A1","Préparation DELF A2","Préparation DELF B1","Préparation DELF B2"]
   },
-  vocabulary: [
-    'Food & Drink', 'Travel & Transport', 'Family & Relationships', 'Work & Profession',
-    'Health & Body', 'Home & Daily Routine', 'Shopping & Money', 'Nature & Weather',
-    'Education & School', 'Emotions & Personality', 'Technology & Media', 'Culture & Society'
-  ],
-  reading: [
-    'Everyday Situations', 'News & Current Events', 'Travel Writing',
-    'Formal Letters & Emails', 'Social Media & Messaging', 'Advertisements',
-    'Short Stories', 'Academic Texts'
-  ]
+  German:{
+    Grammar:["Präsens (Gegenwart)","Perfekt","Präteritum","Futur I","Konjunktiv II","Passiv Präsens","Passiv Perfekt","Imperativ","Nominativ","Akkusativ","Dativ","Genitiv","Artikelwörter bestimmte Artikel","Artikelwörter unbestimmte Artikel","Possessivartikel","Adjektivdeklination","Komparation der Adjektive","Relativsätze","Nebensätze mit weil und dass","Modalverben","Reflexive Verben","Trennbare Verben","Untrennbare Verben","Wortstellung im Hauptsatz","Wortstellung im Nebensatz","Präpositionen mit Akkusativ","Präpositionen mit Dativ","Zwei-Wege-Präpositionen"],
+    Vocabulary:["Familie und Beziehungen","Körper und Gesundheit","Haus und Wohnung","Kleidung und Mode","Essen und Trinken","Verkehr und Transport","Berufe und Arbeit","Freizeit und Hobbys","Stadt und Orientierung","Natur und Umwelt","Gefühle und Emotionen","Tiere","Sport","Reisen und Tourismus","Technologie und Medien","Schule und Bildung","Zahlen und Mathematik","Farben und Formen","Wetter und Jahreszeiten","Feste und Traditionen"],
+    Reading:["Einfacher Erzähltext","Alltagsdialog","Zeitungsartikel","Formeller Brief","Informeller Brief","Ortsbeschreibung","Biographie","Kochrezept","Veranstaltungsprogramm","Werbung und Anzeigen"],
+    Mixed:["Grammatik und Wortschatz A1","Grammatik und Wortschatz A2","Leseverstehen und Ausdruck B1","Vollständige Wiederholung B2","Vorbereitung Goethe A1","Vorbereitung Goethe A2","Vorbereitung Goethe B1","Vorbereitung Goethe B2"]
+  },
+  English:{
+    Grammar:["Present Simple","Present Continuous","Present Perfect","Present Perfect Continuous","Past Simple","Past Continuous","Past Perfect","Future Simple (will)","Future with going to","Future Perfect","Conditionals (Zero, First, Second, Third)","Modal Verbs (can, could, may, might)","Modal Verbs (must, should, would)","Passive Voice","Reported Speech","Gerunds and Infinitives","Relative Clauses","Articles (a, an, the)","Countable and Uncountable Nouns","Comparatives and Superlatives","Adjective Order","Prepositions of Time","Prepositions of Place and Movement","Question Tags","Phrasal Verbs","Linking Words and Discourse Markers"],
+    Vocabulary:["Family and Relationships","Health and the Body","Home and Furniture","Clothes and Fashion","Food and Drink","Transport and Travel","Jobs and Work","Free Time and Hobbies","Town and Directions","Nature and Environment","Feelings and Emotions","Animals and Nature","Sports and Activities","Technology and Media","Education and Learning","Numbers and Money","Colours and Shapes","Weather and Seasons","Celebrations and Traditions","Collocations and Fixed Phrases"],
+    Reading:["Short narrative passage","Everyday dialogue","News article","Formal email or letter","Informal email or letter","Description of a place","Biography or profile","Instructions and procedures","Advertisement or notice","Opinion piece or blog post"],
+    Mixed:["Grammar and Vocabulary A1","Grammar and Vocabulary A2","Reading and Expression B1","Full Revision B2","Cambridge KET A2 preparation","Cambridge PET B1 preparation","Cambridge FCE B2 preparation","IELTS Academic reading practice"]
+  }
 };
 
-const DIFF_PRESETS = {
-  easy_heavy: { easy:60, medium:30, hard:10, label:'Easy-Heavy' },
-  balanced:   { easy:40, medium:40, hard:20, label:'Balanced' },
-  hard_heavy: { easy:20, medium:40, hard:40, label:'Hard-Heavy' },
-  exam_mode:  { easy:20, medium:30, hard:50, label:'Exam Mode' }
-};
-
-// ── STATE ─────────────────────────────────────────────────────────────────
-let state = {
-  generated_text: '',
-  questions: [],
-  answer_key: [],
-  meta: {},
-  test_id: '',
-  form_link: '',
-  form_id: ''
-};
-
-// ── TOPIC DROPDOWN ────────────────────────────────────────────────────────
-function updateTopicDropdown() {
-  const lang = document.getElementById('language').value;
-  const type = document.getElementById('topic_type').value;
-  const topicEl = document.getElementById('topic');
-
-  topicEl.innerHTML = '<option value="">Select a topic</option>';
-
-  if (!lang || !type || type === 'mixed') {
-    topicEl.disabled = true;
-    topicEl.innerHTML = type === 'mixed'
-      ? '<option value="">N/A — see mixed distribution</option>'
-      : '<option value="">Select language & type first</option>';
-    return;
-  }
-
-  let topics = [];
-  if (type === 'grammar') topics = TOPICS.grammar[lang] || [];
-  else if (type === 'vocabulary') topics = TOPICS.vocabulary;
-  else if (type === 'reading') topics = TOPICS.reading;
-
-  topics.forEach(t => {
-    const o = document.createElement('option');
-    o.value = t; o.textContent = t;
-    topicEl.appendChild(o);
-  });
-  topicEl.disabled = false;
-  autoTitle();
-}
-
-document.getElementById('language').addEventListener('change', updateTopicDropdown);
-document.getElementById('topic_type').addEventListener('change', () => {
-  updateTopicDropdown();
-  document.getElementById('mixed-sec').classList.toggle('on', document.getElementById('topic_type').value === 'mixed');
-});
-document.getElementById('topic').addEventListener('change', autoTitle);
-document.getElementById('level').addEventListener('change', autoTitle);
-
-// ── AUTO TITLE ────────────────────────────────────────────────────────────
-function autoTitle() {
-  const lang  = document.getElementById('language').value;
-  const lvl   = document.getElementById('level').value;
-  const topic = document.getElementById('topic').value;
-  const el    = document.getElementById('test_title');
-  if (!el.dataset.manual && lang && lvl && topic) {
-    el.value = `${lang} ${lvl} — ${topic}`;
-  }
-}
-document.getElementById('test_title').addEventListener('input', function() {
-  this.dataset.manual = this.value ? '1' : '';
-});
-
-// ── MIXED TOTAL ───────────────────────────────────────────────────────────
-['mix_g','mix_v','mix_r'].forEach(id =>
-  document.getElementById(id).addEventListener('input', updateMixTotal)
-);
-function updateMixTotal() {
-  const g = parseInt(document.getElementById('mix_g').value)||0;
-  const v = parseInt(document.getElementById('mix_v').value)||0;
-  const r = parseInt(document.getElementById('mix_r').value)||0;
-  const numQ = parseInt(document.getElementById('num_questions').value)||20;
-  const total = g+v+r;
-  document.getElementById('mix-num').textContent = total;
-  document.getElementById('mix-total').classList.toggle('bad', total !== numQ);
-}
-
-// ── DIFFICULTY PRESET ─────────────────────────────────────────────────────
-document.getElementById('diff_preset').addEventListener('change', function() {
-  const p = DIFF_PRESETS[this.value];
-  const bd = document.getElementById('diff-breakdown');
-  if (p) {
-    document.getElementById('e-pct').textContent = p.easy + '%';
-    document.getElementById('m-pct').textContent = p.medium + '%';
-    document.getElementById('h-pct').textContent = p.hard + '%';
-    bd.classList.add('on');
-  } else {
-    bd.classList.remove('on');
-  }
-});
-
-// ── LOADING MESSAGES ──────────────────────────────────────────────────────
-const LOADING_MSGS = [
-  'Composing your assessment…',
-  'Calibrating difficulty levels…',
-  'Checking spelling and accents…',
-  'Crafting distractors…',
-  'Preparing answer key…',
-  'Almost ready…'
+const CEFR=[
+  {level:'A1',desc:'Beginner'},
+  {level:'A2',desc:'Elementary'},
+  {level:'B1',desc:'Intermediate'},
+  {level:'B2',desc:'Upper-Int.'},
+  {level:'C1',desc:'Advanced'},
+  {level:'C2',desc:'Mastery'}
 ];
-let msgInterval;
-function startLoadingMessages() {
-  let i = 0;
-  document.getElementById('loading-msg').textContent = LOADING_MSGS[0];
-  msgInterval = setInterval(() => {
-    i = (i + 1) % LOADING_MSGS.length;
-    document.getElementById('loading-msg').textContent = LOADING_MSGS[i];
-  }, 4000);
-}
-function stopLoadingMessages() { clearInterval(msgInterval); }
 
-// ── PARSE QUESTIONS FROM GENERATED TEXT ──────────────────────────────────
-function parseGeneratedText(text) {
-  const questions = [];
-  const answer_key = [];
+const DIFFICULTIES=[
+  {id:'balanced',name:'Balanced',sub:'Even spread',bars:2},
+  {id:'exam',name:'Exam Mode',sub:'Weighted hard',bars:4},
+  {id:'easy_heavy',name:'Easy-Heavy',sub:'Mostly easy',bars:1},
+  {id:'hard_heavy',name:'Hard-Heavy',sub:'Mostly hard',bars:3}
+];
 
-  const blocks = text.split(/\n(?=Q\d+\.)/);
-
-  blocks.forEach(block => {
-    if (!block.trim() || !/^Q\d+\./.test(block.trim())) return;
-
-    const numMatch   = block.match(/^Q(\d+)\./);
-    if (!numMatch) return;
-    const qNum = parseInt(numMatch[1]);
-
-    const diffMatch  = block.match(/\[(Easy|Medium|Hard)\]/i);
-    const typeMatch  = block.match(/\[(Grammar|Vocabulary|Reading)\]/i);
-    const difficulty = diffMatch ? diffMatch[1] : 'Medium';
-    const q_type     = typeMatch ? typeMatch[1] : '';
-
-    const qTextMatch = block.match(/^Q\d+\.\s*(?:\[(?:Easy|Medium|Hard)\]\s*)?(?:\[(?:Grammar|Vocabulary|Reading)\]\s*)?([\s\S]*?)(?=\nA\))/i);
-    const question   = qTextMatch ? qTextMatch[1].trim() : '';
-
-    const optA = (block.match(/\nA\)\s*([\s\S]*?)(?=\nB\))/) || [])[1]?.trim() || '';
-    const optB = (block.match(/\nB\)\s*([\s\S]*?)(?=\nC\))/) || [])[1]?.trim() || '';
-    const optC = (block.match(/\nC\)\s*([\s\S]*?)(?=\nD\))/) || [])[1]?.trim() || '';
-    const optD = (block.match(/\nD\)\s*([\s\S]*?)(?=\nAnswer:)/) || [])[1]?.trim() || '';
-
-    const answerMatch = block.match(/\nAnswer:\s*([A-D])/i);
-    const answer = answerMatch ? answerMatch[1].toUpperCase() : '';
-
-    const explMatch  = block.match(/\nExplanation:\s*([\s\S]*?)(?=\n---|$)/i);
-    const explanation = explMatch ? explMatch[1].trim() : '';
-
-    if (question && answer) {
-      questions.push({ q_num:qNum, question, option_a:optA, option_b:optB, option_c:optC, option_d:optD, answer, explanation, difficulty, question_type:q_type });
-      answer_key.push({ q_num:qNum, answer, explanation });
-    }
-  });
-
-  return { questions, answer_key };
+function parseTest(raw){
+  let c=raw.replace(/^=\s*/,'').trim();
+  c=c.replace(/\n\s+([A-D][.)]\s)/g,'\n$1');
+  c=c.replace(/^[\s\S]*?(?=(?:\*{0,2}QUESTIONS?\*{0,2}:?\s*\n|^\s*1[.)]\s))/im,'').trim();
+  if(!c.match(/^(\*{0,2}QUESTIONS?|1[.)]\s)/i)){const f=c.indexOf('\n\n');if(f>0)c=c.slice(f).trim();}
+  c=c.replace(/^\*{0,2}QUESTIONS?:?\*{0,2}\s*\n/im,'').trim();
+  const cl=c.toLowerCase(),ak=cl.search(/answer\s*key/);
+  return{cleaned:c,questions:ak>0?c.slice(0,ak).trim():c,answerKey:ak>0?c.slice(ak).trim():''};
 }
 
-// ── HANDLE RESPONSE SHAPES ────────────────────────────────────────────────
-function extractFromResponse(data) {
-  // Shape A: { questions:[], test_id, test_title, ... }
-  if (data.questions && Array.isArray(data.questions)) {
-    return {
-      questions: data.questions,
-      test_id: data.test_id || '',
-      test_title: data.test_title || '',
-      language: data.language || '',
-      level: data.level || '',
-      total_questions: data.total_questions || data.questions.length,
-      generated_text: data.generated_text || ''
-    };
-  }
-  // Shape B: Array (Google Sheets row)
-  if (Array.isArray(data) && data[0]) {
-    const row = data[0];
-    const text = row['generated_text'] || row['Generated Text'] || '';
-    const { questions, answer_key } = parseGeneratedText(text);
-    return {
-      questions, answer_key,
-      test_id: row['test_id'] || row['Test ID'] || '',
-      test_title: row['test_title'] || row['Test Title'] || '',
-      language: row['language'] || '',
-      level: row['level'] || '',
-      total_questions: questions.length,
-      generated_text: text
-    };
-  }
-  // Shape C: plain text
-  if (typeof data === 'string') {
-    const { questions, answer_key } = parseGeneratedText(data);
-    return { questions, answer_key, test_id:'', test_title:'', language:'', level:'', total_questions:questions.length, generated_text:data };
-  }
-  return null;
-}
-
-// ── FORM SUBMIT ───────────────────────────────────────────────────────────
-document.getElementById('gen-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const btn  = document.getElementById('submit-btn');
-  const errB = document.getElementById('error-box');
-  const loadW = document.getElementById('loading-wrap');
-
-  errB.classList.remove('on');
-  btn.classList.add('loading'); btn.disabled = true;
-  loadW.classList.add('on');
-  startLoadingMessages();
-
-  const topicType = document.getElementById('topic_type').value;
-  const presetKey = document.getElementById('diff_preset').value;
-  const diff      = DIFF_PRESETS[presetKey] || { easy:40, medium:40, hard:20 };
-
-  const payload = {
-    teacher_name:   document.getElementById('teacher_name').value.trim(),
-    teacher_email:  document.getElementById('teacher_email').value.trim(),
-    test_title:     document.getElementById('test_title').value.trim(),
-    language:       document.getElementById('language').value,
-    level:          document.getElementById('level').value,
-    topic_type:     topicType,
-    topic:          document.getElementById('topic').value,
-    custom_content: document.getElementById('custom_content').value.trim(),
-    num_questions:  parseInt(document.getElementById('num_questions').value),
-    difficulty:     { easy:diff.easy, medium:diff.medium, hard:diff.hard }
-  };
-
-  if (topicType === 'mixed') {
-    payload.custom_mix = {
-      grammar:    parseInt(document.getElementById('mix_g').value)||0,
-      vocabulary: parseInt(document.getElementById('mix_v').value)||0,
-      reading:    parseInt(document.getElementById('mix_r').value)||0
-    };
-    payload.topic = 'mixed';
-  }
-
-  try {
-    const res  = await fetch(W1_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
+function renderQuestions(text){
+  if(!text)return null;
+  const blocks=text.split(/\n(?=\d+[.)]\s)/).filter(b=>b.trim());
+  if(!blocks.length)return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(text)}}/>;
+  return blocks.map((block,bi)=>{
+    const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
+    const nm=lines[0].match(/^(\d+)[.)]\s*(.*)/);
+    if(!nm)return null;
+    const opts=[];
+    lines.slice(1).forEach(l=>{
+      const om=l.match(/^([A-D])[.)]\s*(.*)/i);
+      if(om)opts.push({label:om[1].toUpperCase(),text:om[2]});
     });
-
-    let data;
-    const text = await res.text();
-    try { data = JSON.parse(text); } catch { data = text; }
-
-    if (!res.ok) throw new Error(
-      (typeof data === 'object' && data.error) ? data.error : `Server error ${res.status}`
+    return(
+      <div key={bi} className="q-block">
+        <div className="q-num">Question {nm[1]}</div>
+        <div className="q-text">{nm[2]}</div>
+        {opts.length>0&&(
+          <div className="q-opts">
+            {opts.map(o=>(
+              <div key={o.label} className="q-opt">
+                <span className="q-opt-label">{o.label}.</span>
+                <span>{o.text}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     );
+  });
+}
 
-    const extracted = extractFromResponse(data);
-    if (!extracted || extracted.questions.length === 0) throw new Error('No questions were generated. Please try again.');
+function renderAnswerKey(text){
+  if(!text)return null;
+  const clean=text.replace(/^\*{0,2}ANSWER\s*KEY:?\*{0,2}\s*\n/im,'').trim();
+  const blocks=clean.split(/\n(?=\d+[.)]\s)/).filter(b=>b.trim());
+  if(!blocks.length)return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(text)}}/>;
+  return blocks.map((block,bi)=>{
+    const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
+    if(!lines.length)return null;
+    const nm=lines[0].match(/^(\d+)[.)]\s*(.*)/);
+    if(!nm)return null;
+    const qnum=nm[1];
+    let ans='',expLines=[];
+    lines.forEach((l,li)=>{
+      if(!ans){const am=l.match(/(?:^|Answer:\s*)([A-D])[.)]/i);if(am)ans=am[1].toUpperCase();}
+      if(l.match(/^Explanation:/i))expLines.push(l.replace(/^Explanation:\s*/i,''));
+      else if(li>0&&!l.match(/^[A-D][.)]/i)&&!l.match(/^Answer:/i)&&!l.match(/^\d+[.)]/)&&l.length>2)expLines.push(l);
+    });
+    return(
+      <div key={bi} className="ak-block">
+        <div className="ak-num">Question {qnum}</div>
+        {ans&&<div className="ak-ans">✓ Answer: {ans}</div>}
+        {expLines.length>0&&<div className="ak-exp">{expLines.join(' ').slice(0,350)}</div>}
+      </div>
+    );
+  });
+}
 
-    // Store state
-    state.questions     = extracted.questions;
-    state.answer_key    = extracted.answer_key || extracted.questions.map(q => ({ q_num:q.q_num, answer:q.answer, explanation:q.explanation }));
-    state.test_id       = extracted.test_id;
-    state.generated_text = extracted.generated_text || text;
-    state.meta = {
-      test_title: extracted.test_title || payload.test_title || `${payload.language} ${payload.level} — ${payload.topic}`,
-      language:   extracted.language  || payload.language,
-      level:      extracted.level     || payload.level,
-      topic:      payload.topic,
-      total:      extracted.total_questions,
-      difficulty: diff.label || presetKey
+function App(){
+  const [lang,setLang]=useState('');
+  const [cefr,setCefr]=useState('');
+  const [topicType,setTopicType]=useState('Grammar');
+  const [topic,setTopic]=useState('');
+  const [difficulty,setDifficulty]=useState('balanced');
+  const [numQ,setNumQ]=useState('');
+  const [timeLimit,setTimeLimit]=useState('');
+  const [email,setEmail]=useState('');
+  const [customVocab,setCustomVocab]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
+  const [result,setResult]=useState(null);
+  const [meta,setMeta]=useState(null);
+  const [activeTab,setActiveTab]=useState('questions');
+  const [formLoading,setFormLoading]=useState(false);
+  const [formData,setFormData]=useState(null);
+  const [formError,setFormError]=useState('');
+  const resultRef=useRef(null);
+
+  const topicTypes=lang?Object.keys(TOPICS[lang]||{}):['Grammar','Vocabulary','Reading','Mixed'];
+  const topicOpts=(lang&&topicType)?TOPICS[lang]?.[topicType]||[]:[];
+
+  useEffect(()=>{setTopic('');},[lang,topicType]);
+  useEffect(()=>{if(numQ&&!timeLimit)setTimeLimit(String(Math.ceil(parseInt(numQ)*1.5)));},[numQ]);
+
+  async function generate(){
+    if(!lang||!cefr||!topic||!numQ){
+      setError('Please fill in all required fields — language, level, topic and question count.');return;
+    }
+    setError('');setLoading(true);setResult(null);setFormData(null);setFormError('');
+    const payload={
+      language:lang,cefr_level:cefr,topic_type:topicType,topic,
+      difficulty_profile:difficulty,num_questions:parseInt(numQ),
+      time_limit:parseInt(timeLimit)||Math.ceil(parseInt(numQ)*1.5),
+      teacher_email:email.trim().toLowerCase(),
+      custom_vocabulary:customVocab.trim(),
+      mode:'ai_only'
     };
-
-    renderResult();
-
-  } catch(err) {
-    errB.classList.add('on');
-    document.getElementById('error-msg').textContent = err.message;
-  } finally {
-    btn.classList.remove('loading'); btn.disabled = false;
-    loadW.classList.remove('on');
-    stopLoadingMessages();
+    try{
+      const res=await fetch(W1,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const raw=await res.text();
+      if(!raw||!raw.trim())throw new Error(`Empty response (status ${res.status})`);
+      let text,testId;
+      try{
+        const j=JSON.parse(raw);
+        const row=Array.isArray(j)?j[0]:j;
+        testId=row.test_id||row['Test ID']||null;
+        const genText=row['Generated Text']||row.generated_text||row.output||row.result||null;
+        text=genText||raw;
+      }catch(e){text=raw;testId=null;}
+      if(!text||!text.trim())throw new Error('Empty response. Please try again.');
+      const parsed=parseTest(text);
+      setResult(parsed);
+      setMeta({...payload,test_id:testId});
+      setTimeout(()=>resultRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),100);
+    }catch(e){setError('Generation failed: '+e.message);}
+    finally{setLoading(false);}
   }
-});
 
-// ── RENDER RESULT ─────────────────────────────────────────────────────────
-function renderResult() {
-  const { questions, answer_key, meta, generated_text } = state;
+  async function createForm(){
+    if(!meta?.test_id){setFormError('No Test ID found. Please regenerate.');return;}
+    setFormLoading(true);setFormError('');
+    try{
+      const res=await fetch(W2,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({test_id:meta.test_id})});
+      const data=await res.json();
+      if(data.form_link)data.form_link=data.form_link.replace(/^=+/,'');
+      setFormData(data);
+    }catch(e){setFormError('Form creation failed: '+e.message);}
+    finally{setFormLoading(false);}
+  }
 
-  document.getElementById('result-title').textContent = meta.test_title;
-  document.getElementById('r-lang').textContent  = `${meta.language} · ${meta.level}`;
-  document.getElementById('r-count').textContent = `${meta.total} Questions`;
-  document.getElementById('r-diff').textContent  = meta.difficulty || 'Balanced';
+  function copyLink(url){
+    const clean=(url||'').replace(/^=+/,'');
+    navigator.clipboard.writeText(clean).then(()=>alert('Link copied!')).catch(()=>{
+      const el=document.createElement('textarea');el.value=clean;
+      document.body.appendChild(el);el.select();document.execCommand('copy');
+      document.body.removeChild(el);alert('Link copied!');
+    });
+  }
 
-  // Questions tab
-  const grid = document.getElementById('questions-grid');
-  grid.innerHTML = '';
-  questions.forEach((q, i) => {
-    const dc   = `tag-${(q.difficulty||'medium').toLowerCase()}`;
-    const letters = ['a','b','c','d'];
-    const optsHtml = letters.map(l => {
-      const txt = q[`option_${l}`] || '';
-      const isCorrct = q.answer === l.toUpperCase();
-      return `<div class="opt-row ${isCorrct?'correct':''}">
-        <span class="opt-letter">${l.toUpperCase()}.</span>
-        <span class="opt-text">${txt}</span>
-      </div>`;
-    }).join('');
+  const langData=[
+    {id:'French',flag:'🇫🇷',native:'Français'},
+    {id:'German',flag:'🇩🇪',native:'Deutsch'},
+    {id:'English',flag:'🇬🇧',native:'English EFL'}
+  ];
 
-    const card = document.createElement('div');
-    card.className = 'q-card';
-    card.style.animationDelay = `${i*0.04}s`;
-    card.innerHTML = `
-      <div class="q-head">
-        <div class="q-num">${String(q.q_num||i+1).padStart(2,'0')}</div>
-        <div class="q-tags">
-          <span class="tag ${dc}">${q.difficulty||'Medium'}</span>
-          ${q.question_type ? `<span class="tag tag-type">${q.question_type}</span>` : ''}
+  return(
+    <>
+    {/* NAV */}
+    <nav className="nav">
+      <div className="nav-logo">
+        <div className="nav-crest">T</div>
+        <span className="nav-brand">TestGen <em>AI</em></span>
+      </div>
+      <div className="nav-right">
+        <div className="nav-langs">
+          {langData.map(l=><span key={l.id} className="lang-flag" title={l.id}>{l.flag}</span>)}
+        </div>
+        <span className="nav-tag">Language Studio</span>
+      </div>
+    </nav>
+
+    {/* HERO */}
+    <div className="hero">
+      <div className="hero-left">
+        <div className="hero-eyebrow a1">For Language Educators</div>
+        <h1 className="hero-h1 a2">
+          Assessments<br/>
+          worthy of <em>your</em><br/>
+          classroom
+        </h1>
+        <p className="hero-sub a3">
+          Bespoke MCQ test papers for French, German, and English EFL teachers.
+          CEFR-calibrated, topic-specific, delivered as a Google Form quiz — in thirty seconds.
+        </p>
+        <div className="hero-cefr a4">
+          {CEFR.map((c,i)=>(
+            <span key={c.level} className={`cefr-pill ${i>=4?'advanced':''}`}>{c.level}</span>
+          ))}
         </div>
       </div>
-      <div class="q-text">${q.question}</div>
-      <div class="q-opts">${optsHtml}</div>
-      ${q.explanation ? `<div class="q-expl">${q.explanation}</div>` : ''}
-    `;
-    grid.appendChild(card);
-  });
+      <div className="hero-card a4">
+        <div className="hero-card-quote">
+          "The difference between the almost right word and the right word is really a large matter — it's the difference between the lightning bug and the lightning."
+        </div>
+        <div className="hero-card-attr">Mark Twain</div>
+        <div className="hero-stat-row">
+          {[['30s','Generation'],['A1–C2','All Levels'],['3','Languages']].map(([n,l])=>(
+            <div key={l} className="hstat">
+              <div className="hstat-n">{n}</div>
+              <div className="hstat-l">{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
 
-  // Answer key tab
-  const akGrid = document.getElementById('ak-grid');
-  akGrid.innerHTML = '';
-  (answer_key || questions).forEach(q => {
-    const card = document.createElement('div');
-    card.className = 'ak-card';
-    card.innerHTML = `
-      <div class="ak-num">Question ${q.q_num}</div>
-      <div class="ak-answer">${q.answer}</div>
-      ${q.explanation ? `<div class="ak-expl">${q.explanation}</div>` : ''}
-    `;
-    akGrid.appendChild(card);
-  });
+    {/* MAIN */}
+    <div className="main">
 
-  // Full paper tab
-  document.getElementById('full-paper-text').textContent = generated_text || 'Full paper text not available.';
+      {/* CARD 1 — Language + Level */}
+      <div className="card a5">
+        <div className="card-hd">
+          <div>
+            <div className="card-title">I. Select Language & Level</div>
+            <div className="card-sub">Choose the language you teach and your students' CEFR proficiency level</div>
+          </div>
+        </div>
+        <div className="card-body">
+          <label className="fl" style={{marginBottom:'12px'}}>Language <span>*</span></label>
+          <div className="lang-grid">
+            {langData.map(l=>(
+              <div key={l.id} className={`lang-card ${lang===l.id?'active':''}`} onClick={()=>setLang(l.id)}>
+                <span className="lang-flag-lg">{l.flag}</span>
+                <span className="lang-name">{l.id}</span>
+                <span className="lang-native">{l.native}</span>
+              </div>
+            ))}
+          </div>
 
-  // Show result section
-  document.getElementById('ornament').style.display = 'block';
-  document.getElementById('result-section').classList.add('on');
-  document.getElementById('result-section').scrollIntoView({ behavior:'smooth', block:'start' });
+          <div className="div"/>
+
+          <label className="fl" style={{marginBottom:'12px'}}>CEFR Level <span>*</span></label>
+          <div className="cefr-grid">
+            {CEFR.map(c=>(
+              <div key={c.level} className={`cefr-btn ${cefr===c.level?`sel-${c.level.toLowerCase()}`:''}`} onClick={()=>setCefr(c.level)}>
+                <span className="cefr-level">{c.level}</span>
+                <span className="cefr-desc">{c.desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* CARD 2 — Topic */}
+      <div className="card">
+        <div className="card-hd">
+          <div>
+            <div className="card-title">II. Choose Topic</div>
+            <div className="card-sub">Select a topic type and specific focus for your test</div>
+          </div>
+        </div>
+        <div className="card-body">
+          <div className="fg" style={{marginBottom:'20px'}}>
+            <div>
+              <label className="fl">Topic Type <span>*</span></label>
+              <select className="ti" value={topicType} onChange={e=>{setTopicType(e.target.value);setTopic('');}}>
+                {topicTypes.map(t=><option key={t}>{t}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="fl">Specific Topic <span>*</span></label>
+              <select className="ti" value={topic} onChange={e=>setTopic(e.target.value)} disabled={!lang}>
+                <option value="">{lang?'Select a topic…':'Select language first'}</option>
+                {topicOpts.map(t=><option key={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="ff-col">
+            <label className="fl">Custom Vocabulary / Content <em>&nbsp;— optional, paste words or phrases you taught this week</em></label>
+            <textarea className="ti" placeholder="e.g. wanderlust, Fernweh, das Heimweh, Weltschmerz — the system will spell-check these before testing them…" value={customVocab} onChange={e=>setCustomVocab(e.target.value)}/>
+            {customVocab.trim()&&(
+              <div className="spell-note">
+                <span className="spell-note-icon">✦</span>
+                <span className="spell-note-text">Your vocabulary will be spell-checked via Claude Haiku before inclusion. Any unrecognisable words will be flagged back to you before the test generates.</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* CARD 3 — Test Settings */}
+      <div className="card">
+        <div className="card-hd">
+          <div>
+            <div className="card-title">III. Test Settings</div>
+            <div className="card-sub">Configure difficulty profile, question count, and delivery</div>
+          </div>
+        </div>
+        <div className="card-body">
+          <label className="fl" style={{marginBottom:'12px'}}>Difficulty Profile <span>*</span></label>
+          <div className="diff-grid" style={{marginBottom:'24px'}}>
+            {DIFFICULTIES.map(d=>(
+              <div key={d.id} className={`diff-btn ${difficulty===d.id?'sel':''}`} onClick={()=>setDifficulty(d.id)}>
+                <span className="diff-name">{d.name}</span>
+                <span className="diff-sub">{d.sub}</span>
+                <div className="diff-bars">
+                  {[1,2,3,4].map(i=><div key={i} className={`diff-bar ${i<=d.bars?'filled':''}`}/>)}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="div"/>
+
+          <div className="fg fg3">
+            <div>
+              <label className="fl">No. of Questions <span>*</span></label>
+              <input className="ti" type="number" placeholder="e.g. 15" min="5" max="40" value={numQ} onChange={e=>setNumQ(e.target.value)}/>
+            </div>
+            <div>
+              <label className="fl">Time Limit (min)</label>
+              <input className="ti" type="number" placeholder="Auto" value={timeLimit} onChange={e=>setTimeLimit(e.target.value)}/>
+            </div>
+            <div>
+              <label className="fl">Your Email</label>
+              <input className="ti" type="email" placeholder="teacher@school.com" value={email} onChange={e=>setEmail(e.target.value)}/>
+            </div>
+          </div>
+
+          <div className="div"/>
+
+          <button className="btn-gen" onClick={generate} disabled={loading}>
+            {loading
+              ?<><span className="blink">◆</span> Composing your assessment…</>
+              :<>◆ &nbsp;Generate {lang||'Language'} Test Paper</>
+            }
+          </button>
+
+          {loading&&(
+            <div className="lw">
+              <div className="lb"><div className="lf"/></div>
+              <div className="lt"><span className="blink">—</span> The examination is being set, please wait…</div>
+            </div>
+          )}
+          {error&&<div className="err"><span>✦</span><span>{error}</span></div>}
+        </div>
+      </div>
+
+      {/* RESULTS */}
+      {result&&(
+        <div className="card" ref={resultRef}>
+          <div className="res-hd">
+            <div>
+              <div className="res-title"><em>{lang}</em> Assessment — {cefr} Level <span className="badge-ok" style={{marginLeft:'12px'}}>✓ Ready</span></div>
+            </div>
+            <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
+              <button className="btn-s" onClick={()=>{
+                const b=new Blob([result.cleaned],{type:'text/plain'});
+                const a=document.createElement('a');
+                a.href=URL.createObjectURL(b);
+                a.download=`${lang}_${cefr}_${topic.replace(/\s+/g,'_')}.txt`;a.click();
+              }}>⬇ Download</button>
+              <button className="btn-s" onClick={()=>copyLink(result.cleaned)}>⎘ Copy</button>
+            </div>
+          </div>
+
+          <div className="meta-row">
+            {[lang,cefr,topicType,topic,
+              DIFFICULTIES.find(d=>d.id===difficulty)?.name||difficulty,
+              `${meta?.num_questions} Questions`,`${meta?.time_limit} min`
+            ].filter(Boolean).map(v=>(
+              <span key={v} className={`mc ${v===lang?'gold':v===cefr?'forest':''}`}>{v}</span>
+            ))}
+            {meta?.test_id&&<span className="mc" style={{fontSize:'9px',letterSpacing:'1px'}}>ID: {meta.test_id}</span>}
+          </div>
+
+          <div className="tabs">
+            {[['questions','Questions'],['answerkey','Answer Key'],['full','Full Paper']].map(([id,label])=>(
+              <div key={id} className={`tab ${activeTab===id?'active':''}`} onClick={()=>setActiveTab(id)}>{label}</div>
+            ))}
+          </div>
+
+          <div className="tc">
+            {activeTab==='questions'&&(renderQuestions(result.questions)||<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.questions||'')}}/>)}
+            {activeTab==='answerkey'&&(
+              result.answerKey&&result.answerKey.trim()
+                ?renderAnswerKey(result.answerKey)
+                :<p style={{fontFamily:'var(--ffi)',fontStyle:'italic',color:'var(--muted)',fontSize:'14px'}}>Answer key not found in output. Please regenerate.</p>
+            )}
+            {activeTab==='full'&&<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.cleaned||'')}}/>}
+          </div>
+
+          <div className="fp">
+            <div>
+              <div className="fp-title">Deliver via Google Form</div>
+              <div className="fp-sub">Creates a timed quiz with automatic marking — share the link with your students</div>
+            </div>
+            <div style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+              {!formData&&(
+                <button className="btn-s forest" onClick={createForm} disabled={formLoading}>
+                  {formLoading?'Creating quiz…':'✦ Create Google Form'}
+                </button>
+              )}
+              {formData?.form_link&&(
+                <>
+                  <a className="btn-s forest" href={(formData.form_link||'').replace(/^=+/,'')} target="_blank">↗ Open Form</a>
+                  <button className="btn-s gold" onClick={()=>copyLink(formData.form_link)}>⎘ Copy Link</button>
+                </>
+              )}
+            </div>
+          </div>
+
+          {formData?.form_link&&(
+            <div style={{padding:'0 28px 20px'}}>
+              <div className="fl-box">
+                <span className="fl-url">{(formData.form_link||'').replace(/^=+/,'')}</span>
+                {formData.total_questions&&<span style={{fontFamily:'var(--ff)',fontSize:'9px',color:'var(--green)',letterSpacing:'1.5px',textTransform:'uppercase',whiteSpace:'nowrap'}}>{formData.total_questions} questions</span>}
+              </div>
+            </div>
+          )}
+          {formError&&<div style={{padding:'0 28px 16px'}}><div className="err"><span>✦</span><span>{formError}</span></div></div>}
+        </div>
+      )}
+
+    </div>
+
+    {/* HOW IT WORKS */}
+    <div className="how">
+      <div className="how-top">
+        <div className="how-eyebrow">The method</div>
+        <h2 className="how-h2">Three steps to a <em>finished</em> assessment</h2>
+      </div>
+      <div className="how-grid">
+        {[
+          {n:'I',icon:'🖋',title:'Configure',desc:'Choose your language, CEFR level, topic type, and specific grammar or vocabulary focus. Optionally paste words from your last lesson.'},
+          {n:'II',icon:'📜',title:'Generate',desc:'The system builds a calibrated prompt and calls Claude AI, which composes MCQ questions suited precisely to your students\' level and your topic.'},
+          {n:'III',icon:'📬',title:'Deliver',desc:'One click creates a self-marking Google Form quiz. Share the link with students, collect responses, and receive a full analytics report.'}
+        ].map(c=>(
+          <div key={c.n} className="how-card">
+            <div className="how-n">Step {c.n}</div>
+            <div className="how-icon">{c.icon}</div>
+            <div className="how-ct">{c.title}</div>
+            <div className="how-cp">{c.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="ornament">✦ ✦ ✦</div>
+
+    <footer className="footer">
+      <div className="footer-l">TestGen AI — Language Assessment Studio · For French, German & English EFL educators</div>
+      <div className="footer-r"><div className="footer-dot"/>System Live</div>
+    </footer>
+    </>
+  );
 }
 
-// ── CREATE GOOGLE FORM ────────────────────────────────────────────────────
-document.getElementById('create-form-btn').addEventListener('click', async function() {
-  if (!state.test_id) {
-    alert('No test ID found. Please generate a test first.');
-    return;
-  }
-
-  this.classList.add('loading'); this.disabled = true;
-  document.getElementById('form-link-box').style.display = 'none';
-
-  try {
-    const res  = await fetch(W2_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ test_id: state.test_id })
-    });
-
-    let data;
-    const text = await res.text();
-    try { data = JSON.parse(text); } catch { data = {}; }
-
-    // Strip leading = from URL (known N8N issue)
-    let formLink = data.form_link || data.responderUri || '';
-    formLink = formLink.replace(/^=/, '');
-
-    if (!formLink) throw new Error('Form link not returned. Check Workflow 2.');
-
-    state.form_link = formLink;
-    state.form_id   = data.form_id || '';
-
-    document.getElementById('form-link-url').textContent = formLink;
-    document.getElementById('form-link-box').style.display = 'flex';
-
-    // Hide the create form button after success
-    document.getElementById('create-form-area').style.display = 'none';
-
-    document.getElementById('form-link-box').scrollIntoView({ behavior:'smooth', block:'nearest' });
-
-  } catch(err) {
-    alert('Form creation failed: ' + err.message);
-  } finally {
-    this.classList.remove('loading'); this.disabled = false;
-  }
-});
-
-// ── COPY LINK ─────────────────────────────────────────────────────────────
-document.getElementById('copy-btn').addEventListener('click', function() {
-  const url = document.getElementById('form-link-url').textContent;
-  navigator.clipboard.writeText(url).then(() => {
-    this.textContent = 'Copied';
-    setTimeout(() => this.textContent = 'Copy Link', 2000);
-  });
-});
-
-// ── OPEN FORM ─────────────────────────────────────────────────────────────
-document.getElementById('open-btn').addEventListener('click', function() {
-  const url = document.getElementById('form-link-url').textContent;
-  if (url && url !== '—') window.open(url, '_blank');
-});
-
-// ── TABS ──────────────────────────────────────────────────────────────────
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    this.classList.add('active');
-    document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
-  });
-});
-
-// ── INIT DIFF BREAKDOWN ───────────────────────────────────────────────────
-document.getElementById('diff_preset').value = 'balanced';
-document.getElementById('diff_preset').dispatchEvent(new Event('change'));
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
 </html>
