@@ -452,7 +452,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   font-family: var(--ff); font-size: 9px; color: var(--gold);
   letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;
 }
-.q-text { font-family: var(--ffi); font-size: 15px; font-style: italic; color: var(--ink); margin-bottom: 14px; line-height: 1.75; }
+.q-text { font-family: var(--ffd); font-size: 15px; font-weight: 400; color: var(--ink); margin-bottom: 14px; line-height: 1.75; letter-spacing: 0.1px; }
 .q-opts { display: flex; flex-direction: column; gap: 7px; }
 .q-opt {
   padding: 9px 14px; border-radius: 2px; font-family: var(--ff); font-size: 13.5px;
@@ -474,7 +474,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 }
 .ak-num { font-family: var(--ff); font-size: 9px; color: var(--green); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 6px; }
 .ak-ans { font-family: var(--ffd); font-size: 15px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
-.ak-exp { font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--muted); line-height: 1.7; }
+.ak-exp { font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--muted); line-height: 1.7; margin-top: 4px; }
 
 /* Markdown fallback */
 .md-out strong { color: var(--ink); font-weight: 600; }
@@ -618,61 +618,78 @@ function parseTest(raw){
 
 function renderQuestions(text){
   if(!text)return null;
-  const blocks=text.split(/\n(?=\d+[.)]\s)/).filter(b=>b.trim());
+  // Normalize options with leading spaces
+  const norm=text.replace(/\n\s+([A-D][.)\s]\s)/g,'\n$1');
+  const blocks=norm.split(/\n(?=\d+[.)\s])/).filter(b=>b.trim());
   if(!blocks.length)return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(text)}}/>;
-  return blocks.map((block,bi)=>{
-    const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
-    const nm=lines[0].match(/^(\d+)[.)]\s*(.*)/);
-    if(!nm)return null;
-    const opts=[];
-    lines.slice(1).forEach(l=>{
-      const om=l.match(/^([A-D])[.)]\s*(.*)/i);
-      if(om)opts.push({label:om[1].toUpperCase(),text:om[2]});
-    });
-    return(
-      <div key={bi} className="q-block">
-        <div className="q-num">Question {nm[1]}</div>
-        <div className="q-text">{nm[2]}</div>
-        {opts.length>0&&(
-          <div className="q-opts">
-            {opts.map(o=>(
-              <div key={o.label} className="q-opt">
-                <span className="q-opt-label">{o.label}.</span>
-                <span>{o.text}</span>
+  return(
+    <div>
+      {blocks.map((block,bi)=>{
+        const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
+        const nm=lines[0].match(/^(\d+)[.)]\s*(.*)/);
+        if(!nm)return null;
+        const opts=[];
+        lines.slice(1).forEach(l=>{
+          const om=l.match(/^([A-D])[.)\s]\s*(.*)/i);
+          if(om)opts.push({label:om[1].toUpperCase(),text:om[2].trim()});
+        });
+        return(
+          <div key={bi} className="q-block">
+            <div className="q-num">Question {nm[1]}</div>
+            <div className="q-text">{nm[2]}</div>
+            {opts.length>0?(
+              <div className="q-opts">
+                {opts.map(o=>(
+                  <div key={o.label} className="q-opt">
+                    <span className="q-opt-label">{o.label}.</span>
+                    <span>{o.text}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            ):(
+              <div className="md-out" style={{marginTop:'8px'}} dangerouslySetInnerHTML={{__html:marked.parse(
+                lines.slice(1).join('\n')
+              )}}/>
+            )}
           </div>
-        )}
-      </div>
-    );
-  });
+        );
+      })}
+    </div>
+  );
 }
 
 function renderAnswerKey(text){
   if(!text)return null;
   const clean=text.replace(/^\*{0,2}ANSWER\s*KEY:?\*{0,2}\s*\n/im,'').trim();
-  const blocks=clean.split(/\n(?=\d+[.)]\s)/).filter(b=>b.trim());
+  const blocks=clean.split(/\n(?=\d+[.)\s])/).filter(b=>b.trim());
   if(!blocks.length)return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(text)}}/>;
-  return blocks.map((block,bi)=>{
-    const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
-    if(!lines.length)return null;
-    const nm=lines[0].match(/^(\d+)[.)]\s*(.*)/);
-    if(!nm)return null;
-    const qnum=nm[1];
-    let ans='',expLines=[];
-    lines.forEach((l,li)=>{
-      if(!ans){const am=l.match(/(?:^|Answer:\s*)([A-D])[.)]/i);if(am)ans=am[1].toUpperCase();}
-      if(l.match(/^Explanation:/i))expLines.push(l.replace(/^Explanation:\s*/i,''));
-      else if(li>0&&!l.match(/^[A-D][.)]/i)&&!l.match(/^Answer:/i)&&!l.match(/^\d+[.)]/)&&l.length>2)expLines.push(l);
-    });
-    return(
-      <div key={bi} className="ak-block">
-        <div className="ak-num">Question {qnum}</div>
-        {ans&&<div className="ak-ans">✓ Answer: {ans}</div>}
-        {expLines.length>0&&<div className="ak-exp">{expLines.join(' ').slice(0,350)}</div>}
-      </div>
-    );
-  });
+  return(
+    <div>
+      {blocks.map((block,bi)=>{
+        const lines=block.split('\n').map(l=>l.trim()).filter(Boolean);
+        if(!lines.length)return null;
+        const nm=lines[0].match(/^(\d+)[.)\s]\s*(.*)/);
+        if(!nm)return null;
+        const qnum=nm[1];
+        let ans='',expLines=[];
+        lines.forEach((l,li)=>{
+          if(!ans){
+            const am=l.match(/(?:^|Answer:\s*)([A-D])[.)\s]/i);
+            if(am)ans=am[1].toUpperCase();
+          }
+          if(l.match(/^Explanation:/i))expLines.push(l.replace(/^Explanation:\s*/i,''));
+          else if(li>0&&!l.match(/^[A-D][.)]/i)&&!l.match(/^Answer:/i)&&!l.match(/^\d+[.)]/)&&l.length>2)expLines.push(l);
+        });
+        return(
+          <div key={bi} className="ak-block">
+            <div className="ak-num">Question {qnum}</div>
+            {ans&&<div className="ak-ans">✓ Answer: {ans}</div>}
+            {expLines.length>0&&<div className="ak-exp">{expLines.join(' ').slice(0,400)}</div>}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function App(){
@@ -981,14 +998,21 @@ function App(){
           </div>
 
           <div className="tc">
-            {activeTab==='questions'&&(renderQuestions(result.questions)||<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.questions||'')}}/>)}
+            {activeTab==='questions'&&(
+              result.questions&&result.questions.trim()
+                ? (renderQuestions(result.questions)||<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.questions)}}/>)
+                : <p style={{fontFamily:'var(--ffi)',fontStyle:'italic',color:'var(--muted)',fontSize:'14px'}}>No questions found. Please regenerate.</p>
+            )}
             {activeTab==='answerkey'&&(
               result.answerKey&&result.answerKey.trim()
-                ?renderAnswerKey(result.answerKey)
-                :<p style={{fontFamily:'var(--ffi)',fontStyle:'italic',color:'var(--muted)',fontSize:'14px'}}>Answer key not found in output. Please regenerate.</p>
+                ? (renderAnswerKey(result.answerKey)||<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.answerKey)}}/>)
+                : <p style={{fontFamily:'var(--ffi)',fontStyle:'italic',color:'var(--muted)',fontSize:'14px'}}>Answer key not found. Please regenerate.</p>
             )}
-            {activeTab==='full'&&<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.cleaned||'')}}/>}
+            {activeTab==='full'&&(
+              <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.cleaned||'')}}/>
+            )}
           </div>
+          <div style={{height:'32px',background:'linear-gradient(transparent, var(--parch))',marginTop:'-32px',pointerEvents:'none',position:'sticky',bottom:0}}/>
 
           <div className="fp">
             <div>
