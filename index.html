@@ -735,16 +735,44 @@ function App(){
       const res=await fetch(W1,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       const raw=await res.text();
       if(!raw||!raw.trim())throw new Error(`Empty response (status ${res.status})`);
-      let text,testId;
+      let parsed,testId;
       try{
         const j=JSON.parse(raw);
         const row=Array.isArray(j)?j[0]:j;
         testId=row.test_id||row['Test ID']||null;
-        const genText=row['Generated Text']||row.generated_text||row.output||row.result||null;
-        text=genText||raw;
-      }catch(e){text=raw;testId=null;}
-      if(!text||!text.trim())throw new Error('Empty response. Please try again.');
-      const parsed=parseTest(text);
+
+        // NEW structured format: { questions: [{number, question, option_a/b/c/d, answer, explanation}] }
+        if(row.questions&&Array.isArray(row.questions)&&row.questions.length>0){
+          const qs=row.questions;
+          // Build questions text
+          let qtext='';
+          qs.forEach(q=>{
+            qtext+=q.number+'. '+q.question+'\n';
+            qtext+='A) '+(q.option_a||q.options?.A||'')+'\n';
+            qtext+='B) '+(q.option_b||q.options?.B||'')+'\n';
+            qtext+='C) '+(q.option_c||q.options?.C||'')+'\n';
+            qtext+='D) '+(q.option_d||q.options?.D||'')+'\n\n';
+          });
+          // Build answer key text
+          let aktext='ANSWER KEY:\n\n';
+          qs.forEach(q=>{
+            aktext+=q.number+'. Answer: '+(q.answer||'A')+'\n';
+            if(q.explanation)aktext+='Explanation: '+q.explanation+'\n';
+            aktext+='\n';
+          });
+          parsed={
+            cleaned: qtext+'\n'+aktext,
+            questions: qtext.trim(),
+            answerKey: aktext.trim()
+          };
+        } else {
+          // Legacy text format
+          const genText=row['Generated Text']||row.generated_text||row.output||row.result||raw;
+          parsed=parseTest(genText);
+        }
+      }catch(e){parsed=parseTest(raw);testId=null;}
+
+      if(!parsed.questions&&!parsed.cleaned)throw new Error('Empty response. Please try again.');
       setResult(parsed);
       setMeta({...payload,test_id:testId});
       setTimeout(()=>resultRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),100);
