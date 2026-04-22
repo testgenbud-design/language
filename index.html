@@ -46,7 +46,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Grain overlay */
 body::before {
   content: '';
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -54,7 +53,6 @@ body::before {
   opacity: 0.7;
 }
 
-/* Warm vignette */
 body::after {
   content: '';
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -74,9 +72,7 @@ body::after {
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--linen);
 }
-.nav-logo {
-  display: flex; align-items: center; gap: 14px;
-}
+.nav-logo { display: flex; align-items: center; gap: 14px; }
 .nav-crest {
   width: 34px; height: 34px; border-radius: 4px;
   border: 1.5px solid var(--gold);
@@ -86,10 +82,7 @@ body::after {
   color: var(--gold); letter-spacing: -0.5px;
   box-shadow: 1px 1px 0 var(--gold);
 }
-.nav-brand {
-  font-family: var(--ffd); font-size: 20px; font-weight: 600;
-  color: var(--ink); letter-spacing: 0.3px;
-}
+.nav-brand { font-family: var(--ffd); font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: 0.3px; }
 .nav-brand em { color: var(--gold); font-style: italic; }
 .nav-right { display: flex; align-items: center; gap: 20px; }
 .nav-tag {
@@ -98,10 +91,7 @@ body::after {
   border: 1px solid var(--linen); padding: 4px 12px; border-radius: 2px;
 }
 .nav-langs { display: flex; gap: 8px; align-items: center; }
-.lang-flag {
-  font-size: 16px; opacity: 0.7; transition: opacity 0.2s;
-  cursor: default;
-}
+.lang-flag { font-size: 16px; opacity: 0.7; transition: opacity 0.2s; cursor: default; }
 .lang-flag:hover { opacity: 1; }
 
 /* ── HERO ── */
@@ -131,9 +121,7 @@ body::after {
   color: var(--muted); line-height: 1.9; margin-bottom: 36px;
   max-width: 440px;
 }
-.hero-cefr {
-  display: flex; gap: 8px; flex-wrap: wrap;
-}
+.hero-cefr { display: flex; gap: 8px; flex-wrap: wrap; }
 .cefr-pill {
   font-family: var(--ffd); font-size: 14px; font-weight: 600;
   color: var(--forest); border: 1px solid var(--linen);
@@ -141,16 +129,11 @@ body::after {
   letter-spacing: 0.5px; transition: all 0.2s;
   box-shadow: 1px 1px 0 var(--linen);
 }
-.cefr-pill:hover {
-  border-color: var(--gold); color: var(--gold);
-  box-shadow: 1px 1px 0 var(--gold);
-}
+.cefr-pill:hover { border-color: var(--gold); color: var(--gold); box-shadow: 1px 1px 0 var(--gold); }
 .cefr-pill.advanced { background: var(--forest); color: var(--gold); border-color: var(--forest); }
 
-/* Hero right — decorative card */
 .hero-card {
-  background: var(--parch);
-  border: 1px solid var(--linen);
+  background: var(--parch); border: 1px solid var(--linen);
   border-radius: 4px; padding: 32px;
   box-shadow: 4px 4px 0 var(--linen), 8px 8px 0 var(--linen2);
   position: relative;
@@ -175,28 +158,19 @@ body::after {
   display: flex; gap: 0; margin-top: 24px;
   border-top: 1px solid var(--linen); padding-top: 20px;
 }
-.hstat {
-  flex: 1; text-align: center; padding: 0 12px;
-  border-right: 1px solid var(--linen);
-}
+.hstat { flex: 1; text-align: center; padding: 0 12px; border-right: 1px solid var(--linen); }
 .hstat:last-child { border-right: none; }
-.hstat-n {
-  font-family: var(--ffd); font-size: 26px; font-weight: 700;
-  color: var(--forest); line-height: 1;
-}
+.hstat-n { font-family: var(--ffd); font-size: 26px; font-weight: 700; color: var(--forest); line-height: 1; }
 .hstat-l { font-size: 10px; color: var(--muted2); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
 
 /* ── MAIN ── */
 .main { max-width: 1060px; margin: 0 auto; padding: 0 56px 80px; }
 
-/* ── ORNAMENT DIVIDER ── */
 .ornament {
   text-align: center; color: var(--gold); opacity: 0.4;
   font-size: 18px; letter-spacing: 12px; margin: 8px 0 24px;
   user-select: none;
 }
-
-/* ── SECTION LABEL ── */
 .sect-label {
   font-family: var(--ff); font-size: 9px; letter-spacing: 3.5px;
   text-transform: uppercase; color: var(--muted);
@@ -204,10 +178,8 @@ body::after {
 }
 .sect-label::after { content: ''; flex: 1; height: 1px; background: var(--linen); }
 
-/* ── CARD ── */
 .card {
-  background: var(--parch);
-  border: 1px solid var(--linen);
+  background: var(--parch); border: 1px solid var(--linen);
   border-radius: 3px; overflow: hidden;
   margin-bottom: 24px;
   box-shadow: 3px 3px 0 var(--linen2), 6px 6px 0 rgba(196,180,154,0.3);
@@ -217,14 +189,8 @@ body::after {
   display: flex; align-items: flex-start; justify-content: space-between;
   background: linear-gradient(135deg, var(--parch2), var(--parch));
 }
-.card-title {
-  font-family: var(--ffd); font-size: 20px; font-weight: 600;
-  color: var(--ink); letter-spacing: 0.2px;
-}
-.card-sub {
-  font-family: var(--ffi); font-size: 13px; font-style: italic;
-  color: var(--muted); margin-top: 3px;
-}
+.card-title { font-family: var(--ffd); font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: 0.2px; }
+.card-sub { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--muted); margin-top: 3px; }
 .card-body { padding: 28px; }
 
 /* ── LANGUAGE SELECTOR ── */
@@ -236,20 +202,11 @@ body::after {
   box-shadow: 2px 2px 0 var(--linen2);
 }
 .lang-card:hover { border-color: var(--gold); box-shadow: 2px 2px 0 var(--gold); }
-.lang-card.active {
-  background: var(--forest); border-color: var(--forest);
-  box-shadow: 2px 2px 0 var(--gold);
-}
+.lang-card.active { background: var(--forest); border-color: var(--forest); box-shadow: 2px 2px 0 var(--gold); }
 .lang-flag-lg { font-size: 28px; margin-bottom: 8px; display: block; }
-.lang-name {
-  font-family: var(--ffd); font-size: 16px; font-weight: 600;
-  color: var(--ink); letter-spacing: 0.3px; display: block;
-}
+.lang-name { font-family: var(--ffd); font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: 0.3px; display: block; }
 .lang-card.active .lang-name { color: var(--gold); }
-.lang-native {
-  font-family: var(--ffi); font-size: 12px; font-style: italic;
-  color: var(--muted); margin-top: 3px; display: block;
-}
+.lang-native { font-family: var(--ffi); font-size: 12px; font-style: italic; color: var(--muted); margin-top: 3px; display: block; }
 .lang-card.active .lang-native { color: rgba(255,255,255,0.5); }
 
 /* ── FORM FIELDS ── */
@@ -276,6 +233,8 @@ body::after {
 .ti::placeholder { color: var(--muted2); font-family: var(--ffi); font-style: italic; }
 .ti:focus { border-color: var(--gold); box-shadow: inset 1px 1px 0 rgba(196,180,154,0.3), 0 0 0 3px var(--gold-dim); }
 .ti:disabled { opacity: 0.35; cursor: not-allowed; }
+.ti.invalid { border-color: var(--red); box-shadow: inset 1px 1px 0 rgba(139,32,32,0.1), 0 0 0 3px var(--red-dim); }
+.ti.valid { border-color: var(--green); box-shadow: inset 1px 1px 0 rgba(45,90,39,0.1), 0 0 0 3px var(--green-dim); }
 select.ti {
   appearance: none; cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A8967E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -283,6 +242,13 @@ select.ti {
 }
 select.ti option { background: var(--cream); }
 textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
+
+.field-hint {
+  font-family: var(--ffi); font-size: 11.5px; font-style: italic;
+  margin-top: 5px; display: block;
+}
+.field-hint.err-hint { color: var(--red); }
+.field-hint.ok-hint { color: var(--green); }
 
 /* CEFR selector */
 .cefr-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
@@ -293,10 +259,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   box-shadow: 1px 1px 0 var(--linen2);
 }
 .cefr-btn:hover { border-color: var(--linen2); }
-.cefr-level {
-  font-family: var(--ffd); font-size: 18px; font-weight: 700;
-  color: var(--forest); display: block; line-height: 1;
-}
+.cefr-level { font-family: var(--ffd); font-size: 18px; font-weight: 700; color: var(--forest); display: block; line-height: 1; }
 .cefr-desc { font-size: 9px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; display: block; }
 .cefr-btn.sel-a1,.cefr-btn.sel-a2 { background: var(--green-dim); border-color: rgba(45,90,39,0.3); }
 .cefr-btn.sel-a1 .cefr-level,.cefr-btn.sel-a2 .cefr-level { color: var(--green); }
@@ -314,10 +277,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   box-shadow: 1px 1px 0 var(--linen2);
 }
 .diff-btn:hover { border-color: var(--linen2); }
-.diff-name {
-  font-family: var(--ffd); font-size: 15px; font-weight: 600;
-  color: var(--ink); display: block;
-}
+.diff-name { font-family: var(--ffd); font-size: 15px; font-weight: 600; color: var(--ink); display: block; }
 .diff-sub { font-family: var(--ffi); font-size: 11px; font-style: italic; color: var(--muted); margin-top: 3px; display: block; }
 .diff-bars { display: flex; gap: 2px; justify-content: center; margin-top: 8px; }
 .diff-bar { width: 8px; height: 3px; border-radius: 1px; background: var(--linen); }
@@ -335,7 +295,6 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 .spell-note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
 .spell-note-text { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--ink2); line-height: 1.6; }
 
-/* Divider */
 .div { height: 1px; background: var(--linen); margin: 8px 0 20px; }
 
 /* Generate button */
@@ -349,10 +308,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   transition: all 0.2s;
   box-shadow: 3px 3px 0 rgba(28,43,30,0.3);
 }
-.btn-gen:hover {
-  background: var(--forest2); box-shadow: 4px 4px 0 rgba(28,43,30,0.4);
-  transform: translate(-1px,-1px);
-}
+.btn-gen:hover { background: var(--forest2); box-shadow: 4px 4px 0 rgba(28,43,30,0.4); transform: translate(-1px,-1px); }
 .btn-gen:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgba(28,43,30,0.3); }
 .btn-gen:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 rgba(28,43,30,0.2); }
 
@@ -412,7 +368,6 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   border: 1px solid rgba(45,90,39,0.2); padding: 4px 10px; border-radius: 2px;
 }
 
-/* Meta tags */
 .meta-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 28px; border-bottom: 1px solid var(--linen); }
 .mc {
   font-family: var(--ff); font-size: 10px; letter-spacing: 1.5px;
@@ -423,7 +378,6 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 .mc.gold { color: var(--gold); border-color: rgba(184,150,12,0.3); background: var(--gold-dim); }
 .mc.forest { color: var(--forest); border-color: rgba(28,43,30,0.25); background: var(--green-dim); }
 
-/* Tabs */
 .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--linen); padding: 0 28px; }
 .tab {
   padding: 14px 22px; font-family: var(--ff); font-size: 11px;
@@ -448,10 +402,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   border-radius: 2px; border-left: 3px solid var(--gold);
   box-shadow: 2px 2px 0 var(--linen2);
 }
-.q-num {
-  font-family: var(--ff); font-size: 9px; color: var(--gold);
-  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;
-}
+.q-num { font-family: var(--ff); font-size: 9px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
 .q-text { font-family: var(--ffd); font-size: 15px; font-weight: 400; color: var(--ink); margin-bottom: 14px; line-height: 1.75; letter-spacing: 0.1px; }
 .q-opts { display: flex; flex-direction: column; gap: 7px; }
 .q-opt {
@@ -461,10 +412,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   transition: border-color 0.1s;
 }
 .q-opt:hover { border-color: var(--linen2); }
-.q-opt-label {
-  font-family: var(--ffd); font-size: 13px; font-weight: 700;
-  color: var(--gold); flex-shrink: 0; margin-top: 1px;
-}
+.q-opt-label { font-family: var(--ffd); font-size: 13px; font-weight: 700; color: var(--gold); flex-shrink: 0; margin-top: 1px; }
 
 /* Answer key */
 .ak-block {
@@ -475,6 +423,19 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 .ak-num { font-family: var(--ff); font-size: 9px; color: var(--green); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 6px; }
 .ak-ans { font-family: var(--ffd); font-size: 15px; font-weight: 600; color: var(--green); margin-bottom: 6px; }
 .ak-exp { font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--muted); line-height: 1.7; margin-top: 4px; }
+
+/* Full Paper */
+.full-paper { }
+.full-paper-section {
+  margin-bottom: 36px;
+}
+.full-paper-section-hd {
+  font-family: var(--ff); font-size: 9px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gold);
+  padding-bottom: 10px; border-bottom: 1px solid var(--linen);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+}
+.full-paper-section-hd::before { content: '✦'; font-size: 8px; }
 
 /* Markdown fallback */
 .md-out strong { color: var(--ink); font-weight: 600; }
@@ -505,10 +466,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 /* How it works */
 .how { padding: 72px 56px; max-width: 1060px; margin: 0 auto; }
 .how-top { text-align: center; margin-bottom: 52px; }
-.how-eyebrow {
-  font-family: var(--ff); font-size: 9px; letter-spacing: 4px;
-  text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
-}
+.how-eyebrow { font-family: var(--ff); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
 .how-h2 { font-family: var(--ffd); font-size: clamp(30px, 4vw, 48px); font-weight: 600; color: var(--ink); letter-spacing: -0.5px; }
 .how-h2 em { font-style: italic; color: var(--forest); }
 .how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
@@ -535,7 +493,6 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 .footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: livepulse 2s ease-in-out infinite; }
 @keyframes livepulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
-/* Animations */
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 .a1{animation:fadeUp 0.6s ease both 0.05s}
 .a2{animation:fadeUp 0.7s ease both 0.2s}
@@ -567,6 +524,11 @@ const {useState,useRef,useEffect}=React;
 
 const W1='https://tstai.app.n8n.cloud/webhook/language-teacher-gen';
 const W2='https://tstai.app.n8n.cloud/webhook/6309a8f0-7e27-4fdb-b9cd-ad4d1747298a';
+
+// ── EMAIL VALIDATION ─────────────────────────────────────────────
+function isValidEmail(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+}
 
 // ── TOPICS BY LANGUAGE ──────────────────────────────────────────
 const TOPICS={
@@ -618,7 +580,6 @@ function parseTest(raw){
 
 function renderQuestions(text){
   if(!text)return null;
-  // Normalize options with leading spaces
   const norm=text.replace(/\n\s+([A-D][.)\s]\s)/g,'\n$1');
   const blocks=norm.split(/\n(?=\d+[.)\s])/).filter(b=>b.trim());
   if(!blocks.length)return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(text)}}/>;
@@ -647,9 +608,7 @@ function renderQuestions(text){
                 ))}
               </div>
             ):(
-              <div className="md-out" style={{marginTop:'8px'}} dangerouslySetInnerHTML={{__html:marked.parse(
-                lines.slice(1).join('\n')
-              )}}/>
+              <div className="md-out" style={{marginTop:'8px'}} dangerouslySetInnerHTML={{__html:marked.parse(lines.slice(1).join('\n'))}}/>
             )}
           </div>
         );
@@ -673,10 +632,7 @@ function renderAnswerKey(text){
         const qnum=nm[1];
         let ans='',expLines=[];
         lines.forEach((l,li)=>{
-          if(!ans){
-            const am=l.match(/(?:^|Answer:\s*)([A-D])[.)\s]/i);
-            if(am)ans=am[1].toUpperCase();
-          }
+          if(!ans){const am=l.match(/(?:^|Answer:\s*)([A-D])[.)\s]/i);if(am)ans=am[1].toUpperCase();}
           if(l.match(/^Explanation:/i))expLines.push(l.replace(/^Explanation:\s*/i,''));
           else if(li>0&&!l.match(/^[A-D][.)]/i)&&!l.match(/^Answer:/i)&&!l.match(/^\d+[.)]/)&&l.length>2)expLines.push(l);
         });
@@ -692,6 +648,31 @@ function renderAnswerKey(text){
   );
 }
 
+// ── FULL PAPER: renders questions + answer key sections together ──
+function renderFullPaper(result){
+  if(!result)return null;
+  const hasStructured=result.questions&&result.questions.trim()&&result.answerKey&&result.answerKey.trim();
+  if(hasStructured){
+    return(
+      <div className="full-paper">
+        <div className="full-paper-section">
+          <div className="full-paper-section-hd">Questions</div>
+          {renderQuestions(result.questions)||<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.questions)}}/>}
+        </div>
+        <div className="full-paper-section">
+          <div className="full-paper-section-hd">Answer Key</div>
+          {renderAnswerKey(result.answerKey)||<div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.answerKey)}}/>}
+        </div>
+      </div>
+    );
+  }
+  // fallback: cleaned text
+  if(result.cleaned){
+    return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.cleaned)}}/>;
+  }
+  return null;
+}
+
 function App(){
   const [lang,setLang]=useState('');
   const [cefr,setCefr]=useState('');
@@ -699,8 +680,8 @@ function App(){
   const [topic,setTopic]=useState('');
   const [difficulty,setDifficulty]=useState('balanced');
   const [numQ,setNumQ]=useState('');
-  const [timeLimit,setTimeLimit]=useState('');
   const [email,setEmail]=useState('');
+  const [emailTouched,setEmailTouched]=useState(false);
   const [customVocab,setCustomVocab]=useState('');
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
@@ -716,17 +697,24 @@ function App(){
   const topicOpts=(lang&&topicType)?TOPICS[lang]?.[topicType]||[]:[];
 
   useEffect(()=>{setTopic('');},[lang,topicType]);
-  useEffect(()=>{if(numQ&&!timeLimit)setTimeLimit(String(Math.ceil(parseInt(numQ)*1.5)));},[numQ]);
+
+  const emailValid=isValidEmail(email);
+  const emailInvalid=emailTouched&&email.trim()&&!emailValid;
+  const emailOk=emailTouched&&emailValid;
 
   async function generate(){
-    if(!lang||!cefr||!topic||!numQ){
-      setError('Please fill in all required fields — language, level, topic and question count.');return;
+    setEmailTouched(true);
+    if(!lang||!cefr||!topic||!numQ||!email.trim()){
+      setError('Please fill in all required fields — language, level, topic, question count, and your email address.');return;
+    }
+    if(!emailValid){
+      setError('Please enter a valid email address (e.g. teacher@school.com).');return;
     }
     setError('');setLoading(true);setResult(null);setFormData(null);setFormError('');
     const payload={
       language:lang,cefr_level:cefr,topic_type:topicType,topic,
       difficulty_profile:difficulty,num_questions:parseInt(numQ),
-      time_limit:parseInt(timeLimit)||Math.ceil(parseInt(numQ)*1.5),
+      time_limit:Math.ceil(parseInt(numQ)*1.5),
       teacher_email:email.trim().toLowerCase(),
       custom_vocabulary:customVocab.trim(),
       mode:'ai_only'
@@ -740,11 +728,8 @@ function App(){
         const j=JSON.parse(raw);
         const row=Array.isArray(j)?j[0]:j;
         testId=row.test_id||row['Test ID']||null;
-
-        // NEW structured format: { questions: [{number, question, option_a/b/c/d, answer, explanation}] }
         if(row.questions&&Array.isArray(row.questions)&&row.questions.length>0){
           const qs=row.questions;
-          // Build questions text
           let qtext='';
           qs.forEach(q=>{
             qtext+=q.number+'. '+q.question+'\n';
@@ -753,25 +738,18 @@ function App(){
             qtext+='C) '+(q.option_c||q.options?.C||'')+'\n';
             qtext+='D) '+(q.option_d||q.options?.D||'')+'\n\n';
           });
-          // Build answer key text
           let aktext='ANSWER KEY:\n\n';
           qs.forEach(q=>{
             aktext+=q.number+'. Answer: '+(q.answer||'A')+'\n';
             if(q.explanation)aktext+='Explanation: '+q.explanation+'\n';
             aktext+='\n';
           });
-          parsed={
-            cleaned: qtext+'\n'+aktext,
-            questions: qtext.trim(),
-            answerKey: aktext.trim()
-          };
-        } else {
-          // Legacy text format
+          parsed={cleaned:qtext+'\n'+aktext,questions:qtext.trim(),answerKey:aktext.trim()};
+        }else{
           const genText=row['Generated Text']||row.generated_text||row.output||row.result||raw;
           parsed=parseTest(genText);
         }
       }catch(e){parsed=parseTest(raw);testId=null;}
-
       if(!parsed.questions&&!parsed.cleaned)throw new Error('Empty response. Please try again.');
       setResult(parsed);
       setMeta({...payload,test_id:testId});
@@ -957,18 +935,27 @@ function App(){
 
           <div className="div"/>
 
-          <div className="fg fg3">
+          <div className="fg">
             <div>
               <label className="fl">No. of Questions <span>*</span></label>
               <input className="ti" type="number" placeholder="e.g. 15" min="5" max="40" value={numQ} onChange={e=>setNumQ(e.target.value)}/>
             </div>
             <div>
-              <label className="fl">Time Limit (min)</label>
-              <input className="ti" type="number" placeholder="Auto" value={timeLimit} onChange={e=>setTimeLimit(e.target.value)}/>
-            </div>
-            <div>
-              <label className="fl">Your Email</label>
-              <input className="ti" type="email" placeholder="teacher@school.com" value={email} onChange={e=>setEmail(e.target.value)}/>
+              <label className="fl">Your Email <span>*</span></label>
+              <input
+                className={`ti ${emailInvalid?'invalid':emailOk?'valid':''}`}
+                type="email"
+                placeholder="teacher@school.com"
+                value={email}
+                onChange={e=>setEmail(e.target.value)}
+                onBlur={()=>setEmailTouched(true)}
+              />
+              {emailInvalid&&(
+                <span className="field-hint err-hint">✦ Please enter a valid email address</span>
+              )}
+              {emailOk&&(
+                <span className="field-hint ok-hint">✓ Looks good</span>
+              )}
             </div>
           </div>
 
@@ -1012,7 +999,7 @@ function App(){
           <div className="meta-row">
             {[lang,cefr,topicType,topic,
               DIFFICULTIES.find(d=>d.id===difficulty)?.name||difficulty,
-              `${meta?.num_questions} Questions`,`${meta?.time_limit} min`
+              `${meta?.num_questions} Questions`
             ].filter(Boolean).map(v=>(
               <span key={v} className={`mc ${v===lang?'gold':v===cefr?'forest':''}`}>{v}</span>
             ))}
@@ -1037,7 +1024,8 @@ function App(){
                 : <p style={{fontFamily:'var(--ffi)',fontStyle:'italic',color:'var(--muted)',fontSize:'14px'}}>Answer key not found. Please regenerate.</p>
             )}
             {activeTab==='full'&&(
-              <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.cleaned||'')}}/>
+              renderFullPaper(result)||
+              <p style={{fontFamily:'var(--ffi)',fontStyle:'italic',color:'var(--muted)',fontSize:'14px'}}>Nothing to display. Please regenerate.</p>
             )}
           </div>
           <div style={{height:'32px',background:'linear-gradient(transparent, var(--parch))',marginTop:'-32px',pointerEvents:'none',position:'sticky',bottom:0}}/>
