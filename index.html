@@ -111,16 +111,33 @@ body::after {
   height: 1px; background: var(--gold); opacity: 0.5;
 }
 .hero-h1 {
-  font-family: var(--ffd); font-size: clamp(44px, 5vw, 70px);
-  font-weight: 600; line-height: 1.08; letter-spacing: -0.5px;
+  font-family: var(--ffd); font-size: clamp(38px, 4.5vw, 62px);
+  font-weight: 600; line-height: 1.1; letter-spacing: -0.5px;
   color: var(--ink); margin-bottom: 18px;
 }
 .hero-h1 em { color: var(--forest); font-style: italic; font-weight: 400; }
-.hero-sub {
-  font-family: var(--ffi); font-size: 16px; font-style: italic;
-  color: var(--muted); line-height: 1.9; margin-bottom: 36px;
-  max-width: 440px;
+.hero-pipeline {
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px;
 }
+.hero-pipeline-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-family: var(--ffd); font-size: 17px; font-weight: 500; color: var(--ink2); line-height: 1.5;
+}
+.hero-pipeline-bullet {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+  flex-shrink: 0; margin-top: 8px;
+}
+.hero-sub {
+  font-family: var(--ffi); font-size: 15px; font-style: italic;
+  color: var(--muted); line-height: 1.85; margin-bottom: 28px;
+  max-width: 420px; padding-top: 8px; border-top: 1px solid var(--linen);
+}
+.hero-trust {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--ff); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted2); margin-bottom: 28px;
+}
+.hero-trust-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--green); }
 .hero-cefr { display: flex; gap: 8px; flex-wrap: wrap; }
 .cefr-pill {
   font-family: var(--ffd); font-size: 14px; font-weight: 600;
@@ -163,6 +180,33 @@ body::after {
 .hstat-n { font-family: var(--ffd); font-size: 26px; font-weight: 700; color: var(--forest); line-height: 1; }
 .hstat-l { font-size: 10px; color: var(--muted2); margin-top: 4px; letter-spacing: 1px; text-transform: uppercase; }
 
+/* ── FLOW STRIP ── */
+.flow-strip {
+  max-width: 1060px; margin: 0 auto 8px;
+  padding: 0 56px;
+}
+.flow-strip-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0;
+  background: var(--parch); border: 1px solid var(--linen);
+  border-radius: 3px; padding: 18px 28px;
+  box-shadow: 2px 2px 0 var(--linen2);
+}
+.flow-step {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--ff); font-size: 10px; letter-spacing: 1.8px;
+  text-transform: uppercase; color: var(--muted);
+  padding: 0 20px; flex-shrink: 0;
+}
+.flow-step-icon { font-size: 15px; }
+.flow-step-label { white-space: nowrap; }
+.flow-arrow {
+  font-size: 13px; color: var(--gold); opacity: 0.6; flex-shrink: 0;
+  font-family: var(--ff);
+}
+.flow-step.highlight .flow-step-label { color: var(--forest); font-weight: 600; }
+.flow-step.highlight .flow-step-icon { filter: none; }
+
 /* ── MAIN ── */
 .main { max-width: 1060px; margin: 0 auto; padding: 0 56px 80px; }
 
@@ -191,6 +235,7 @@ body::after {
 }
 .card-title { font-family: var(--ffd); font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: 0.2px; }
 .card-sub { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--muted); margin-top: 3px; }
+.card-hint { font-family: var(--ff); font-size: 10px; letter-spacing: 1.5px; color: var(--muted2); margin-top: 6px; text-transform: uppercase; }
 .card-body { padding: 28px; }
 
 /* ── LANGUAGE SELECTOR ── */
@@ -200,9 +245,24 @@ body::after {
   border-radius: 3px; padding: 18px 16px; cursor: pointer;
   transition: all 0.2s; text-align: center;
   box-shadow: 2px 2px 0 var(--linen2);
+  position: relative;
 }
-.lang-card:hover { border-color: var(--gold); box-shadow: 2px 2px 0 var(--gold); }
-.lang-card.active { background: var(--forest); border-color: var(--forest); box-shadow: 2px 2px 0 var(--gold); }
+.lang-card:hover { border-color: var(--gold); box-shadow: 2px 2px 0 var(--gold); transform: translateY(-1px); }
+.lang-card.active {
+  background: var(--forest); border-color: var(--forest);
+  box-shadow: 2px 2px 0 var(--gold), 0 4px 16px rgba(28,43,30,0.18);
+  transform: translateY(-2px) scale(1.02);
+}
+.lang-check {
+  position: absolute; top: 8px; right: 8px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); color: var(--forest);
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(0.5);
+  transition: all 0.2s;
+}
+.lang-card.active .lang-check { opacity: 1; transform: scale(1); }
 .lang-flag-lg { font-size: 28px; margin-bottom: 8px; display: block; }
 .lang-name { font-family: var(--ffd); font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: 0.3px; display: block; }
 .lang-card.active .lang-name { color: var(--gold); }
@@ -249,6 +309,8 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 }
 .field-hint.err-hint { color: var(--red); }
 .field-hint.ok-hint { color: var(--green); }
+.field-hint.warn-hint { color: var(--gold); }
+.field-hint.checking-hint { color: var(--muted2); }
 
 /* CEFR selector */
 .cefr-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
@@ -256,16 +318,22 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   padding: 10px 6px; text-align: center;
   background: var(--cream); border: 1px solid var(--linen);
   border-radius: 2px; cursor: pointer; transition: all 0.15s;
-  box-shadow: 1px 1px 0 var(--linen2);
+  box-shadow: 1px 1px 0 var(--linen2); position: relative;
 }
-.cefr-btn:hover { border-color: var(--linen2); }
+.cefr-btn:hover { border-color: var(--linen2); transform: translateY(-1px); }
+.cefr-check {
+  position: absolute; top: 4px; right: 4px;
+  font-size: 8px; color: var(--gold); opacity: 0;
+  transition: opacity 0.15s;
+}
+.cefr-btn[class*="sel-"] .cefr-check { opacity: 1; }
 .cefr-level { font-family: var(--ffd); font-size: 18px; font-weight: 700; color: var(--forest); display: block; line-height: 1; }
 .cefr-desc { font-size: 9px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; display: block; }
-.cefr-btn.sel-a1,.cefr-btn.sel-a2 { background: var(--green-dim); border-color: rgba(45,90,39,0.3); }
+.cefr-btn.sel-a1,.cefr-btn.sel-a2 { background: var(--green-dim); border-color: rgba(45,90,39,0.3); transform: translateY(-2px); }
 .cefr-btn.sel-a1 .cefr-level,.cefr-btn.sel-a2 .cefr-level { color: var(--green); }
-.cefr-btn.sel-b1,.cefr-btn.sel-b2 { background: var(--gold-dim); border-color: rgba(184,150,12,0.3); }
+.cefr-btn.sel-b1,.cefr-btn.sel-b2 { background: var(--gold-dim); border-color: rgba(184,150,12,0.3); transform: translateY(-2px); }
 .cefr-btn.sel-b1 .cefr-level,.cefr-btn.sel-b2 .cefr-level { color: var(--gold); }
-.cefr-btn.sel-c1,.cefr-btn.sel-c2 { background: rgba(28,43,30,0.08); border-color: rgba(28,43,30,0.3); }
+.cefr-btn.sel-c1,.cefr-btn.sel-c2 { background: rgba(28,43,30,0.08); border-color: rgba(28,43,30,0.3); transform: translateY(-2px); }
 .cefr-btn.sel-c1 .cefr-level,.cefr-btn.sel-c2 .cefr-level { color: var(--forest); }
 
 /* Difficulty pills */
@@ -295,6 +363,17 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 .spell-note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
 .spell-note-text { font-family: var(--ffi); font-size: 13px; font-style: italic; color: var(--ink2); line-height: 1.6; }
 
+/* Trust strip */
+.trust-strip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 18px; background: var(--green-dim);
+  border: 1px solid rgba(45,90,39,0.15); border-left: 3px solid var(--green);
+  border-radius: 2px; margin-bottom: 20px;
+}
+.trust-strip-icon { font-size: 15px; flex-shrink: 0; }
+.trust-strip-text { font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--ink2); line-height: 1.5; }
+.trust-strip-text strong { font-style: normal; color: var(--forest); font-weight: 600; }
+
 .div { height: 1px; background: var(--linen); margin: 8px 0 20px; }
 
 /* Generate button */
@@ -305,12 +384,27 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   font-family: var(--ffd); font-size: 18px; font-weight: 600;
   color: var(--gold); cursor: pointer; letter-spacing: 0.5px;
   display: flex; align-items: center; justify-content: center; gap: 12px;
-  transition: all 0.2s;
-  box-shadow: 3px 3px 0 rgba(28,43,30,0.3);
+  transition: all 0.25s;
+  box-shadow: 3px 3px 0 rgba(28,43,30,0.3), 0 0 0 0 rgba(184,150,12,0);
+  position: relative; overflow: hidden;
 }
-.btn-gen:hover { background: var(--forest2); box-shadow: 4px 4px 0 rgba(28,43,30,0.4); transform: translate(-1px,-1px); }
+.btn-gen::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(184,150,12,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.btn-gen:hover {
+  background: var(--forest2);
+  box-shadow: 5px 5px 0 rgba(28,43,30,0.4), 0 0 24px rgba(184,150,12,0.18);
+  transform: translate(-1px,-2px);
+}
 .btn-gen:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 rgba(28,43,30,0.3); }
 .btn-gen:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 rgba(28,43,30,0.2); }
+.btn-gen-timer {
+  font-family: var(--ff); font-size: 11px; letter-spacing: 1.5px;
+  color: rgba(184,150,12,0.7); text-transform: uppercase; margin-left: 4px;
+}
 
 /* Secondary buttons */
 .btn-s {
@@ -327,6 +421,25 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 .btn-s.forest:hover { background: rgba(28,43,30,0.12); }
 .btn-s.gold { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); box-shadow: 1px 1px 0 rgba(184,150,12,0.3); }
 .btn-s.gold:hover { background: rgba(184,150,12,0.15); }
+
+/* Loading sequence */
+.loading-seq {
+  margin-top: 20px; padding: 20px 22px;
+  background: var(--cream); border: 1px solid var(--linen);
+  border-radius: 2px;
+}
+.loading-seq-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid var(--linen);
+  font-family: var(--ffi); font-size: 13.5px; font-style: italic; color: var(--muted);
+  transition: color 0.3s;
+}
+.loading-seq-step:last-child { border-bottom: none; }
+.loading-seq-step.done { color: var(--green); }
+.loading-seq-step.active { color: var(--ink2); }
+.loading-seq-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+.loading-seq-icon.spin { animation: spin 1.2s linear infinite; display: inline-block; }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
 /* Loader */
 .lw { text-align: center; padding: 14px 0 4px; }
@@ -367,6 +480,20 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   color: var(--green); background: var(--green-dim);
   border: 1px solid rgba(45,90,39,0.2); padding: 4px 10px; border-radius: 2px;
 }
+
+/* Delivery confirmation */
+.delivery-confirm {
+  margin: 0 28px 20px;
+  border: 1px solid rgba(45,90,39,0.2); border-left: 3px solid var(--green);
+  border-radius: 2px; background: var(--green-dim); padding: 16px 20px;
+}
+.delivery-confirm-row {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--ff); font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--green); margin-bottom: 8px;
+}
+.delivery-confirm-row:last-child { margin-bottom: 0; }
+.delivery-confirm-icon { font-size: 14px; }
 
 .meta-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 28px; border-bottom: 1px solid var(--linen); }
 .mc {
@@ -426,9 +553,7 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
 
 /* Full Paper */
 .full-paper { }
-.full-paper-section {
-  margin-bottom: 36px;
-}
+.full-paper-section { margin-bottom: 36px; }
 .full-paper-section-hd {
   font-family: var(--ff); font-size: 9px; letter-spacing: 3px;
   text-transform: uppercase; color: var(--gold);
@@ -510,6 +635,9 @@ textarea.ti { resize: vertical; min-height: 90px; line-height: 1.7; }
   .ff-col{grid-column:1;}
   .how{padding:48px 20px;}
   .footer{padding:20px;}
+  .flow-strip{padding:0 20px;}
+  .flow-strip-inner{flex-wrap:wrap;gap:8px;justify-content:flex-start;}
+  .flow-step{padding:0 8px;}
 }
 @media(max-width:520px){
   .lang-grid,.cefr-grid{grid-template-columns:repeat(3,1fr);}
@@ -525,30 +653,115 @@ const {useState,useRef,useEffect}=React;
 const W1='https://tstai.app.n8n.cloud/webhook/language-teacher-gen';
 const W2='https://tstai.app.n8n.cloud/webhook/6309a8f0-7e27-4fdb-b9cd-ad4d1747298a';
 
-// ── EMAIL VALIDATION ─────────────────────────────────────────────
 function isValidEmail(email){
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
 }
 
-// ── TOPICS BY LANGUAGE ──────────────────────────────────────────
+const PURPOSE=['Quick Test','Homework','Weekly Revision','Exam Practice'];
+
+// Topics split by CEFR band: beginner (A1/A2), intermediate (B1/B2), advanced (C1/C2)
 const TOPICS={
   French:{
-    Grammar:["Présent de l'indicatif","Passé composé","Imparfait","Futur simple","Futur proche","Conditionnel présent","Subjonctif présent","Plus-que-parfait","Passé simple","Impératif","Articles définis et indéfinis","Articles partitifs","Pronoms personnels","Pronoms relatifs (qui, que, dont)","Pronoms démonstratifs","Adjectifs possessifs","Adjectifs qualificatifs","Comparatif et superlatif","Négation","Questions et interrogation","Prépositions de lieu","Prépositions de temps","Discours indirect","La voix passive","Les gallicismes (être en train de, venir de)"],
-    Vocabulary:["La famille et les relations","Le corps humain","La maison et les meubles","Les vêtements et la mode","La nourriture et les boissons","Les transports","Les professions et le travail","Les loisirs et les hobbies","La ville et les directions","La nature et l'environnement","Les émotions et les sentiments","Les animaux","Les sports","Les voyages et le tourisme","Les technologies","La santé et le corps","Les nombres et les mathématiques","Les couleurs et les formes","Le temps et les saisons","Les fêtes et les traditions"],
-    Reading:["Texte narratif simple","Dialogue quotidien","Article de presse","Lettre formelle","Lettre informelle","Description de lieu","Biographie","Recette de cuisine","Programme d'événement","Publicité et affiche"],
-    Mixed:["Grammaire et vocabulaire niveau A1","Grammaire et vocabulaire niveau A2","Compréhension et expression B1","Révision complète B2","Préparation DELF A1","Préparation DELF A2","Préparation DELF B1","Préparation DELF B2"]
+    Grammar:{
+      'A1':['Présent de l\'indicatif (verbes réguliers)','Articles définis et indéfinis','Pronoms personnels sujets','Négation simple (ne...pas)','Questions simples','Adjectifs possessifs','Impératif (formes simples)','Prépositions de lieu basiques'],
+      'A2':['Passé composé (être/avoir)','Imparfait (introduction)','Futur proche (aller + infinitif)','Articles partitifs','Adjectifs qualificatifs','Comparatif simple','Pronoms toniques','Prépositions de temps'],
+      'B1':['Futur simple','Conditionnel présent','Subjonctif présent (introduction)','Plus-que-parfait','Pronoms relatifs (qui, que, dont)','Discours indirect (présent)','La voix passive (présent)','Comparatif et superlatif avancé'],
+      'B2':['Subjonctif (usages avancés)','Passé simple (reconnaissance)','Conditionnel passé','Discours indirect (passé)','La voix passive (tous les temps)','Les gallicismes (être en train de, venir de)','Pronoms démonstratifs avancés','Gérondif'],
+      'C1':['Style soutenu et registres','Tournures impersonnelles avancées','Subjonctif imparfait','Concordance des temps','Nominalisation','Euphémismes et périphrases','Argumentation formelle','Nuances modales avancées'],
+      'C2':['Maîtrise stylistique complète','Registres littéraires','Constructions syntaxiques complexes','Ellipses et implicature','Langue des textes officiels','Rhétorique et figures de style','Connotations lexicales fines','Variation diatopique']
+    },
+    Vocabulary:{
+      'A1':['La famille immédiate','Les chiffres 1–100','Les couleurs de base','La maison (pièces essentielles)','La nourriture du quotidien','Les jours et les mois','Le corps humain (parties principales)','Les animaux familiers'],
+      'A2':['Les vêtements et la mode basique','Les transports courants','Les professions communes','La ville (lieux essentiels)','Les loisirs simples','La météo et les saisons','Les sports populaires','Les émotions courantes'],
+      'B1':['Vocabulaire des voyages','Nature et environnement','Technologies du quotidien','Santé et médecine','Éducation et école','Les médias','Expressions idiomatiques fréquentes','Le monde du travail'],
+      'B2':['Registres formel/informel','Synonymes et antonymes avancés','Vocabulaire politique et social','Économie et finance de base','Culture et arts','Vocabulaire des sciences','Expressions figées et collocations','Nuances de sens proches'],
+      'C1':['Langue des affaires et du droit','Vocabulaire académique','Figures de style et rhétorique','Archaïsmes et néologismes','Vocabulaire de la diplomatie','Connotations culturelles','Terminologie spécialisée','Registre littéraire'],
+      'C2':['Nuances lexicales extrêmes','Langue de spécialité avancée','Jargon académique et scientifique','Expressions rares et soutenues','Dialectes et régionalismes','Étymologie et formation des mots','Ironie et sous-entendu','Intertextualité']
+    },
+    Reading:{
+      'A1':['Panneau ou affiche simple','Dialogue de présentation','Menu ou programme','Message court (SMS/note)','Formulaire simplifié'],
+      'A2':['Texte narratif simple','Article très court','Lettre informelle','Description de lieu','Recette basique'],
+      'B1':['Article de presse court','Lettre formelle','Biographie simple','Blog ou post informel','Programme d\'événement'],
+      'B2':['Article d\'opinion','Lettre de réclamation formelle','Extrait littéraire adapté','Reportage','Interview journalistique'],
+      'C1':['Essai argumentatif','Texte littéraire authentique','Discours officiel','Article spécialisé','Éditorial de presse nationale'],
+      'C2':['Œuvre littéraire complexe','Texte philosophique','Document juridique','Analyse critique','Texte de langue soutenue']
+    },
+    Mixed:{
+      'A1':['Révision complète A1','Préparation DELF A1'],
+      'A2':['Révision complète A2','Préparation DELF A2'],
+      'B1':['Révision complète B1','Préparation DELF B1'],
+      'B2':['Révision complète B2','Préparation DELF B2'],
+      'C1':['Révision complète C1','Préparation DALF C1'],
+      'C2':['Révision complète C2','Préparation DALF C2']
+    }
   },
   German:{
-    Grammar:["Präsens (Gegenwart)","Perfekt","Präteritum","Futur I","Konjunktiv II","Passiv Präsens","Passiv Perfekt","Imperativ","Nominativ","Akkusativ","Dativ","Genitiv","Artikelwörter bestimmte Artikel","Artikelwörter unbestimmte Artikel","Possessivartikel","Adjektivdeklination","Komparation der Adjektive","Relativsätze","Nebensätze mit weil und dass","Modalverben","Reflexive Verben","Trennbare Verben","Untrennbare Verben","Wortstellung im Hauptsatz","Wortstellung im Nebensatz","Präpositionen mit Akkusativ","Präpositionen mit Dativ","Zwei-Wege-Präpositionen"],
-    Vocabulary:["Familie und Beziehungen","Körper und Gesundheit","Haus und Wohnung","Kleidung und Mode","Essen und Trinken","Verkehr und Transport","Berufe und Arbeit","Freizeit und Hobbys","Stadt und Orientierung","Natur und Umwelt","Gefühle und Emotionen","Tiere","Sport","Reisen und Tourismus","Technologie und Medien","Schule und Bildung","Zahlen und Mathematik","Farben und Formen","Wetter und Jahreszeiten","Feste und Traditionen"],
-    Reading:["Einfacher Erzähltext","Alltagsdialog","Zeitungsartikel","Formeller Brief","Informeller Brief","Ortsbeschreibung","Biographie","Kochrezept","Veranstaltungsprogramm","Werbung und Anzeigen"],
-    Mixed:["Grammatik und Wortschatz A1","Grammatik und Wortschatz A2","Leseverstehen und Ausdruck B1","Vollständige Wiederholung B2","Vorbereitung Goethe A1","Vorbereitung Goethe A2","Vorbereitung Goethe B1","Vorbereitung Goethe B2"]
+    Grammar:{
+      'A1':['Präsens (Gegenwart) – regelmäßige Verben','Nominativ und Akkusativ','Bestimmter Artikel','Unbestimmter Artikel','Verneinung (nicht/kein)','Personalpronomen','Modalverben (können, müssen)','W-Fragen'],
+      'A2':['Perfekt','Dativ','Possessivartikel','Trennbare Verben','Imperativ','Präpositionen mit Akkusativ','Präpositionen mit Dativ','Komparativ einfach'],
+      'B1':['Präteritum','Konjunktiv II (Gegenwart)','Passiv Präsens','Relativsätze','Nebensätze (weil, dass, wenn)','Adjektivdeklination','Futur I','Reflexive Verben'],
+      'B2':['Konjunktiv II (Vergangenheit)','Passiv Perfekt','Genitiv','Zwei-Wege-Präpositionen','Untrennbare Verben','Indirekte Rede','Konzessivsätze','Nominalisierung'],
+      'C1':['Erweiterte Partizipialkonstruktionen','Stilistische Variation','Modalpartikeln','Komplexe Satzgefüge','Formeller Schreibstil','Konjunktiv I (Indirekte Rede)','Wortbildung fortgeschritten','Ellipsen'],
+      'C2':['Literarische Syntax','Archaische Formen','Idiomatische Präzision','Rhetorische Stilmittel','Varietäten des Deutschen','Akademisches Schreiben','Komplexe Nominalphrasen','Sprachkritik']
+    },
+    Vocabulary:{
+      'A1':['Familie und Verwandtschaft','Zahlen und Mengen','Farben und Formen','Haus und Wohnbereich','Alltagsessen','Wochentage und Monate','Körperteile','Haustiere'],
+      'A2':['Kleidung und Einkaufen','Öffentliche Verkehrsmittel','Häufige Berufe','Stadt und Wegbeschreibung','Freizeitaktivitäten','Wetter und Jahreszeiten','Schule und Schulfächer','Gefühle ausdrücken'],
+      'B1':['Reisen und Tourismus','Natur und Umwelt','Technologie im Alltag','Gesundheit und Arztbesuch','Arbeit und Bewerbung','Medien und Nachrichten','Idiome der Alltagssprache','Kultur und Veranstaltungen'],
+      'B2':['Register: formell/informell','Synonyme und Antonyme','Politik und Gesellschaft','Wirtschaft und Finanzen','Bildung und Wissenschaft','Kollokationen und feste Ausdrücke','Fachvokabular Basis','Sprachliche Nuancen'],
+      'C1':['Akademisches Deutsch','Rechts- und Wirtschaftssprache','Bildungssprache','Rhetorische Mittel','Neologismen und Anglizismen','Fachterminologie','Kulturelle Konnotationen','Diplomatische Sprache'],
+      'C2':['Extreme Nuancen','Seltene und gehobene Ausdrücke','Dialekte und Soziolekte','Sprachhistorische Bezüge','Ironie und Subtext','Wissenschaftssprache','Literarisches Vokabular','Intertextualität']
+    },
+    Reading:{
+      'A1':['Einfaches Schild oder Plakat','Kurzgespräch Alltag','Speisekarte oder Programm','Kurze Nachricht (SMS)','Einfaches Formular'],
+      'A2':['Einfacher Erzähltext','Sehr kurzer Artikel','Informeller Brief','Ortsbeschreibung','Einfaches Rezept'],
+      'B1':['Kurzer Zeitungsartikel','Formeller Brief','Einfache Biographie','Blogbeitrag','Veranstaltungsprogramm'],
+      'B2':['Meinungsartikel','Formelle Beschwerde','Adaptierter Literaturtext','Reportage','Journalistisches Interview'],
+      'C1':['Argumentativer Essay','Authentischer Literaturtext','Offizieller Diskurs','Fachtext','Leitartikel'],
+      'C2':['Komplexes literarisches Werk','Philosophischer Text','Rechtsdokument','Kritische Analyse','Gehobener Sprachtext']
+    },
+    Mixed:{
+      'A1':['Vollständige Wiederholung A1','Vorbereitung Goethe A1'],
+      'A2':['Vollständige Wiederholung A2','Vorbereitung Goethe A2'],
+      'B1':['Vollständige Wiederholung B1','Vorbereitung Goethe B1'],
+      'B2':['Vollständige Wiederholung B2','Vorbereitung Goethe B2'],
+      'C1':['Vollständige Wiederholung C1','Vorbereitung Goethe C1'],
+      'C2':['Vollständige Wiederholung C2','Vorbereitung Goethe C2']
+    }
   },
   English:{
-    Grammar:["Present Simple","Present Continuous","Present Perfect","Present Perfect Continuous","Past Simple","Past Continuous","Past Perfect","Future Simple (will)","Future with going to","Future Perfect","Conditionals (Zero, First, Second, Third)","Modal Verbs (can, could, may, might)","Modal Verbs (must, should, would)","Passive Voice","Reported Speech","Gerunds and Infinitives","Relative Clauses","Articles (a, an, the)","Countable and Uncountable Nouns","Comparatives and Superlatives","Adjective Order","Prepositions of Time","Prepositions of Place and Movement","Question Tags","Phrasal Verbs","Linking Words and Discourse Markers"],
-    Vocabulary:["Family and Relationships","Health and the Body","Home and Furniture","Clothes and Fashion","Food and Drink","Transport and Travel","Jobs and Work","Free Time and Hobbies","Town and Directions","Nature and Environment","Feelings and Emotions","Animals and Nature","Sports and Activities","Technology and Media","Education and Learning","Numbers and Money","Colours and Shapes","Weather and Seasons","Celebrations and Traditions","Collocations and Fixed Phrases"],
-    Reading:["Short narrative passage","Everyday dialogue","News article","Formal email or letter","Informal email or letter","Description of a place","Biography or profile","Instructions and procedures","Advertisement or notice","Opinion piece or blog post"],
-    Mixed:["Grammar and Vocabulary A1","Grammar and Vocabulary A2","Reading and Expression B1","Full Revision B2","Cambridge KET A2 preparation","Cambridge PET B1 preparation","Cambridge FCE B2 preparation","IELTS Academic reading practice"]
+    Grammar:{
+      'A1':['Present Simple (to be, have)','Present Simple (regular verbs)','Indefinite and definite articles','Plural nouns','Basic question forms','There is / There are','Prepositions of place','Can / Can\'t'],
+      'A2':['Present Continuous','Past Simple (regular verbs)','Past Simple (irregular verbs)','Future with going to','Countable and uncountable nouns','Comparatives','Some / Any','Object pronouns'],
+      'B1':['Present Perfect','Future Simple (will)','First Conditional','Second Conditional','Modal Verbs (must, should, might)','Passive Voice (present)','Reported Speech (basics)','Gerunds and Infinitives'],
+      'B2':['Third Conditional','Past Perfect','Passive (all tenses)','Reported Speech (advanced)','Relative Clauses','Modal Verbs (advanced)','Phrasal Verbs','Linking Words and Discourse Markers'],
+      'C1':['Complex conditionals and mixed conditionals','Inversion for emphasis','Cleft sentences','Nominalization','Subjunctive mood','Advanced passive constructions','Ellipsis and substitution','Register and formality'],
+      'C2':['Subtle modal distinctions','Stylistic grammar choices','Archaic and literary structures','Pragmatics and implicature','Syntactic complexity','Academic discourse grammar','Rhetorical devices','Idiomatic precision']
+    },
+    Vocabulary:{
+      'A1':['Family and relationships (basic)','Numbers and colours','Body parts','Everyday objects','Food and drink (basics)','Days and months','Common adjectives','Classroom language'],
+      'A2':['Clothes and shopping','Town and directions','Common jobs','Free time and hobbies','Weather and seasons','Transport basics','Feelings and states','School subjects'],
+      'B1':['Travel and tourism','Health and the body','Technology in daily life','Work and careers','Education','Media and news','Common idioms','Environment basics'],
+      'B2':['Formal vs informal register','Synonyms and antonyms','Politics and society','Business and finance (basic)','Collocations and fixed phrases','Academic vocabulary','Cultural references','Connotation and nuance'],
+      'C1':['Academic and professional vocabulary','Legal and business language','Rhetorical devices','Neologisms and loanwords','Advanced idioms','Specialised terminology','Cultural connotation','Diplomatic language'],
+      'C2':['Extreme lexical nuance','Rare and elevated expressions','Dialects and sociolects','Etymology and word formation','Irony and subtext','Scientific and academic register','Literary vocabulary','Intertextuality']
+    },
+    Reading:{
+      'A1':['Simple sign or notice','Short everyday dialogue','Menu or schedule','Short message or note','Simple form'],
+      'A2':['Short narrative passage','Very short news item','Informal letter or email','Place description','Simple instructions'],
+      'B1':['Short news article','Formal letter or email','Simple biography','Blog or informal post','Event programme'],
+      'B2':['Opinion piece','Formal complaint letter','Adapted literary extract','Report or feature article','Journalistic interview'],
+      'C1':['Argumentative essay','Authentic literary text','Official speech or address','Specialist article','Newspaper editorial'],
+      'C2':['Complex literary work','Philosophical text','Legal document','Critical analysis','Elevated register text']
+    },
+    Mixed:{
+      'A1':['Full A1 revision','Cambridge Starters preparation'],
+      'A2':['Full A2 revision','Cambridge KET A2 preparation'],
+      'B1':['Full B1 revision','Cambridge PET B1 preparation'],
+      'B2':['Full B2 revision','Cambridge FCE B2 preparation'],
+      'C1':['Full C1 revision','Cambridge CAE C1 preparation'],
+      'C2':['Full C2 revision','Cambridge CPE C2 preparation']
+    }
   }
 };
 
@@ -648,7 +861,6 @@ function renderAnswerKey(text){
   );
 }
 
-// ── FULL PAPER: renders questions + answer key sections together ──
 function renderFullPaper(result){
   if(!result)return null;
   const hasStructured=result.questions&&result.questions.trim()&&result.answerKey&&result.answerKey.trim();
@@ -666,11 +878,39 @@ function renderFullPaper(result){
       </div>
     );
   }
-  // fallback: cleaned text
   if(result.cleaned){
     return <div className="md-out" dangerouslySetInnerHTML={{__html:marked.parse(result.cleaned)}}/>;
   }
   return null;
+}
+
+// Email state machine
+function getEmailState(email, touched){
+  if(!touched||!email.trim()) return 'idle';
+  if(!isValidEmail(email)) return 'invalid';
+  return 'verified';
+}
+
+function LoadingSequence({step}){
+  const steps=[
+    {icon:'⚙',label:'Generating your test…'},
+    {icon:'📋',label:'Creating Google Form…'},
+    {icon:'📡',label:'Setting up response tracking…'},
+  ];
+  return(
+    <div className="loading-seq">
+      {steps.map((s,i)=>{
+        const done=i<step;
+        const active=i===step;
+        return(
+          <div key={i} className={`loading-seq-step ${done?'done':active?'active':''}`}>
+            <span className="loading-seq-icon">{done?'✓':active?<span className="spin">◌</span>:'○'}</span>
+            <span>{s.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function App(){
@@ -678,12 +918,14 @@ function App(){
   const [cefr,setCefr]=useState('');
   const [topicType,setTopicType]=useState('Grammar');
   const [topic,setTopic]=useState('');
+  const [purpose,setPurpose]=useState('Quick Test');
   const [difficulty,setDifficulty]=useState('balanced');
   const [numQ,setNumQ]=useState('');
   const [email,setEmail]=useState('');
   const [emailTouched,setEmailTouched]=useState(false);
   const [customVocab,setCustomVocab]=useState('');
   const [loading,setLoading]=useState(false);
+  const [loadingStep,setLoadingStep]=useState(0);
   const [error,setError]=useState('');
   const [result,setResult]=useState(null);
   const [meta,setMeta]=useState(null);
@@ -694,29 +936,43 @@ function App(){
   const resultRef=useRef(null);
 
   const topicTypes=lang?Object.keys(TOPICS[lang]||{}):['Grammar','Vocabulary','Reading','Mixed'];
-  const topicOpts=(lang&&topicType)?TOPICS[lang]?.[topicType]||[]:[];
+  // Filter topics by selected CEFR band; fall back to flat array if no CEFR
+  const topicOpts=React.useMemo(()=>{
+    if(!lang||!topicType) return [];
+    const byType=TOPICS[lang]?.[topicType];
+    if(!byType) return [];
+    if(Array.isArray(byType)) return byType;
+    // object keyed by CEFR level
+    if(cefr&&byType[cefr]) return byType[cefr];
+    // show all if no CEFR selected yet
+    return Object.values(byType).flat();
+  },[lang,topicType,cefr]);
 
-  useEffect(()=>{setTopic('');},[lang,topicType]);
+  useEffect(()=>{setTopic('');},[lang,topicType,cefr]);
 
-  const emailValid=isValidEmail(email);
-  const emailInvalid=emailTouched&&email.trim()&&!emailValid;
-  const emailOk=emailTouched&&emailValid;
+  const emailState=getEmailState(email,emailTouched);
 
   async function generate(){
     setEmailTouched(true);
     if(!lang||!cefr||!topic||!numQ||!email.trim()){
       setError('Please fill in all required fields — language, level, topic, question count, and your email address.');return;
     }
-    if(!emailValid){
+    if(!isValidEmail(email)){
       setError('Please enter a valid email address (e.g. teacher@school.com).');return;
     }
-    setError('');setLoading(true);setResult(null);setFormData(null);setFormError('');
+    setError('');setLoading(true);setLoadingStep(0);setResult(null);setFormData(null);setFormError('');
+
+    // advance loading steps with delays
+    const stepTimer=setTimeout(()=>setLoadingStep(1),3500);
+    const stepTimer2=setTimeout(()=>setLoadingStep(2),6000);
+
     const payload={
       language:lang,cefr_level:cefr,topic_type:topicType,topic,
       difficulty_profile:difficulty,num_questions:parseInt(numQ),
       time_limit:Math.ceil(parseInt(numQ)*1.5),
       teacher_email:email.trim().toLowerCase(),
       custom_vocabulary:customVocab.trim(),
+      purpose,
       mode:'ai_only'
     };
     try{
@@ -753,9 +1009,13 @@ function App(){
       if(!parsed.questions&&!parsed.cleaned)throw new Error('Empty response. Please try again.');
       setResult(parsed);
       setMeta({...payload,test_id:testId});
-      setTimeout(()=>resultRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),100);
+      setLoadingStep(3);
+      setTimeout(()=>resultRef.current?.scrollIntoView({behavior:'smooth',block:'start'}),400);
     }catch(e){setError('Generation failed: '+e.message);}
-    finally{setLoading(false);}
+    finally{
+      clearTimeout(stepTimer);clearTimeout(stepTimer2);
+      setLoading(false);
+    }
   }
 
   async function createForm(){
@@ -806,14 +1066,30 @@ function App(){
       <div className="hero-left">
         <div className="hero-eyebrow a1">For Language Educators</div>
         <h1 className="hero-h1 a2">
-          Assessments<br/>
-          worthy of <em>your</em><br/>
-          classroom
+          Create a test<br/>
+          in <em>30 seconds.</em>
         </h1>
+        <div className="hero-pipeline a3">
+          <div className="hero-pipeline-item">
+            <span className="hero-pipeline-bullet"/>
+            <span>Create a test in 30 seconds.</span>
+          </div>
+          <div className="hero-pipeline-item">
+            <span className="hero-pipeline-bullet"/>
+            <span>Send it via Google Forms.</span>
+          </div>
+          <div className="hero-pipeline-item">
+            <span className="hero-pipeline-bullet"/>
+            <span>Get student performance insights automatically.</span>
+          </div>
+        </div>
         <p className="hero-sub a3">
-          Bespoke MCQ test papers for French, German, and English EFL teachers.
-          CEFR-calibrated, topic-specific, delivered as a Google Form quiz — in thirty seconds.
+          Built for language teachers — no manual checking, no setup.
         </p>
+        <div className="hero-trust a4">
+          <span className="hero-trust-dot"/>
+          <span>Save 2–3 hours per test · No manual checking needed</span>
+        </div>
         <div className="hero-cefr a4">
           {CEFR.map((c,i)=>(
             <span key={c.level} className={`cefr-pill ${i>=4?'advanced':''}`}>{c.level}</span>
@@ -836,6 +1112,31 @@ function App(){
       </div>
     </div>
 
+    {/* FLOW STRIP */}
+    <div className="flow-strip">
+      <div className="flow-strip-inner">
+        <div className="flow-step highlight">
+          <span className="flow-step-icon">⚡</span>
+          <span className="flow-step-label">Generate</span>
+        </div>
+        <span className="flow-arrow">→</span>
+        <div className="flow-step highlight">
+          <span className="flow-step-icon">📋</span>
+          <span className="flow-step-label">Google Form</span>
+        </div>
+        <span className="flow-arrow">→</span>
+        <div className="flow-step highlight">
+          <span className="flow-step-icon">✏️</span>
+          <span className="flow-step-label">Students Attempt</span>
+        </div>
+        <span className="flow-arrow">→</span>
+        <div className="flow-step highlight">
+          <span className="flow-step-icon">📊</span>
+          <span className="flow-step-label">Insights in Email</span>
+        </div>
+      </div>
+    </div>
+
     {/* MAIN */}
     <div className="main">
 
@@ -845,6 +1146,7 @@ function App(){
           <div>
             <div className="card-title">I. Select Language & Level</div>
             <div className="card-sub">Choose the language you teach and your students' CEFR proficiency level</div>
+            <div className="card-hint">We generate CEFR-aligned questions based on your selection</div>
           </div>
         </div>
         <div className="card-body">
@@ -852,6 +1154,7 @@ function App(){
           <div className="lang-grid">
             {langData.map(l=>(
               <div key={l.id} className={`lang-card ${lang===l.id?'active':''}`} onClick={()=>setLang(l.id)}>
+                <span className="lang-check">✓</span>
                 <span className="lang-flag-lg">{l.flag}</span>
                 <span className="lang-name">{l.id}</span>
                 <span className="lang-native">{l.native}</span>
@@ -865,6 +1168,7 @@ function App(){
           <div className="cefr-grid">
             {CEFR.map(c=>(
               <div key={c.level} className={`cefr-btn ${cefr===c.level?`sel-${c.level.toLowerCase()}`:''}`} onClick={()=>setCefr(c.level)}>
+                <span className="cefr-check">✓</span>
                 <span className="cefr-level">{c.level}</span>
                 <span className="cefr-desc">{c.desc}</span>
               </div>
@@ -878,7 +1182,7 @@ function App(){
         <div className="card-hd">
           <div>
             <div className="card-title">II. Choose Topic</div>
-            <div className="card-sub">Select a topic type and specific focus for your test</div>
+            <div className="card-sub">Choose what you recently taught — we'll build targeted questions</div>
           </div>
         </div>
         <div className="card-body">
@@ -892,7 +1196,7 @@ function App(){
             <div>
               <label className="fl">Specific Topic <span>*</span></label>
               <select className="ti" value={topic} onChange={e=>setTopic(e.target.value)} disabled={!lang}>
-                <option value="">{lang?'Select a topic…':'Select language first'}</option>
+                <option value="">{lang?(cefr?`Select a topic for ${cefr}…`:'Select level first'):'Select language first'}</option>
                 {topicOpts.map(t=><option key={t}>{t}</option>)}
               </select>
             </div>
@@ -900,11 +1204,11 @@ function App(){
 
           <div className="ff-col">
             <label className="fl">Custom Vocabulary / Content <em>&nbsp;— optional, paste words or phrases you taught this week</em></label>
-            <textarea className="ti" placeholder="e.g. wanderlust, Fernweh, das Heimweh, Weltschmerz — the system will spell-check these before testing them…" value={customVocab} onChange={e=>setCustomVocab(e.target.value)}/>
+            <textarea className="ti" placeholder="e.g. past tense verbs, travel vocabulary, classroom phrases…" value={customVocab} onChange={e=>setCustomVocab(e.target.value)}/>
             {customVocab.trim()&&(
               <div className="spell-note">
                 <span className="spell-note-icon">✦</span>
-                <span className="spell-note-text">Your vocabulary will be spell-checked via Claude Haiku before inclusion. Any unrecognisable words will be flagged back to you before the test generates.</span>
+                <span className="spell-note-text">Your vocabulary will be spell-checked via Claude before inclusion. Any unrecognisable words will be flagged back to you before the test generates.</span>
               </div>
             )}
           </div>
@@ -916,10 +1220,32 @@ function App(){
         <div className="card-hd">
           <div>
             <div className="card-title">III. Test Settings</div>
-            <div className="card-sub">Configure difficulty profile, question count, and delivery</div>
+            <div className="card-sub">Configure difficulty profile, purpose, question count, and delivery</div>
           </div>
         </div>
         <div className="card-body">
+
+          {/* Purpose selector */}
+          <div style={{marginBottom:'24px'}}>
+            <label className="fl" style={{marginBottom:'10px'}}>Purpose <span>*</span></label>
+            <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
+              {PURPOSE.map(p=>(
+                <button key={p}
+                  onClick={()=>setPurpose(p)}
+                  style={{
+                    padding:'8px 16px',borderRadius:'2px',cursor:'pointer',
+                    fontFamily:'var(--ff)',fontSize:'12px',letterSpacing:'1px',
+                    border: purpose===p ? '1px solid var(--gold)' : '1px solid var(--linen)',
+                    background: purpose===p ? 'var(--gold-dim)' : 'var(--cream)',
+                    color: purpose===p ? 'var(--gold)' : 'var(--muted)',
+                    boxShadow: purpose===p ? '1px 1px 0 var(--gold)' : '1px 1px 0 var(--linen2)',
+                    transition:'all 0.15s'
+                  }}
+                >{p}</button>
+              ))}
+            </div>
+          </div>
+
           <label className="fl" style={{marginBottom:'12px'}}>Difficulty Profile <span>*</span></label>
           <div className="diff-grid" style={{marginBottom:'24px'}}>
             {DIFFICULTIES.map(d=>(
@@ -935,26 +1261,32 @@ function App(){
 
           <div className="div"/>
 
+          {/* Trust block */}
+          <div className="trust-strip">
+            <span className="trust-strip-icon">🕒</span>
+            <span className="trust-strip-text"><strong>Save 2–3 hours per test.</strong> No manual checking needed — student responses are marked automatically and insights land in your email.</span>
+          </div>
+
           <div className="fg">
             <div>
               <label className="fl">No. of Questions <span>*</span></label>
               <input className="ti" type="number" placeholder="e.g. 15" min="5" max="40" value={numQ} onChange={e=>setNumQ(e.target.value)}/>
             </div>
             <div>
-              <label className="fl">Your Email <span>*</span></label>
+              <label className="fl">Your Email <span>*</span> <em>— test + student insights sent here</em></label>
               <input
-                className={`ti ${emailInvalid?'invalid':emailOk?'valid':''}`}
+                className={`ti ${emailState==='invalid'?'invalid':emailState==='verified'?'valid':''}`}
                 type="email"
                 placeholder="teacher@school.com"
                 value={email}
                 onChange={e=>setEmail(e.target.value)}
                 onBlur={()=>setEmailTouched(true)}
               />
-              {emailInvalid&&(
+              {emailState==='invalid'&&(
                 <span className="field-hint err-hint">✦ Please enter a valid email address</span>
               )}
-              {emailOk&&(
-                <span className="field-hint ok-hint">✓ Looks good</span>
+              {emailState==='verified'&&(
+                <span className="field-hint ok-hint">✓ Verified — trial access enabled</span>
               )}
             </div>
           </div>
@@ -963,17 +1295,12 @@ function App(){
 
           <button className="btn-gen" onClick={generate} disabled={loading}>
             {loading
-              ?<><span className="blink">◆</span> Composing your assessment…</>
-              :<>◆ &nbsp;Generate {lang||'Language'} Test Paper</>
+              ?<><span className="blink">◆</span> Generating…</>
+              :<>◆ &nbsp;Generate Test <span className="btn-gen-timer">— 30 seconds</span></>
             }
           </button>
 
-          {loading&&(
-            <div className="lw">
-              <div className="lb"><div className="lf"/></div>
-              <div className="lt"><span className="blink">—</span> The examination is being set, please wait…</div>
-            </div>
-          )}
+          {loading&&<LoadingSequence step={loadingStep}/>}
           {error&&<div className="err"><span>✦</span><span>{error}</span></div>}
         </div>
       </div>
@@ -983,7 +1310,10 @@ function App(){
         <div className="card" ref={resultRef}>
           <div className="res-hd">
             <div>
-              <div className="res-title"><em>{lang}</em> Assessment — {cefr} Level <span className="badge-ok" style={{marginLeft:'12px'}}>✓ Ready</span></div>
+              <div className="res-title">Your Test + Delivery Setup is Ready <span className="badge-ok" style={{marginLeft:'12px'}}>✓ Ready</span></div>
+              <div style={{fontFamily:'var(--ffi)',fontSize:'13px',fontStyle:'italic',color:'var(--muted)',marginTop:'4px'}}>
+                <em>{lang}</em> · {cefr} · {topic}
+              </div>
             </div>
             <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
               <button className="btn-s" onClick={()=>{
@@ -996,8 +1326,24 @@ function App(){
             </div>
           </div>
 
+          {/* Delivery confirmation */}
+          <div className="delivery-confirm">
+            <div className="delivery-confirm-row">
+              <span className="delivery-confirm-icon">✅</span>
+              <span>Your test is ready</span>
+            </div>
+            <div className="delivery-confirm-row">
+              <span className="delivery-confirm-icon">📩</span>
+              <span>Google Form will be sent to {email} once created below</span>
+            </div>
+            <div className="delivery-confirm-row">
+              <span className="delivery-confirm-icon">📊</span>
+              <span>You'll receive student performance insights after responses come in</span>
+            </div>
+          </div>
+
           <div className="meta-row">
-            {[lang,cefr,topicType,topic,
+            {[lang,cefr,topicType,topic,purpose,
               DIFFICULTIES.find(d=>d.id===difficulty)?.name||difficulty,
               `${meta?.num_questions} Questions`
             ].filter(Boolean).map(v=>(
@@ -1072,9 +1418,9 @@ function App(){
       </div>
       <div className="how-grid">
         {[
-          {n:'I',icon:'🖋',title:'Configure',desc:'Choose your language, CEFR level, topic type, and specific grammar or vocabulary focus. Optionally paste words from your last lesson.'},
-          {n:'II',icon:'📜',title:'Generate',desc:'The system builds a calibrated prompt and calls Claude AI, which composes MCQ questions suited precisely to your students\' level and your topic.'},
-          {n:'III',icon:'📬',title:'Deliver',desc:'One click creates a self-marking Google Form quiz. Share the link with students, collect responses, and receive a full analytics report.'}
+          {n:'I',icon:'🖋',title:'Configure',desc:'Choose your language, CEFR level, topic type, and specific grammar or vocabulary focus. Topics are filtered to your students\' exact level. Optionally add words from your last lesson.'},
+          {n:'II',icon:'📜',title:'Generate',desc:'The system builds a calibrated prompt and calls Claude AI, which composes MCQ questions suited precisely to your students\' level and your topic — in under 30 seconds.'},
+          {n:'III',icon:'📬',title:'Deliver & Track',desc:'One click creates a self-marking Google Form quiz. Share the link with students, collect responses, and receive a full performance report — straight to your inbox.'}
         ].map(c=>(
           <div key={c.n} className="how-card">
             <div className="how-n">Step {c.n}</div>
